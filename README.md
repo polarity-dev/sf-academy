@@ -41,6 +41,7 @@ ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramit
 - [DNS on AWS Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
 - [LAMP stack on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-lamp-amazon-linux-2.html)
 - [Hosting Wordpress on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hosting-wordpress.html)
+- [Docker: Getting Started](https://docs.docker.com/get-started/)
 
 ### Blockchain:  
 - [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf)
