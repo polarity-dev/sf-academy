@@ -34,6 +34,7 @@ ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramit
 - [MySQL](https://www.w3schools.com/sql/default.asp)
 - [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
 - [RPC/REST](https://blog.jscrambler.com/rpc-style-vs-rest-web-apis)
+- [GRPC](https://grpc.io/docs/)
 
 ### Infrastruttura:  
 - [Getting started with AWS EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html)
