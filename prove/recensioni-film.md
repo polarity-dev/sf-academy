@@ -19,7 +19,7 @@ L’API deve prelevare i films da [http://www.omdbapi.com].
 
 ### Frontend
 
-E’ richiesta una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (login, visualizzazione classifica e votazione). Questa può essere realizzata a discrezione del candidato con React o con semplice JavaScript. La grafica della pagina non sarà discriminante per il successo della prova, ma apprezzata.
+E’ richiesta una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (login, visualizzazione classifica e votazione). Questa deve essere realizzata in React, nello specifico usando solo componenti funzionali. La grafica della pagina non sarà discriminante per il successo della prova, ma apprezzata.
 
 ### Note
 
