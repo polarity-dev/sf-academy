@@ -38,7 +38,7 @@ L'interfaccia di questo microservizio è quindi molto semplice ed espone una sol
 - **API**: questo microservizio è l'unico accessibile direttamente da internet e deve essere sviluppato usando open api ed express [vedi esempio](https://github.com/soluzionifutura/open-api-demo). Lo scopo dell'api è quello di ricevere le chiamate dell'esterno e smistarle ai vari microservizi, rispondendo con i risultati effettivamente restituiti dagli stessi
 
 ### Frontend
-E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa può essere realizzata a discrezione del candidato con React o con semplice JavaScript senza frameworks (no jquery). La grafica e la UI della pagina non sarà discriminante per il successo della prova, ma apprezzata.
+E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa deve essere realizzata con React, nello specifico usando solo componenti funzionali. La grafica e la UI della pagina non sarà discriminante per il successo della prova, ma apprezzata.
 La webapp deve essere servita da AWS S3.
 
 ### NB
@@ -46,5 +46,3 @@ L'intero applicativo deve poter essere testato localmente con Docker anche se no
 L’infrastruttura deve essere realizzata utilizzando un template di Terraform per permettere una riproduzione perfetta del sistema in fase di valutazione.
 Verrà attentamente valutato l’utilizzo di GIT (soprattutto i messaggi dei commit). Obbligatoria la stesura di un README esplicativo del progetto realizzato.
 Tutte le interazioni con i supervisori riguardanti la prova dovranno avvenire nella sezione issues.
-
-#### Data di consegna: xx/xx/xxxx (x mese/i)
