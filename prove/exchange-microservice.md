@@ -34,7 +34,7 @@ L'interfaccia di questo microservizio è quindi molto semplice ed espone una sol
 	- `deposit(nubmer value, string symbol)`: permette all'utente di depositare sul suo conto il valore specificato nella valuta specificata
 	- `withdraw(number value, string synbol)`: permette all'utente di spostare dalla piattaforma al suo iban la quantità di denaro specificata nella valuta specificata. NB. le due funzioni `deposit` e `withdraw` sono funzioni che simulano unicamente degli spostamenti di denaro limitandosi ad aggiornare dei valori sul DB dell'applicativo
 	- `buy(number value, string symbol)`: permette all'utente di comprare con una valuta la quantità specificata di denaro nell'altra valuta disponibile secondo il tasso di cambio recuperato dall'Exchange microservice; per ogni transazione è necessario archiviare in una tabella di DB appositamente strutturata tutte le informazioni riguardo l'operazione
-	- `listTransations(object filter)`: permette all'utente di visualizzare le sue transazioni con la possibilità di filtrarle per date e/o valuta di riferimento
+	- `listTransactions(object filter)`: permette all'utente di visualizzare le sue transazioni con la possibilità di filtrarle per date e/o valuta di riferimento
 - **API**: questo microservizio è l'unico accessibile direttamente da internet e deve essere sviluppato usando open api ed express [vedi esempio](https://github.com/soluzionifutura/open-api-demo). Lo scopo dell'api è quello di ricevere le chiamate dell'esterno e smistarle ai vari microservizi, rispondendo con i risultati effettivamente restituiti dagli stessi
 
 ### Frontend
