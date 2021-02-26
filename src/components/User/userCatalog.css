@@ -1,0 +1,668 @@
+header {
+  background-color: #121212;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 30px 70px;
+}
+
+header #userInteraction #button-user {
+  border-radius: 10px 0 0 10px;
+  background-color: #121212;
+  color: #ff9900;
+  border: 1px solid #ff9900;
+  padding: 10px;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(50%, black),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, black 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border: none;
+  font-weight: bold;
+}
+
+header #userInteraction #button-user:hover {
+  border-color: #ff9900;
+  text-decoration: none;
+  color: #121212;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(51%, #ff9900),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, #ff9900 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+header #userInteraction #button-logout {
+  cursor: pointer;
+  outline: none !important;
+  border-radius: 0 10px 10px 0;
+  background-color: #121212;
+  color: red;
+  border: 1px solid red;
+  padding: 10px;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(50%, black),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, black 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border: none;
+  font-weight: bold;
+}
+
+header #userInteraction #button-logout:hover {
+  border-color: red;
+  text-decoration: none;
+  color: #121212;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(51%, red),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, red 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+header img {
+  display: block;
+  width: 200px;
+}
+
+header #searchFilm {
+  margin: 0;
+  color: #ff9900;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 450px;
+  position: relative;
+  border-radius: 0;
+  background-color: transparent;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #ff9900;
+}
+
+header #searchFilm input[type="text"] {
+  background-color: #121212;
+  width: 100%;
+  outline: none;
+  color: #ff9900;
+  border: transparent;
+}
+
+header #searchFilm #suggestions {
+  position: absolute;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+header #searchFilm #suggestions ul {
+  padding: 0 !important;
+  -webkit-box-shadow: 0 20px 20px 10px black;
+  box-shadow: 0 20px 20px 10px black;
+  background-color: #121212;
+}
+
+header #searchFilm #suggestions li {
+  background-color: #121212;
+  padding: 8px;
+  list-style-type: none;
+  border: 1px solid #121212;
+  -webkit-transition: 1s all;
+  transition: 1s all;
+}
+
+header #searchFilm #suggestions li:hover {
+  background-color: black !important;
+}
+
+header #searchFilm #suggestions li:hover i {
+  color: #ff9900;
+}
+
+header #searchFilm #suggestions a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+header #searchFilm #suggestions li p {
+  margin: 0;
+}
+
+header #searchFilm #suggestions li i {
+  color: black;
+  margin: 0 10px;
+  -webkit-transition: 1s all;
+  transition: 1s all;
+}
+
+header #searchFilm button {
+  border: none;
+  background-color: #121212;
+}
+
+header #searchFilm i {
+  color: orange;
+  margin-right: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+/* Handle */
+::-webkit-scrollbar-track {
+  background: none;
+  border-left: 1px solid #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff9900;
+  border-radius: 10px;
+}
+
+footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 150px;
+  background-color: #ff9900;
+}
+
+footer ul {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+
+footer ul a,
+footer ul a:link,
+footer ul a:visited,
+footer ul a:active {
+  text-decoration: none;
+  color: black;
+  opacity: 70%;
+}
+
+footer ul a:hover {
+  opacity: 100%;
+}
+
+footer .footer-copyright i {
+  color: red;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  background-color: black;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 200px;
+}
+
+#noFilm {
+  border-left: 5px #ff9900 solid;
+  text-transform: uppercase;
+  margin: 10vh 10vw;
+}
+
+#noFilm h1 {
+  font-size: 10vw;
+  color: orange;
+}
+
+#noFilm h1 span {
+  background-color: #ff9900;
+  color: black;
+}
+
+#filterGenres {
+  margin: auto;
+  display: none;
+  background-color: #121212;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  padding: 10px;
+  letter-spacing: 2px;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(50%, black),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, black 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+#filterGenres .fas {
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+
+#filterGenres:hover {
+  border-color: black;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(51%, black),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, black 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+#filterGenres:hover .fas:first-child {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+#filterGenres:hover .fas:last-child {
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+#allGenres {
+  display: none;
+  margin: 5%;
+}
+
+#allGenres ul {
+  display: -ms-grid;
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  -ms-grid-columns: 33% 33% auto;
+  grid-template-columns: 33% 33% auto;
+}
+
+#allGenres ul li {
+  padding: 5px;
+  border: 1px solid #ff9900;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(50%, #ff9900),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, #ff9900 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  direction: ltr;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  text-decoration: none;
+  color: #918f8f;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+#allGenres ul li:hover {
+  color: black;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(51%, #ff9900),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, #ff9900 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+main {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: [genres] 20% [films] 80%;
+  grid-template-columns: [genres] 20% [films] 80%;
+  margin: 30px 10px;
+}
+
+.user-genres {
+  grid-area: genres;
+  margin: 10px 0;
+}
+
+.user-genres ::-webkit-scrollbar {
+  width: 4px;
+}
+
+.user-genres ::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+.user-genres ::-webkit-scrollbar-track {
+  border: none;
+}
+
+.user-genres #genresLegend {
+  text-align: center;
+  padding: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ff9900;
+}
+
+.user-genres #genresLegend h1 {
+  color: #ff9900;
+  font-size: 30px;
+}
+
+.user-genres ul {
+  list-style-type: none;
+  direction: rtl;
+  height: 100vh;
+  overflow: scroll;
+  padding: 0;
+}
+
+.user-genres ul li {
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(50%, #ff9900),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, #ff9900 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  direction: ltr;
+  padding: 10px;
+  margin: 5%;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  text-decoration: none;
+  color: #918f8f;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.user-genres ul li:hover {
+  border-color: #ff9900;
+  color: black;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(51%, #ff9900),
+    color-stop(50%, transparent)
+  );
+  background-image: linear-gradient(to top, #ff9900 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease,
+    border-color 300ms ease;
+}
+
+.user-films {
+  grid-area: films;
+  margin: 10px 0;
+}
+
+.user-films #title {
+  text-align: center;
+  padding: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ff9900;
+}
+
+.user-films #title h1 {
+  color: #ff9900;
+  font-size: 30px;
+}
+
+.user-films #title h1 i {
+  color: #ff9900;
+  font-size: 30px;
+}
+
+#favouriteFilms {
+  border-left: 1px solid #ff9900;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
+  justify-items: center;
+  padding: 1vw 0;
+  row-gap: 30px;
+}
+
+#favouriteFilms .far,
+#favouriteFilms .fas {
+  color: #ff9900;
+}
+
+#favouriteFilms .card {
+  width: 200px;
+  border-radius: 4px;
+  display: inline-block;
+  border: transparent;
+  background-color: #121212;
+}
+
+#favouriteFilms .card img {
+  height: 300px;
+  width: 200px;
+  opacity: 80%;
+}
+
+#favouriteFilms .card .card-body .card-title {
+  color: #ff9900;
+}
+
+#favouriteFilms .card .card-body .card-text {
+  color: white;
+}
+
+#favouriteFilms .card .btn {
+  background-color: #ff9900;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 0 0 4px 4px;
+}
+
+#favouriteFilms .card .btn:hover,
+#favouriteFilms .card .btn:focus,
+#favouriteFilms .card .btn:active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+#favouriteFilms .card:hover {
+  position: relative;
+  bottom: 20px;
+}
+
+#favouriteFilms .card:hover img {
+  opacity: 100%;
+}
+
+@media only screen and (max-width: 1400px) {
+  header #searchFilm {
+    width: 300px;
+  }
+  #favouriteFilms {
+    -ms-grid-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  header {
+    padding: 30px 0px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    row-gap: 20px;
+  }
+  header #searchFilm {
+    width: 60%;
+  }
+  header img {
+    width: 400px;
+  }
+  #filterGenres {
+    display: block;
+  }
+  main {
+    -ms-grid-columns: [films] 100%;
+    grid-template-columns: [films] 100%;
+  }
+  main .card .card-title {
+    font-size: 18px;
+  }
+  aside {
+    display: none;
+  }
+  #favouriteFilms {
+    -ms-grid-columns: auto auto auto;
+    grid-template-columns: auto auto auto;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  header {
+    row-gap: 15px;
+  }
+  header #searchFilm {
+    width: 65%;
+  }
+  header img {
+    width: 300px;
+  }
+  #favouriteFilms {
+    -ms-grid-columns: auto auto;
+    grid-template-columns: auto auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    row-gap: 10px;
+  }
+  header #searchFilm {
+    width: 70%;
+  }
+  header img {
+    width: 200px;
+  }
+  #favouriteFilms .card {
+    width: 150px;
+  }
+  #favouriteFilms .card img {
+    width: 150px;
+    height: 225px;
+  }
+}
+/*# sourceMappingURL=userCatalog.css.map */

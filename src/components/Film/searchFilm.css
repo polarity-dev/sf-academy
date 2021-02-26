@@ -1,0 +1,550 @@
+header {
+  background-color: #121212;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 30px 70px;
+}
+
+header #userInteraction #button-user {
+  border-radius: 10px 0 0 10px;
+  background-color: #121212;
+  color: #ff9900;
+  border: 1px solid #ff9900;
+  padding: 10px;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(50%, black), color-stop(50%, transparent));
+  background-image: linear-gradient(to top, black 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border: none;
+  font-weight: bold;
+}
+
+header #userInteraction #button-user:hover {
+  border-color: #ff9900;
+  text-decoration: none;
+  color: #121212;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(51%, #ff9900), color-stop(50%, transparent));
+  background-image: linear-gradient(to top, #ff9900 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+}
+
+header #userInteraction #button-logout {
+  cursor: pointer;
+  outline: none !important;
+  border-radius: 0 10px 10px 0;
+  background-color: #121212;
+  color: red;
+  border: 1px solid red;
+  padding: 10px;
+  background-size: 200% 200%;
+  text-align: center;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(50%, black), color-stop(50%, transparent));
+  background-image: linear-gradient(to top, black 50%, transparent 50%);
+  -webkit-transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  border: none;
+  font-weight: bold;
+}
+
+header #userInteraction #button-logout:hover {
+  border-color: red;
+  text-decoration: none;
+  color: #121212;
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(51%, red), color-stop(50%, transparent));
+  background-image: linear-gradient(to top, red 51%, transparent 50%);
+  background-position: 0 100%;
+  -webkit-transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+  transition: background-position 300ms, color 300ms ease, border-color 300ms ease;
+}
+
+header img {
+  display: block;
+  width: 200px;
+}
+
+header #searchFilm {
+  margin: 0;
+  color: #ff9900;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 450px;
+  position: relative;
+  border-radius: 0;
+  background-color: transparent;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #ff9900;
+}
+
+header #searchFilm input[type="text"] {
+  background-color: #121212;
+  width: 100%;
+  outline: none;
+  color: #ff9900;
+  border: transparent;
+}
+
+header #searchFilm #suggestions {
+  position: absolute;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+header #searchFilm #suggestions ul {
+  padding: 0 !important;
+  -webkit-box-shadow: 0 20px 20px 10px black;
+  box-shadow: 0 20px 20px 10px black;
+  background-color: #121212;
+}
+
+header #searchFilm #suggestions li {
+  background-color: #121212;
+  padding: 8px;
+  list-style-type: none;
+  border: 1px solid #121212;
+  -webkit-transition: 1s all;
+  transition: 1s all;
+}
+
+header #searchFilm #suggestions li:hover {
+  background-color: black !important;
+}
+
+header #searchFilm #suggestions li:hover i {
+  color: #ff9900;
+}
+
+header #searchFilm #suggestions a {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+header #searchFilm #suggestions li p {
+  margin: 0;
+}
+
+header #searchFilm #suggestions li i {
+  color: black;
+  margin: 0 10px;
+  -webkit-transition: 1s all;
+  transition: 1s all;
+}
+
+header #searchFilm button {
+  border: none;
+  background-color: #121212;
+}
+
+header #searchFilm i {
+  color: orange;
+  margin-right: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+/* Handle */
+::-webkit-scrollbar-track {
+  background: none;
+  border-left: 1px solid #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff9900;
+  border-radius: 10px;
+}
+
+footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  height: 150px;
+  background-color: #ff9900;
+}
+
+footer ul {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+footer ul a,
+footer ul a:link,
+footer ul a:visited,
+footer ul a:active {
+  text-decoration: none;
+  color: black;
+  opacity: 70%;
+}
+
+footer ul a:hover {
+  opacity: 100%;
+}
+
+footer .footer-copyright i {
+  color: red;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 200px;
+}
+
+#root {
+  min-height: 100%;
+}
+
+#filmNotFound {
+  padding: 0;
+  border-right: 5px #ff9900 solid;
+  text-transform: uppercase;
+  margin: 10vh 10vw;
+}
+
+#filmNotFound h1 {
+  font-size: 8vw;
+  color: orange;
+  text-align: right;
+}
+
+#filmNotFound h1 span {
+  background-color: #ff9900;
+  color: black;
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 100px;
+  height: 80px;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  -webkit-animation-timing-function: cubic-bezier(0, 1, 1, 0);
+          animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  -webkit-animation: lds-ellipsis1 0.6s infinite;
+          animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  -webkit-animation: lds-ellipsis2 0.6s infinite;
+          animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  -webkit-animation: lds-ellipsis2 0.6s infinite;
+          animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  -webkit-animation: lds-ellipsis3 0.6s infinite;
+          animation: lds-ellipsis3 0.6s infinite;
+}
+
+@-webkit-keyframes lds-ellipsis1 {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@-webkit-keyframes lds-ellipsis3 {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+}
+
+@-webkit-keyframes lds-ellipsis2 {
+  0% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+  }
+  100% {
+    -webkit-transform: translate(24px, 0);
+            transform: translate(24px, 0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+  }
+  100% {
+    -webkit-transform: translate(24px, 0);
+            transform: translate(24px, 0);
+  }
+}
+
+#specificFilm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  background-color: #121212;
+  width: 90%;
+  margin: 50px auto 0;
+  padding: 20px;
+}
+
+#specificFilm img {
+  border: 1px solid #ff9900;
+  margin-right: 20px;
+  height: 100%;
+}
+
+#specificFilm #filmInformation {
+  height: 100%;
+}
+
+#specificFilm #filmInformation #title {
+  line-height: 60px;
+  color: black;
+  font-size: 40px;
+  background-color: #ff9900;
+  display: inline;
+  text-transform: uppercase;
+  letter-spacing: 0.5vw;
+  padding: 0 1vw;
+}
+
+#specificFilm #filmInformation #plot {
+  font-size: 20px;
+  margin: 20px 0;
+  padding: 0 10px;
+  color: white;
+  border-left: 1px solid #ff9900;
+}
+
+#specificFilm #filmInformation h5 {
+  font-size: 15px;
+  padding: 0 10px;
+  color: white;
+  border-left: 1px solid #ff9900;
+}
+
+#specificFilm #filmInformation #vote {
+  margin-top: 20px;
+}
+
+#specificFilm #filmInformation #vote #textRating {
+  display: inline;
+  background-color: #ff9900;
+  color: black;
+  padding: 5px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-right: 5px;
+  font-size: 20px;
+}
+
+#specificFilm #filmInformation #vote .fas {
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#specificFilm #filmInformation #vote .fa-thumbs-up {
+  text-shadow: 0 0 1px green;
+}
+
+#specificFilm #filmInformation #vote .fa-thumbs-down {
+  text-shadow: 0 0 1px red;
+}
+
+#specificFilm #filmInformation #vote .fa-thumbs-up,
+#specificFilm #filmInformation #vote .fa-thumbs-down {
+  -webkit-transition: color 0.5s;
+  transition: color 0.5s;
+  margin-left: 10px;
+}
+
+#specificFilm #filmInformation #vote .fa-thumbs-up:hover {
+  color: green;
+}
+
+#specificFilm #filmInformation #vote .fa-thumbs-down:hover {
+  color: red;
+}
+
+@media only screen and (max-width: 1200px) {
+  header #searchFilm {
+    width: 300px;
+  }
+  #specificFilm #filmInformation #serverResponse {
+    display: inline-block;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  header {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    row-gap: 20px;
+    padding: 30px 0px;
+  }
+  header #searchFilm {
+    width: 60%;
+  }
+  header img {
+    width: 400px;
+  }
+  #specificFilm #filmInformation #title {
+    font-size: 30px;
+    line-height: 50px;
+  }
+  #specificFilm #filmInformation #textRating {
+    display: inline-block;
+    border: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  header {
+    row-gap: 15px;
+  }
+  header #searchFilm {
+    width: 65%;
+  }
+  header img {
+    width: 300px;
+  }
+  #specificFilm {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  #specificFilm img {
+    margin: 0 auto 20px auto;
+    width: 50%;
+    height: 50%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  header {
+    row-gap: 10px;
+  }
+  header #searchFilm {
+    width: 70%;
+  }
+  header img {
+    width: 200px;
+  }
+  #specificFilm img {
+    width: 70%;
+    height: 70%;
+  }
+}
+/*# sourceMappingURL=searchFilm.css.map */

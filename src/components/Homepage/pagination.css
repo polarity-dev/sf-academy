@@ -1,0 +1,14 @@
+.pagination .page-item {
+  cursor: pointer;
+  padding: 20px;
+  font-size: 20px;
+  background-color: #ff9900;
+  color: black;
+  border: 1px solid black;
+}
+
+.pagination .active {
+  background-color: black;
+  color: #ff9900;
+}
+/*# sourceMappingURL=pagination.css.map */
