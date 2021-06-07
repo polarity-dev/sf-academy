@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package exchange;
+
+message ExchangeRequest {
+    double value = 1;
+    string from = 2;
+    string to = 3;
+}
+
+message ExchangeResponse {
+    double value = 1;
+}
+
+service Exchanger {
+    rpc exchange (ExchangeRequest) returns (ExchangeResponse) {}
+}
