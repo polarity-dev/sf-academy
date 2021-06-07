@@ -1,0 +1,9 @@
+version: "3"
+services:
+  exchange:
+    container_name: exchange
+    build: "./exchange"
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9000:9000"
