@@ -155,7 +155,29 @@ paths:
           description: "auth token not valid"
         '400':
           description: "Invalid parameters or not enough money to withdraw"
-
+  /balance:
+    get:
+      operationId: balance
+      summary: "get the current balance"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token"
+          in: "query"
+          required: true
+          description: "auth token"
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        '403':
+          description: "auth token not valid"
 definitions:
   User:
     type: 'object'

@@ -77,6 +77,23 @@ const withdraw = async (req, res) => {
     }
 }
 
+const balance = async (req, res) => {
+    try {
+        const { token } = req.query;
+        if (token === undefined || token === null || token === "") throw "Bad Request wrong token field";
+
+        grpcUsers.getBalance({ token }, (err, data) => {
+            console.log(err, data);
+            if (data) return res.status(200).json({ status: "ok", data: data.data })
+            if (err) return GRPCerrorHandler(err, res)
+        })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+
+
 function GRPCerrorHandler(err, res) {
     console.log(err);
     switch (err.code) {
@@ -111,5 +128,5 @@ function errorHandler(error, res) {
 
 
 module.exports = {
-    signUp, login, deposit, withdraw
+    signUp, login, deposit, withdraw, balance
 }
