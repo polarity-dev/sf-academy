@@ -41,7 +41,23 @@ const login = async (req, res) => {
     }
 }
 
+const deposit = async (req, res) => {
+    try {
+        const { token, value, symbol } = req.body;
+        if (token === undefined || token === null || token === "") throw "Bad Request wrong token field";
+        if (value === undefined || value === null || value < 0) throw "Bad Request wrong value field";
+        if (symbol === undefined || symbol === null || (symbol !== "EUR" && symbol !== "USD")) throw "Bad Request wrong symbol field";
 
+        grpcUsers.deposit({ token, value, symbol }, (err, data) => {
+            console.log(err, data);
+            if (data) return res.status(200).json({ status: "ok", data: data.data })
+            if (err) return GRPCerrorHandler(err, res)
+        })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
 
 
 function GRPCerrorHandler(err, res) {
@@ -78,5 +94,5 @@ function errorHandler(error, res) {
 
 
 module.exports = {
-    signUp, login
+    signUp, login, deposit
 }
