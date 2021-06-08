@@ -130,7 +130,58 @@ const deposit = async (call, callback) => {
     }
 }
 
+const withdraw = async (call, callback) => {
+    try {
+        const db = new Db();
+        const { token, value, symbol } = call.request;
+
+        console.log(call.request);
+        validate(token);
+
+        const user = getDecoded(token);
+
+        if (symbol === 'USD') {
+            const balanceUSD = await db.query(
+                `select u.balanceUSD from users u where u.id=${user.id}`
+            ).then(r => r[0].balanceUSD);
+            if (balanceUSD < value) throw "INVALID"
+            await db.query(
+                `update users set balanceUSD=${balanceUSD - value} where id=${user.id}`
+            )
+        }
+        else if (symbol === 'EUR') {
+            const balanceEUR = await db.query(
+                `select u.balanceEUR from users u where u.id=${user.id}`
+            ).then(r => r[0].balanceEUR);
+
+            if (balanceEUR < value) throw "INVALID"
+
+            await db.query(
+                `update users set balanceEUR=${balanceEUR - value} where id=${user.id}`
+            )
+        }
+
+        await db.query(`insert into transactions(transType, value, symbol, idUser) values ('withdraw',${value} ,'${symbol}', ${user.id}); `)
+
+        const balance = await db.query(
+            `select u.balanceEUR, u.balanceUSD from users u where u.id=${user.id}`
+        ).then(r => r[0])
+
+        db.con.end()
+        return callback(null, {
+            data: balance
+        })
+    } catch (error) {
+        if (error === "AUTH_ERROR") return callback({ message: "Auth Token not valid", code: status.UNAUTHENTICATED }, null)
+        if (error === "INVALID") return callback({ code: status.INVALID_ARGUMENT, message: "can't perform operation due to money insufficience" }, null)
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        })
+    }
+}
+
 
 module.exports = {
-    signup, login, deposit
+    signup, login, deposit, withdraw
 }
