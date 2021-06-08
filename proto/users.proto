@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package users;
+
+message User{
+    string email = 1;
+    string password = 2;
+    string name = 3;
+    string iban = 4;
+}
+
+message LoginRequest{
+    string email = 1;
+    string password = 2;
+}
+
+message Response{
+    string token = 3;
+}
+
+message MovementRequest{
+    string token = 1;
+    double value = 2;
+    string symbol = 3;
+}
+
+message GetBalanceRequest{
+    string token = 1;
+}
+message Balance{
+    double balanceEUR = 1;
+    double balanceUSD = 2;
+}
+
+message BalanceResponse{
+    Balance data = 1;
+}
+
+message Date{
+    string from = 1;
+    string to = 2;
+}
+
+message GetTransactionsRequest {
+    string token = 1;
+    optional Date date = 2;
+    optional string symbol = 3;
+}
+
+message Transaction {
+    string time = 1;
+    string transType = 2;
+    double value = 3;
+    string symbol = 4;
+    optional double eValue = 5;
+    optional string eSymbol = 6;
+}
+
+message TransactionResponse {
+    repeated Transaction data = 1;
+}
+
+message Exchange {
+    double value = 1;
+    string symbol = 2;
+}
+
+
+service Users {
+    rpc signup(User) returns (Response) {};
+    rpc login(LoginRequest) returns (Response) {};
+    rpc deposit(MovementRequest) returns (BalanceResponse) {};
+    rpc withdraw(MovementRequest) returns (BalanceResponse) {};
+    rpc getBalance(GetBalanceRequest) returns (BalanceResponse) {};
+    rpc buy(MovementRequest) returns (BalanceResponse) {};
+    rpc listTransactions(GetTransactionsRequest) returns (TransactionResponse) {};
+    rpc exchangeValue(Exchange) returns (Exchange) {};
+}
