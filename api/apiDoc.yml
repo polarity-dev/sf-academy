@@ -1,0 +1,107 @@
+swagger: '2.0'
+info:
+  title: exchange-microservices API
+  version: '1.0'
+paths:
+  /signup:
+    post:
+      operationId: signUp
+      summary: "signs up the user into the system"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "username"
+          in: "body"
+          required: true
+          description: "name of the user"
+          schema:
+            $ref: "#/definitions/User"
+        - name: "password"
+          in: "body"
+          required: true
+          description: "password of the user"
+          schema:
+            $ref: "#/definitions/User"
+        - name: "iban"
+          in: "body"
+          required: true
+          description: "iban of the user"
+          schema:
+            $ref: "#/definitions/User"
+        - name: "email"
+          in: "body"
+          required: true
+          description: "email of the user"
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        '201':
+          description: OK
+          schema:
+            type: "string"
+            items:
+              $ref: "#/definitions/Token"
+        '400':
+          description: "invalid argument/s"
+        '409':
+          description: "email already in use"
+
+
+definitions:
+  User:
+    type: 'object'
+    properties: 
+      id:
+        type: integer
+      name:
+        type: string
+      iban:
+        type: string
+      password:
+        type: string
+      balanceEUR:
+        type: number
+      balanceUSD:
+        type: number
+  Token:
+    type: 'string'
+  Movement:
+    type: 'object'
+    properties: 
+      token:
+        type: string
+      value:
+        type: number
+      symbol:
+        type: string
+  Balance:
+    type: 'object'
+    properties: 
+      balanceEUR:
+        type: number
+      balanceUSD:
+        type: number
+  Date:
+    type: object
+    properties: 
+      from:
+        type: string
+      to:
+        type: string
+  Transactions:
+    type: object
+    properties: 
+      time:
+        type: string
+      transType:
+        type: string
+      value:
+        type: number
+      symbol:
+        type: string
+      eValue:
+        type: number
+      eSymbol:
+        type: string
