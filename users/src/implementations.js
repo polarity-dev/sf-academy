@@ -327,9 +327,42 @@ const exchangeValue = async (call, callback) => {
     }
 }
 
+const listTransactions = async (call, callback) => {
+    try {
+        const db = new Db();
+        const { token, date: { from, to }, symbol } = call.request;
 
+        console.log(call.request);
+        validate(token);
+
+        const user = getDecoded(token);
+
+
+        const transactions = await db.query(
+            `select t.time, t.transType, t.value, t.symbol, t.eValue, t.eSymbol from transactions t where t.idUser=${user.id}
+            ${symbol !== undefined ? `and t.symbol='${symbol}'` : ""} 
+            ${from !== undefined && to !== undefined ? `and t.time between '${from}' and '${to}'` : ""}
+            
+            `
+        )
+
+        console.log("filtered transactions", transactions);
+
+        db.con.end()
+        return callback(null, {
+            data: transactions ? transactions : []
+        })
+    } catch (error) {
+        if (error === "AUTH_ERROR") return callback({ message: "Auth Token not valid", code: status.UNAUTHENTICATED }, null)
+        if (error === "INVALID") return callback({ code: status.INVALID_ARGUMENT, message: "invalid value argument" }, null)
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        })
+    }
+}
 
 
 module.exports = {
-    signup, login, deposit, withdraw, getBalance, buy, exchangeValue
+    signup, login, deposit, withdraw, getBalance, buy, exchangeValue, listTransactions
 }
