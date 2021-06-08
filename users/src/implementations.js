@@ -295,6 +295,41 @@ const buy = async (call, callback) => {
 
 }
 
+const exchangeValue = async (call, callback) => {
+
+    try {
+        const db = new Db();
+        const { value, symbol } = call.request;
+
+        console.log(call.request);
+
+
+        grpcExchange.exchange({ value, from: symbol === "USD" ? "USD" : "EUR", to: symbol === 'USD' ? "EUR" : "USD" }, async (err, data) => {
+            console.log({ err, data });
+
+            const { value: costValue } = data
+
+            console.log(costValue);
+
+
+            return callback(null, {
+                value: costValue,
+                symbol: symbol === 'USD' ? "EUR" : "USD"
+            })
+        })
+        db.con.end()
+    } catch (error) {
+        if (error === "INVALID") return callback({ code: status.INVALID_ARGUMENT, message: "invalid value argument" }, null)
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        })
+    }
+}
+
+
+
+
 module.exports = {
-    signup, login, deposit, withdraw, getBalance, buy
+    signup, login, deposit, withdraw, getBalance, buy, exchangeValue
 }

@@ -3,10 +3,10 @@ const grpc = require("@grpc/grpc-js")
 const { join } = require("path")
 const { promisify } = require("util")
 const { PORT = 9001 } = process.env
-const { signup, login, deposit, withdraw, getBalance, buy } = require("./src/implementations")
+const { signup, login, deposit, withdraw, getBalance, buy, exchangeValue } = require("./src/implementations")
 
 const implementations = {
-    signup, login, deposit, withdraw, getBalance, buy
+    signup, login, deposit, withdraw, getBalance, buy, exchangeValue
 }
 
 
