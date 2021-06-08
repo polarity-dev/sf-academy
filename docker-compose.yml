@@ -55,3 +55,15 @@ services:
       - exchange
       - users
       - db
+  nginx:
+    image: nginx:latest
+    container_name: server
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - exchange
+      - users
+      - db
+      - api
