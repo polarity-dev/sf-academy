@@ -210,7 +210,91 @@ const getBalance = async (call, callback) => {
     }
 }
 
+const buy = async (call, callback) => {
+
+    try {
+        const db = new Db();
+        const { token, value, symbol } = call.request;
+
+        console.log(call.request);
+        validate(token);
+
+        const user = getDecoded(token);
+
+        const balance = await db.query(
+            `
+                select u.balanceUSD, u.balanceEUR from users u where u.id=${user.id}
+            `
+        ).then(r => r[0])
+
+
+        grpcExchange.exchange({ value, from: symbol === "USD" ? "USD" : "EUR", to: symbol === 'USD' ? "EUR" : "USD" }, async (err, data) => {
+            console.log({ err, data });
+
+            const { value: costValue } = data
+
+            console.log(costValue);
+
+
+
+            if (symbol === "EUR") {
+                if (balance.balanceUSD < costValue) return callback({ message: "Not enough to pay", code: status.UNAVAILABLE }, null)
+            }
+            else if (symbol === "USD") {
+                if (balance.balanceEUR < costValue) return callback({ message: "Not enough to pay", code: status.UNAVAILABLE }, null)
+            }
+
+
+            if (symbol === "EUR") {
+                await db.query(
+                    `update users as u
+                    set u.balanceUSD=${balance.balanceUSD - costValue},
+                        u.balanceEUR=${balance.balanceEUR + value}
+                    where u.id=${user.id}
+                    `
+                )
+            } else if (symbol === "USD") {
+                await db.query(
+                    `update users as u
+                    set u.balanceUSD=${balance.balanceUSD + value},
+                        u.balanceEUR=${balance.balanceEUR - costValue}
+                    where u.id=${user.id}
+                    `
+                )
+            }
+
+            await db.query(
+                `insert into transactions(transType, value, symbol, eValue, eSymbol, idUser) 
+                values ('buy',${value} ,'${symbol}',${costValue}, '${symbol === "USD" ? "EUR" : "USD"}', ${user.id}); 
+            `)
+
+
+
+            const updBalance = await db.query(
+                `select u.balanceEUR, u.balanceUSD from users u where u.id=${user.id}`
+            ).then(r => r[0])
+
+
+
+
+
+            db.con.end()
+            return callback(null, {
+                data: updBalance
+            })
+        })
+
+    } catch (error) {
+        if (error === "AUTH_ERROR") return callback({ message: "Auth Token not valid", code: status.UNAUTHENTICATED }, null)
+        if (error === "INVALID") return callback({ code: status.INVALID_ARGUMENT, message: "invalid value argument" }, null)
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        })
+    }
+
+}
 
 module.exports = {
-    signup, login, deposit, withdraw, getBalance
+    signup, login, deposit, withdraw, getBalance, buy
 }
