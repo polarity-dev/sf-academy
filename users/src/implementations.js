@@ -46,9 +46,40 @@ const signup = async (call, callback) => {
     }
 }
 
+const login = async (call, callback) => {
+    try {
+        const db = new Db();
+        const { email, password } = call.request;
+        const e = email.toLowerCase()
+        const user = await db.query(
+            `
+                select u.id, u.name, u.email, u.password, u.iban from users u where u.email='${e}'
+            `
+        ).then(r => r[0])
+        if (user === undefined) return callback({ code: status.NOT_FOUND, message: "No user with this email" }, null)
+        if (!(await bcrypt.compare(password, user.password))) return callback({ code: status.INVALID_ARGUMENT, message: "Wrong email/password" }, null)
 
+        const token = jwt.sign({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            iban: user.iban
+        }, process.env.JWT_SECRET);
+
+        db.con.end()
+        return callback(null, {
+            success: true,
+            token: token
+        })
+    } catch (error) {
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        }, null)
+    }
+}
 
 
 module.exports = {
-    signup,
+    signup, login
 }
