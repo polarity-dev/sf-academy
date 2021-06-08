@@ -55,6 +55,18 @@ services:
       - exchange
       - users
       - db
+  web:
+    container_name: web
+    build: ./web
+    ports:
+      - "5000:5000"
+    expose:
+      - 5000
+    depends_on:
+      - exchange
+      - users
+      - db
+      - api
   nginx:
     image: nginx:latest
     container_name: server
@@ -67,3 +79,4 @@ services:
       - users
       - db
       - api
+      - web

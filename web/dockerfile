@@ -1,0 +1,11 @@
+FROM node:latest
+
+COPY . /app
+
+WORKDIR /app
+
+EXPOSE 5000
+
+RUN yarn add package.json
+
+CMD npm run build && yarn global add serve && serve -s build
