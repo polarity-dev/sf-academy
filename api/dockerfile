@@ -1,0 +1,11 @@
+FROM node:latest
+
+COPY . /src
+
+WORKDIR /src
+
+RUN npm install --production
+
+EXPOSE 9002
+
+CMD npm start

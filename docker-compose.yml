@@ -42,3 +42,16 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - DB_URI=${DB_URI}
+  api:
+    container_name: api
+    build: ./api
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9002:9002"
+    expose:
+      - 9002
+    depends_on:
+      - exchange
+      - users
+      - db
