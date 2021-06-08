@@ -29,3 +29,16 @@ services:
       - "./proto:/src/proto"
     ports:
       - "9000:9000"
+  users:
+    container_name: users
+    build: "./users"
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9001:9001"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_URI=${DB_URI}
