@@ -181,7 +181,36 @@ const withdraw = async (call, callback) => {
     }
 }
 
+const getBalance = async (call, callback) => {
+    try {
+        const db = new Db();
+        const { token } = call.request;
+
+        console.log(call.request);
+        validate(token);
+
+        const user = getDecoded(token);
+
+
+        const balance = await db.query(
+            `select u.balanceEUR, u.balanceUSD from users u where u.id=${user.id}`
+        ).then(r => r[0])
+
+        db.con.end()
+        return callback(null, {
+            data: balance
+        })
+    } catch (error) {
+        if (error === "AUTH_ERROR") return callback({ message: "Auth Token not valid", code: status.UNAUTHENTICATED }, null)
+        if (error === "INVALID") return callback({ code: status.INVALID_ARGUMENT, message: "invalid value argument" }, null)
+        return callback({
+            code: status.INTERNAL,
+            message: error
+        })
+    }
+}
+
 
 module.exports = {
-    signup, login, deposit, withdraw
+    signup, login, deposit, withdraw, getBalance
 }
