@@ -3,9 +3,9 @@ const bodyParser = require("body-parser")
 const { initialize } = require("express-openapi")
 const { join } = require("path")
 const cors = require('cors')
-const { signUp, } = require("./services/operations")
+const { signUp, login } = require("./services/operations")
 const operations = {
-    signUp,
+    signUp, login
 };
 
 

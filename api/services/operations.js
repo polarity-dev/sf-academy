@@ -24,6 +24,26 @@ const signUp = async (req, res) => {
     }
 }
 
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (email === undefined || email === null || email === "") throw "Bad Request wrong email field";
+        if (password === undefined || password === null || password.length < 8) throw "Bad Request wrong password field, at least 8 chars";
+
+        grpcUsers.login({ email, password }, (err, data) => {
+            console.log(err, data);
+            if (data) return res.status(200).json({ status: "ok", data: data.token })
+            if (err) return GRPCerrorHandler(err, res)
+        })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+
+
+
+
 function GRPCerrorHandler(err, res) {
     console.log(err);
     switch (err.code) {
@@ -58,5 +78,5 @@ function errorHandler(error, res) {
 
 
 module.exports = {
-    signUp,
+    signUp, login
 }

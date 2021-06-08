@@ -47,7 +47,38 @@ paths:
           description: "invalid argument/s"
         '409':
           description: "email already in use"
-
+  /login:
+      post:
+        operationId: login
+        summary: "logs the user into the system"
+        consumes:
+          - "application/json"
+        produces:
+          - "application/json"
+        parameters:
+          - name: "email"
+            in: "body"
+            required: true
+            description: "email of the user"
+            schema:
+              $ref: "#/definitions/User"
+          - name: "password"
+            in: "body"
+            required: true
+            description: "password of the user"
+            schema:
+              $ref: "#/definitions/User"
+        responses:
+          '200':
+            description: OK
+            schema:
+              type: "string"
+              items:
+                $ref: "#/definitions/Token"
+          '404':
+            description: "No users found with this email"
+          '400':
+            description: "Invalid email/password"
 
 definitions:
   User:
