@@ -111,6 +111,34 @@ const buy = async (req, res) => {
     }
 }
 
+const transactions = async (req, res) => {
+    try {
+        const { token, symbol, from, to } = req.query;
+        if (token === undefined || token === null || token === "") throw "Bad Request wrong token field";
+        if (symbol !== undefined) {
+            if (symbol === null || (symbol !== "EUR" && symbol !== "USD")) throw "Bad Request wrong symbol field";
+        }
+        if (from !== undefined && to !== undefined) {
+            if (from === null || from === "") throw "Bad Request wrong from field";
+            if (to === null || to === "") throw "Bad Request wrong from field";
+        }
+
+
+
+        grpcUsers.listTransactions({ token, date: { from, to }, symbol }, (err, data) => {
+            console.log(err, data);
+            if (data) return res.status(200).json({ status: "ok", data: !data.data ? [] : data.data })
+            if (err) return GRPCerrorHandler(err, res)
+        })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
+
+
+
+
 function GRPCerrorHandler(err, res) {
     console.log(err);
     switch (err.code) {
@@ -133,7 +161,6 @@ function GRPCerrorHandler(err, res) {
     }
 }
 
-
 function errorHandler(error, res) {
     if (typeof error != "string") return res.status(500).json({ status: "rejected", cause: `Server Error ${error.message}` })
     if (error.includes("Bad Request")) return res.status(400).json({ status: "rejected", cause: error })
@@ -143,7 +170,6 @@ function errorHandler(error, res) {
     return res.status(422).json({ status: "rejected", error: error });
 }
 
-
 module.exports = {
-    signUp, login, deposit, withdraw, balance, buy
+    signUp, login, deposit, withdraw, balance, buy, transactions
 }

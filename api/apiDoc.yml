@@ -216,7 +216,39 @@ paths:
           description: "auth token not valid"
         '400':
           description: "Invalid parameters or not enough money to pay"
-
+  /transactions:
+    get:
+      operationId: transactions
+      summary: "get the history of transactions"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token"
+          in: "query"
+          required: true
+          description: "auth token"
+          type: string
+        - name: "date"
+          in: query
+          required: false
+          type: string
+        - name: "symbol"
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Transactions"
+        '400':
+          description: "missing or wrong argument"
+        '403':
+          description: "auth token not valid"
 definitions:
   User:
     type: 'object'
