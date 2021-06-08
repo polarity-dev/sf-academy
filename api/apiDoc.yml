@@ -249,6 +249,34 @@ paths:
           description: "missing or wrong argument"
         '403':
           description: "auth token not valid"
+  /exchangeValue:
+    get:
+      operationId: exchangeValue
+      summary: "get the exchanged Value"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "value"
+          in: "query"
+          required: true
+          description: "value"
+          type: number
+        - name: "symbol"
+          in: "query"
+          required: true
+          description: "value"
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        '403':
+          description: "auth token not valid"
 definitions:
   User:
     type: 'object'

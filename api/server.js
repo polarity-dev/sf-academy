@@ -3,9 +3,9 @@ const bodyParser = require("body-parser")
 const { initialize } = require("express-openapi")
 const { join } = require("path")
 const cors = require('cors')
-const { signUp, login, deposit, withdraw, balance, buy, transactions } = require("./services/operations")
+const { signUp, login, deposit, withdraw, balance, buy, transactions, exchangeValue } = require("./services/operations")
 const operations = {
-    signUp, login, deposit, withdraw, balance, buy, transactions
+    signUp, login, deposit, withdraw, balance, buy, transactions, exchangeValue
 };
 
 

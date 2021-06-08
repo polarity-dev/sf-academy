@@ -136,7 +136,22 @@ const transactions = async (req, res) => {
     }
 }
 
+const exchangeValue = async (req, res) => {
+    try {
+        const { value, symbol } = req.query;
+        if (value === undefined || value === null || value < 0) throw "Bad Request wrong value field";
+        if (symbol === undefined || symbol === null || (symbol !== "EUR" && symbol !== "USD")) throw "Bad Request wrong symbol field";
 
+        grpcUsers.exchangeValue({ value, symbol }, (err, data) => {
+            console.log(err, data);
+            if (data) return res.status(200).json({ status: "ok", data: data })
+            if (err) return GRPCerrorHandler(err, res)
+        })
+
+    } catch (error) {
+        errorHandler(error, res)
+    }
+}
 
 
 function GRPCerrorHandler(err, res) {
@@ -171,5 +186,5 @@ function errorHandler(error, res) {
 }
 
 module.exports = {
-    signUp, login, deposit, withdraw, balance, buy, transactions
+    signUp, login, deposit, withdraw, balance, buy, transactions, exchangeValue
 }
