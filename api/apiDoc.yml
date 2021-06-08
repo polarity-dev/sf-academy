@@ -117,6 +117,44 @@ paths:
           description: "auth token not valid"
         '400':
           description: "Invalid parameters"
+  /withdraw:
+    post:
+      operationId: withdraw
+      summary: "withdraw money"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "token"
+          in: "body"
+          required: true
+          description: "auth token"
+          schema:
+            $ref: "#/definitions/Movement"
+        - name: "value"
+          in: "body"
+          required: true
+          description: "auth token"
+          schema:
+            $ref: "#/definitions/Movement"
+        - name: "symbol"
+          in: "body"
+          required: true
+          description: "auth token"
+          schema:
+            $ref: "#/definitions/Movement"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: "object"
+            items:
+              $ref: "#/definitions/Balance"
+        '403':
+          description: "auth token not valid"
+        '400':
+          description: "Invalid parameters or not enough money to withdraw"
 
 definitions:
   User:
