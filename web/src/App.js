@@ -3,8 +3,20 @@ import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login"
 import Transactions from "./pages/Transactions";
+import { useAuth } from './utils/auth';
+import { useEffect } from 'react';
 
 function App() {
+
+  const auth = useAuth();
+
+  useEffect(() => {
+    auth.checkLogin();
+    console.log(auth);
+    // eslint-disable-next-line
+  }, []);
+
+
   return (
     <Router>
       <Switch>
