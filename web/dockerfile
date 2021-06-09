@@ -6,6 +6,6 @@ WORKDIR /app
 
 EXPOSE 5000
 
-RUN yarn add package.json
+RUN yarn install
 
 CMD npm run build && yarn global add serve && serve -s build
