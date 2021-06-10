@@ -5,6 +5,7 @@ import Login from "./pages/Login"
 import Transactions from "./pages/Transactions";
 import { useAuth } from './utils/auth';
 import { useEffect } from 'react';
+import PrivateRoute from "./utils/PrivateRoute"
 
 function App() {
 
@@ -20,12 +21,12 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <PrivateRoute exact path="/">
           <Home />
-        </Route>
-        <Route exact path="/history">
+        </PrivateRoute>
+        <PrivateRoute exact path="/history">
           <Transactions />
-        </Route>
+        </PrivateRoute>
         <Route exact path="/login">
           <Login />
         </Route>
