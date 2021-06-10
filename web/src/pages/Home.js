@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import Eur from "../components/BalanceEUR";
 import Usd from "../components/BalanceUSD";
 import Navbar from "../components/Navbar";
+import Exchange from "../components/Exchange";
 import { address, useAuth } from "../utils/auth";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
@@ -53,6 +54,8 @@ export default function Home() {
                     </div>
 
                 </section>
+
+                <Exchange updater={update} />
 
             </main>
 
