@@ -1,0 +1,42 @@
+version: "3"
+services:
+  users:
+    container_name: users_service
+    image: "sassonegalattico/users-service"
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9001:9001"
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_URI=${DB_URI}
+  exchange:
+    container_name: exchange_service
+    image: "sassonegalattico/exchange-service"
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9000:9000"
+  api:
+    container_name: api_service
+    image: "sassonegalattico/api-service"
+    volumes:
+      - "./proto:/src/proto"
+    ports:
+      - "9002:9002"
+    expose:
+      - 9002
+    depends_on:
+      - exchange
+      - users
+  nginx:
+    image: nginx:latest
+    container_name: server
+    ports:
+      - "80:80"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - exchange
+      - users
+      - api
