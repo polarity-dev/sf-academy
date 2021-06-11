@@ -32,7 +32,7 @@ Localmente invece per ogni servizio viene creata un immagine docker diversa, le 
 
 ```dotenv
 MYSQL_PASSWORD=<password>
-MYSQL_ROOT_PASSWORD=root
+MYSQL_ROOT_PASSWORD=<root_password>
 JWT_SECRET=<segreto>
 DB_URI=mysql://admin:<password>d@db_service:3306/utentiMicroservice
 ```
@@ -47,6 +47,8 @@ docker-compose up
 
 Localmente l'applicazione sarà attiva sulla porta [80](http://localhost), mentre se si vuole interagire direttamente con l'API il servizio si trova sulla porta [9002](http://localhost:9002) oppure direttamente dalla porta 80 sulla root `/api/` [qui](http://localhost/api).
 La descrizione dettagliata del funzionamento dell'API si trova in `./api/apiDoc.yml` nella cartella del progetto.
+<br>
+È possibile visitare l'applicazione funzionante e online cliccando sul badge in alto
 
 ## Deploy su AWS
 
