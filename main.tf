@@ -109,12 +109,16 @@ output "rds_address" {
 
 
 resource "aws_instance" "exchange-services" {
+
   depends_on      = [time_sleep.wait_30_seconds]
   ami             = "ami-043097594a7df80ec"
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.exchange-sgroup.name]
   key_name        = aws_key_pair.generated_key.key_name
 
+  tags = {
+    Name = "exchange-services"
+  }
 
   provisioner "file" {
     source      = "./EC2Config/docker-composeEC2.yml"
@@ -168,7 +172,59 @@ resource "aws_instance" "exchange-services" {
 
 }
 
-
 output "ec2_address" {
   value = aws_instance.exchange-services.public_dns
+}
+
+variable "bucket_name" {
+  default = "exchangeapp"
+}
+
+resource "aws_s3_bucket" "er_secchio" {
+  bucket        = var.bucket_name
+  acl           = "public-read"
+  force_destroy = true
+  versioning {
+    enabled = true
+  }
+
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD", "PUT", "POST"]
+    allowed_origins = ["http://${aws_instance.exchange-services.public_dns}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+
+  policy = <<EOF
+{
+  "Id": "bucket_policy_site",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "bucket_policy_site_main",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Principal": "*"
+    }
+  ]
+}
+EOF
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+
+  provisioner "local-exec" {
+    command = "cd web && set REACT_APP_ADDRESS=${aws_instance.exchange-services.public_dns} && npm run build && aws s3 sync ./build  s3://${var.bucket_name}"
+  }
+}
+
+output "website_endpoint" {
+  value = aws_s3_bucket.er_secchio.website_endpoint
 }
