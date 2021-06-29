@@ -6,6 +6,6 @@ WORKDIR /app
 
 RUN npm i
 
-CMD npm run start
+EXPOSE 3000
 
-EXPOSE 5500
+CMD npm start
