@@ -1,0 +1,37 @@
+version: "3.8"
+services: 
+    # database
+    database:
+        image: "mysql"
+        expose:
+        - 3308
+        ports:
+        - "3308:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_PORT: 3306
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    # backend
+    exchange:
+        container_name: exchange
+        build: "./backend/exchange"
+        ports:
+            - "9000:9000"
+    users:
+        container_name: users
+        build: "./backend/users"
+        ports:
+            - "9001:9001"
+    # api:
+    #     container_name: api
+    #     build: "./backend/api"
+    #     ports:
+    #         - "9002:9002"
+    # frontend
+    frontend:
+        container_name: frontend
+        build: ./frontend
+        ports:
+            - "80:3000"

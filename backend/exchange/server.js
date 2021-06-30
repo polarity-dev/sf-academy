@@ -8,7 +8,7 @@ const xml2js = require('xml2js');
 
 const financial = (value) => {
     return Number.parseFloat(value).toFixed(2);
-}
+};
 
 const implementations = {
     exchange: async (call, callback) => {
@@ -31,8 +31,8 @@ const implementations = {
             .then((xml) => {
                 xml2js.parseString(xml.data, (error, result) => {
                     const usdConversionRate = result['gesmes:Envelope'].Cube[0].Cube[0].Cube[0]['$'].rate;
-                    
-                    if (from.toLowerCase() === to.toLowerCase()){
+
+                    if (from.toLowerCase() === to.toLowerCase()) {
                         return callback(null, {
                             code: grpc.status.OK,
                             value: financial(value),

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package users;
+
+service Users {
+    rpc signup(User) returns (Token) {};
+}
+
+message Token {
+    string jwt = 1;
+}
+
+message User {
+    string email = 1;
+    string password = 2;
+    string iban = 3;
+}
