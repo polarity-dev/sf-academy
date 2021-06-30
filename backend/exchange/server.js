@@ -15,13 +15,13 @@ const implementations = {
         const { value, from, to } = call.request;
 
         if (value === undefined || value === null || typeof value != 'number') {
-            return callback(null, { code: grpc.status.INVALID_ARGUMENT, error: "Invalid argument: 'value'" });
+            return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'value'" });
         }
         if (from === undefined || from === null || from === '' || !['eur', 'usd'].includes(from.toLowerCase())) {
-            return callback(null, { code: grpc.status.INVALID_ARGUMENT, error: "Invalid argument: 'from'" });
+            return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'from'" });
         }
         if (to === undefined || to === null || to === '' || !['eur', 'usd'].includes(to.toLowerCase())) {
-            return callback(null, { code: grpc.status.INVALID_ARGUMENT, error: "Invalid argument: 'to'" });
+            return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'to'" });
         }
 
         const ECB_URI = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml';
@@ -53,7 +53,7 @@ const implementations = {
                 });
             })
             .catch((error) => {
-                return callback(null, { code: grpc.status.UNAVAILABLE, error: 'There was a problem getting XML, try again later.' });
+                return callback({ code: grpc.status.UNAVAILABLE, error: 'There was a problem getting XML, try again later.' });
             });
     },
 };
