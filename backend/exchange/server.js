@@ -31,17 +31,24 @@ const implementations = {
             .then((xml) => {
                 xml2js.parseString(xml.data, (error, result) => {
                     const usdConversionRate = result['gesmes:Envelope'].Cube[0].Cube[0].Cube[0]['$'].rate;
-
-                    if (from.toLowerCase() === 'eur') {
+                    
+                    if (from.toLowerCase() === to.toLowerCase()){
                         return callback(null, {
                             code: grpc.status.OK,
-                            value: financial(value * usdConversionRate),
+                            value: financial(value),
                         });
                     } else {
-                        return callback(null, {
-                            code: grpc.status.OK,
-                            value: financial(value / usdConversionRate),
-                        });
+                        if (from.toLowerCase() === 'eur') {
+                            return callback(null, {
+                                code: grpc.status.OK,
+                                value: financial(value * usdConversionRate),
+                            });
+                        } else {
+                            return callback(null, {
+                                code: grpc.status.OK,
+                                value: financial(value / usdConversionRate),
+                            });
+                        }
                     }
                 });
             })
