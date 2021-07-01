@@ -2,7 +2,10 @@ version: "3.8"
 services: 
     # database
     database:
+        container_name: database
         image: "mysql"
+        cap_add:
+            - SYS_NICE
         expose:
         - 3308
         ports:
@@ -13,25 +16,52 @@ services:
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        volumes:
+            # ADD schema.sql /docker-entrypoint-initdb.d
+            - "./schema.sql:/docker-entrypoint-initdb.d/schema.sql"
     # backend
     exchange:
         container_name: exchange
         build: "./backend/exchange"
         ports:
             - "9000:9000"
+        restart: always
+    volumes:
+        - "./proto:./proto"
     users:
         container_name: users
         build: "./backend/users"
         ports:
             - "9001:9001"
+        environment:
+            - JWT_SECRET=${JWT_SECRET}
+            - DATABASE_URI=${DATABASE_URI}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+        restart: always
+        volumes:
+            - "./proto:./proto"
+        depends_on:
+            - database
     # api:
     #     container_name: api
     #     build: "./backend/api"
     #     ports:
     #         - "9002:9002"
+    #     restart: always  
+    #     depends_on: 
+    #         - database
+    #         - exchange
+    #         - users
     # frontend
     frontend:
         container_name: frontend
         build: ./frontend
         ports:
             - "80:3000"
+        depends_on: 
+            - database
+            - exchange
+            - users
+            # - api
