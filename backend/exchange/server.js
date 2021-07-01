@@ -58,7 +58,7 @@ const implementations = {
     },
 };
 
-const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync('exchange.proto'));
+const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/exchange.proto')));
 const server = new grpc.Server();
 server.bindAsync = promisify(server.bindAsync);
 server
