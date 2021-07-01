@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS exchangeMicroserviceDatabase;
+CREATE DATABASE IF NOT EXISTS exchange_microservice_database;
 
-USE exchangeMicroserviceDatabase;
+USE exchange_microservice_database;
 
 CREATE TABLE IF NOT EXISTS `user`(
     `id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS `user`(
 );
 CREATE TABLE IF NOT EXISTS `exchange`(
     `id` INT PRIMARY KEY AUTO_INCREMENT,
-    `execution_date` DATETIME NOT NULL,
+    `execution_date` DATETIME DEFAULT NOW(),
     `transaction_type` ENUM('deposit', 'withdraw', 'buy') NOT NULL,
     `value` DOUBLE NOT NULL,
-    `currency` ENUM('$', '€') NOT NULL,
+    `currency` VARCHAR(1) NOT NULL,
     `fk_id_user` INT NOT NULL,
     FOREIGN KEY(`fk_id_user`) REFERENCES `user`(`id`)
 );
