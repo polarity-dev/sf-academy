@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package users;
+
+service Users {
+    rpc signup(User) returns (Response) {};
+    rpc login(Login) returns (Token) {};
+    rpc deposit(Movement) returns (CurrentBalance) {};
+    rpc withdraw(Movement) returns (CurrentBalance) {};
+    rpc buy(Movement) returns (CurrentBalance) {};
+    // rpc listTransactions(Filter) returns (Transactions) {};
+}
+
+message User {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    string iban = 4;
+    double usd = 5;
+    double eur = 6;
+}
+
+message Login {
+    string email = 1;
+    string password = 2;
+}
+
+message Movement {
+    string token = 1;
+    double value = 2;
+    string symbol = 3;
+}
+
+message CurrentBalance {
+    double eurCurrent = 1;
+    double usdCurrent = 2;
+}
+
+message Filter {
+    string token = 1;
+    optional string from = 2;
+    optional string to = 3;
+    optional string symbol = 4;
+}
+
+message Transaction {
+    int32 id = 1;
+    string date = 2;
+    string type = 3;
+    double value = 4;
+    string currency = 5;
+}
+
+message Transactions {
+    repeated Transaction transactions = 1;
+}
+
+message Token {
+    string token = 1;
+}
+
+message Response {
+    string response = 1;
+}
