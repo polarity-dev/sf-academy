@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `exchange`(
     `transaction_type` ENUM('deposit', 'withdraw', 'buy') NOT NULL,
     `value` DOUBLE NOT NULL,
     `currency` VARCHAR(1) NOT NULL,
+    `converted_value` DOUBLE DEFAULT NULL,
     `fk_id_user` INT NOT NULL,
     FOREIGN KEY(`fk_id_user`) REFERENCES `user`(`id`)
 );

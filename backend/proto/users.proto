@@ -8,7 +8,7 @@ service Users {
     rpc deposit(Movement) returns (CurrentBalance) {};
     rpc withdraw(Movement) returns (CurrentBalance) {};
     rpc buy(Movement) returns (CurrentBalance) {};
-    // rpc listTransactions(Filter) returns (Transactions) {};
+    rpc listTransactions(Filter) returns (Transactions) {};
 }
 
 message User {
@@ -49,6 +49,7 @@ message Transaction {
     string type = 3;
     double value = 4;
     string currency = 5;
+    double convertedValue = 6;
 }
 
 message Transactions {

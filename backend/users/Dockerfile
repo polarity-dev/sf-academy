@@ -1,10 +1,10 @@
 FROM node:latest
 
-COPY . /app
-
 WORKDIR /app
 
-RUN npm i --production
+COPY . .
+
+RUN npm i 
 
 EXPOSE 9001
 
