@@ -1,0 +1,250 @@
+swagger: "2.0"
+info:
+  title: "SF-Academy Exchange Microservice API"
+  version: "1.0.0"
+  description: "API for Exchange Microservice @ SF-Academy"
+paths:
+  /listTransactions:
+    get:
+      tags:
+        - "listTransactions"
+      summary: "Shows all transactions from an account"
+      description: "Shows all transactions and let's filter those transactions from an account"
+      operationId: "listTransactions"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: token
+          type: string
+          description: "Token for authorization"
+          required: true
+        - in: query
+          name: from
+          type: string
+          description: "Date to start filter from"
+          required: false
+        - in: query
+          name: to
+          type: string
+          description: "Date to finish filter to"
+          required: false
+        - in: query
+          name: symbol
+          type: string
+          description: "Currency to filer, can be $ or €"
+          required: false
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: object
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /exchange:
+    get:
+      tags:
+        - "exchange"
+      summary: "Conversion from USD to EUR or viceversa"
+      description: "Conversion rate comes from ecb.europa.eu"
+      operationId: "exchange"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: value
+          type: number
+          description: "Money value that you want to convert"
+          required: true
+        - in: query
+          name: from
+          type: string
+          description: "Currency you want to convert from"
+          required: true
+        - in: query
+          name: to
+          type: string
+          description: "Currency you want to convert to"
+          required: true
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: object
+            properties:
+              value:
+                type: number
+                description: "Converted value"
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /signup:
+    post:
+      tags:
+        - "signup"
+      summary: "Registers the user into the database"
+      operationId: "signup"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: user
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: object
+            properties:
+              response:
+                type: string
+                description: "Response message"
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /login:
+    post:
+      tags:
+        - "login"
+      summary: "User login"
+      description: "Gives to the user an authorization code"
+      operationId: "login"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: user
+          description: "Account data necessary for logging in"
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: "JWT for authorization"
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /deposit:
+    post:
+      tags:
+        - "deposit"
+      summary: "Let's the user deposit some money into his account"
+      operationId: "deposit"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: movement
+          schema:
+            $ref: '#/definitions/Movement'
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/CurrentBalance'
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /withdraw:
+    post:
+      tags:
+        - "withdraw"
+      summary: "Let's the user withdraw some money from his account"
+      operationId: "withdraw"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: movement
+          schema:
+            $ref: '#/definitions/Movement'
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/CurrentBalance'
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /buy:
+    post:
+      tags:
+        - "buy"
+      summary: "Let's the user buy some money from EUR to USD or viceversa into his account"
+      operationId: "buy"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: movement
+          schema:
+            $ref: '#/definitions/Movement'
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/CurrentBalance'
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+definitions:
+  User:
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      iban:
+        type: string
+  Movement:
+    type: object
+    properties:
+      token:
+        type: string
+      value:
+        type: number
+      symbol:
+        type: string
+  CurrentBalance:
+    type: object
+    properties:
+      eurCurrent:
+        type: number
+      usdCurrent:
+        type: number

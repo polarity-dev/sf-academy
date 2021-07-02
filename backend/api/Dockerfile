@@ -1,11 +1,11 @@
 FROM node:latest
 
-COPY . /app
-
 WORKDIR /app
 
-RUN npm i --production
+COPY . .
 
-EXPOSE 9002
+RUN npm i 
+
+EXPOSE 9000
 
 CMD npm start
