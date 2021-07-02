@@ -10,17 +10,21 @@ const financial = (value) => {
     return Number.parseFloat(value).toFixed(2);
 };
 
+const checkNullOrUndefined = (element) => {
+    return element === undefined || element === null;
+};
+
 const implementations = {
     exchange: async (call, callback) => {
         const { value, from, to } = call.request;
 
-        if (value === undefined || value === null || typeof value != 'number') {
+        if (checkNullOrUndefined(value) || typeof value != 'number') {
             return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'value'" });
         }
-        if (from === undefined || from === null || from === '' || !['eur', 'usd'].includes(from.toLowerCase())) {
+        if (checkNullOrUndefined(from) || from === '' || !['EUR', 'USD'].includes(from.toUpperCase())) {
             return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'from'" });
         }
-        if (to === undefined || to === null || to === '' || !['eur', 'usd'].includes(to.toLowerCase())) {
+        if (checkNullOrUndefined(to) || to === '' || !['EUR', 'USD'].includes(to.toUpperCase())) {
             return callback({ code: grpc.status.INVALID_ARGUMENT, message: "Invalid argument: 'to'" });
         }
 
@@ -32,13 +36,13 @@ const implementations = {
                 xml2js.parseString(xml.data, (error, result) => {
                     const usdConversionRate = result['gesmes:Envelope'].Cube[0].Cube[0].Cube[0]['$'].rate;
 
-                    if (from.toLowerCase() === to.toLowerCase()) {
+                    if (from.toUpperCase() === to.toUpperCase()) {
                         return callback(null, {
                             code: grpc.status.OK,
                             value: financial(value),
                         });
                     } else {
-                        if (from.toLowerCase() === 'eur') {
+                        if (from.toUpperCase() === 'EUR') {
                             return callback(null, {
                                 code: grpc.status.OK,
                                 value: financial(value * usdConversionRate),
