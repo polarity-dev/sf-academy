@@ -26,6 +26,12 @@ const pool = mysql.createPool({
 
 const promisePool = pool.promise();
 
+const checkDates = (from, to) => {
+    const date1 = new Date(from);
+    const date2 = new Date(to);
+    return date1 > date2;
+};
+
 const getCurrentDATETIME = () => {
     // MySQL DATETIME Format: YYYY-MM-DD hh:mm:ss
     const currentDate = Date.now();
@@ -62,22 +68,26 @@ const grpcClient = new clientDescriptor.exchange.Exchange('0.0.0.0:9000', grpc.c
 
 const implementations = {
     signup: async (call, callback) => {
-        let { username, email, password, iban } = call.request;
-
-        username = username.trim().toLowerCase();
-        email = email.trim().toLowerCase();
-        password = await bcrypt.hash(password.trim(), 10);
-        iban = iban.toUpperCase();
-
         try {
-            await promisePool.query('INSERT INTO user(username, email, password, iban) VALUES (?, ?, ?, ?)', [username, email, password, iban]);
-        } catch (error) {
-            if (error.code === 'ER_DUP_ENTRY') {
-                return callback({ code: grpc.status.ALREADY_EXISTS, message: 'An account with the inserted email already exists.' });
+            let { username, email, password, iban } = call.request;
+
+            username = username.trim().toLowerCase();
+            email = email.trim().toLowerCase();
+            password = await bcrypt.hash(password.trim(), 10);
+            iban = iban.toUpperCase();
+
+            try {
+                await promisePool.query('INSERT INTO user(username, email, password, iban) VALUES (?, ?, ?, ?)', [username, email, password, iban]);
+            } catch (error) {
+                if (error.code === 'ER_DUP_ENTRY') {
+                    return callback({ code: grpc.status.ALREADY_EXISTS, message: 'An account with the inserted email already exists.' });
+                }
+                return callback({ code: grpc.status.INTERNAL, message: error });
             }
-            return callback({ code: grpc.status.INTERNAL, message: error });
+            return callback(null, { code: grpc.status.OK, response: 'Sign up went fine!' });
+        } catch (err) {
+            return callback({ code: grpc.status.INTERNAL, message: err });
         }
-        return callback(null, { code: grpc.status.OK, response: 'Sign up went fine!' });
     },
     login: async (call, callback) => {
         let { email, password } = call.request;
@@ -204,7 +214,7 @@ const implementations = {
         }
 
         try {
-            await grpcClient.exchange({ value: value, from: from, to: to }, async (err, data) => {
+            await grpcClient.exchange({ value, from, to }, async (err, data) => {
                 const convertedValue = data.value;
                 try {
                     const { id } = getDataFromJWT(token);
@@ -249,6 +259,15 @@ const implementations = {
             jwt.verify(token, 'test123');
         } catch {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
+        }
+
+        if (checkDates(from, to)) {
+            [from, to] = [to, from];
+        }
+
+        if (from === to) {
+            from += ' 00:00:00';
+            to += ' 23:59:59';
         }
 
         try {
