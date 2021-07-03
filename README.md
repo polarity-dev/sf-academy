@@ -6,8 +6,8 @@
   - [x] Exchange Microservice
   - [x] Users Microservice
   - [x] API Microservice
-- [ ] Frontend
-  - [ ] React WebApp
+- [x] Frontend
+  - [x] React WebApp
 
 ## Media utilizzati
 
@@ -19,5 +19,6 @@
 - Authentication/Authorization:
   - [JWT](https://www.npmjs.com/package/jsonwebtoken)
   - [React Auth Hook](https://usehooks.com/useAuth/)
+  - [BCryptJS](https://github.com/kelektiv/node.bcrypt.js#readme)
 - Docker
   - [Setting Up a MySQL Database in Docker](https://betterprogramming.pub/setting-up-mysql-database-in-a-docker-d6c69a3e9afe) - Ashutosh Karna.

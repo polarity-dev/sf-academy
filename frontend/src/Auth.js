@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 
 export const authContext = createContext();
-export const baseRoute = 'https://localhost:9001';
+export const baseRoute = 'http://localhost:9002';
 
 export default function ProvideAuth({ children }) {
     const auth = useProvideAuth();
@@ -17,31 +17,46 @@ function useProvideAuth() {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
-    const login = async ({ username, password }) => {
-        await axios
-            .post(`${baseRoute}/login`, {
-                username: username,
-                password: password,
-            })
-            .then(function (response) {
-                //console.log(response);
-                const responseData = response.data;
-                console.log(response.data);
-                const { data } = responseData; // JWT
-                console.log('pippolone', data);
-                localStorage.setItem('token', data);
-                setUser(JSON.parse(atob(localStorage.getItem('token').split('.')[1])));
-                setToken(data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
-    };
+    // const login = async ({ email, password }) => {
+    //     axios
+    //         .post(`${baseRoute}/login`, {
+    //             email,
+    //             password,
+    //         })
+    //         .then((response) => {
+    //             const { data } = response.data; // JWT
+    //             const jwt = data.token;
+    //             localStorage.setItem('token', jwt);
+    //             const jwtToken = localStorage.getItem('token');
+    //             setUser(JSON.parse(atob(jwtToken.split('.')[1])));
+    //             setToken(jwt);
+    //             return response;
+    //         })
+    //         .catch((error) => {
+    //             return error;
+    //         });
+    // };
+
+    // const signup = async ({ email, password, username, iban }) => {
+    //     axios
+    //         .post(`${baseRoute}/signup`, {
+    //             email,
+    //             password,
+    //             username,
+    //             iban,
+    //         })
+    //         .then((response) => {
+    //             return response;
+    //         })
+    //         .catch((error) => {
+    //             return error;
+    //         });
+    // };
 
     const logout = () => {
         localStorage.setItem('token', '');
     };
-    
+
     const checkLogin = () => {
         if (isAuthenticated()) {
             const jwtToken = localStorage.getItem('token');
@@ -63,7 +78,10 @@ function useProvideAuth() {
     return {
         user,
         token,
-        login,
+        setUser,
+        setToken,
+        // login,
+        // signup,
         logout,
         isAuthenticated,
         checkLogin,
