@@ -8,9 +8,16 @@ export default function Navbar() {
     const location = useLocation();
 
     return (
-        <div className="h-auto flex justify-between px-8 py-4 items-center flex-col sm:flex-row gap-3">
+        <div className="bg-white h-auto flex justify-between px-8 py-4 items-center flex-col sm:flex-row gap-3">
             <div>
-                <p className="text-blue-500 text-xl font-semibold">Exchange</p>
+                <button
+                    className="text-blue-500 text-xl font-bold"
+                    onClick={() => {
+                        history.push('/');
+                    }}
+                >
+                    Exchange
+                </button>
             </div>
             {!auth.isAuthenticated() ? (
                 <div className="flex space-x-2">

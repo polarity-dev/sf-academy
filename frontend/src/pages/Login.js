@@ -68,7 +68,9 @@ export default function Login() {
                                 >
                                     Not registered? Signup here.
                                 </button>
-                                <input type="submit" value="Login" className="text-center focus:ring-2 focus:outline-none focus:ring-blue-200 py-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md cursor-pointer" />
+                                <button type="submit" className="text-center focus:ring-2 focus:outline-none focus:ring-blue-200 py-2 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md cursor-pointer">
+                                    Login
+                                </button>
                             </form>
                         )}
                     />

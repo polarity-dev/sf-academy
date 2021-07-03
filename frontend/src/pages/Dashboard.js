@@ -6,7 +6,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { Form, Field } from 'react-final-form';
 import toast, { Toaster } from 'react-hot-toast';
-
+import Footer from '../components/Footer';
 const isNumber = (value) => (!isNaN(parseFloat(value)) && parseFloat(value) >= 0 ? undefined : 'Must be a positive number');
 const checkEmpty = (value) => (value === undefined || value === null || value === '' ? 'Cannot be empty' : undefined);
 
@@ -73,7 +73,8 @@ export default function Dashboard() {
                         <Withdraw setEurBalance={setEurBalance} setUsdBalance={setUsdBalance} />
                     </div>
                 </div>
-            </div>
+            </div>            
+            <Footer />
         </div>
     ) : (
         <div className="w-screen h-screen flex jutify-center items-center">
