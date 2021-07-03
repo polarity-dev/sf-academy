@@ -1,15 +1,15 @@
-version: "3.8"
-services: 
+version: '3.8'
+services:
     # database
     database:
         container_name: database
-        image: "mysql"
+        image: mysql:8.0.25
         cap_add:
             - SYS_NICE
         expose:
-        - 3308
+            - 3306
         ports:
-        - "3308:3306"
+            - '3306:3306'
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_PORT: 3306
@@ -17,22 +17,22 @@ services:
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
-            # ADD schema.sql /docker-entrypoint-initdb.d
-            - "./schema.sql:/docker-entrypoint-initdb.d/schema.sql"
+            # ADD ddl_schema.sql /docker-entrypoint-initdb.d
+            - './ddl_schema.sql:/docker-entrypoint-initdb.d/ddl_schema.sql'
     # backend
     exchange:
         container_name: exchange
-        build: "./backend/exchange"
+        build: './backend/exchange'
         ports:
-            - "9000:9000"
+            - '9000:9000'
         restart: always
-    volumes:
-        - "./proto:./proto"
+        volumes:
+            - './backend/proto:/app/proto'
     users:
         container_name: users
-        build: "./backend/users"
+        build: './backend/users'
         ports:
-            - "9001:9001"
+            - '9001:9001'
         environment:
             - JWT_SECRET=${JWT_SECRET}
             - DATABASE_URI=${DATABASE_URI}
@@ -41,28 +41,51 @@ services:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
         restart: always
         volumes:
-            - "./proto:./proto"
+            - './backend/proto:/app/proto'
         depends_on:
             - database
     api:
         container_name: api
-        build: "./backend/api"
+        build: './backend/api'
         ports:
-            - "9002:9002"
+            - '9002:9002'
+        expose:
+            - 9002
         restart: always
         volumes:
-            - "./proto:./proto"
-        depends_on: 
+            - './backend/proto:/app/proto'
+        depends_on:
             - database
             - exchange
             - users
+    # nginx
+    web:
+        image: nginx:1.20.1-alpine
+        container_name: nginx
+        volumes:
+            - './nginx.conf:/etc/nginx/templates/default.conf.template'
+        ports:
+            - '80:80'
+        expose: 
+            - 80
+        environment:
+            - NGINX_PORT=80
+            # - NGINX_HOST=foobar.com
+        depends_on:
+            - database
+            - exchange
+            - users
+            - api
+            - frontend
     # frontend
     frontend:
         container_name: frontend
         build: ./frontend
         ports:
-            - "80:3000"
-        depends_on: 
+            - '5000:80'
+        expose: 
+            - 5000
+        depends_on:
             - database
             - exchange
             - users
