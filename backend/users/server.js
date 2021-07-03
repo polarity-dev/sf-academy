@@ -283,7 +283,7 @@ const implementations = {
             }
             if (!checkEmpty(from) && !checkEmpty(to) && !checkEmpty(symbol)) {
                 const query = promisePool.format('SELECT * FROM exchange WHERE fk_id_user = ? AND currency LIKE ? AND execution_date BETWEEN ? AND ? ORDER BY id ASC', [id, symbol, from, to]);
-                console.log(query);
+                // console.log(query);
                 const [results, schema] = await promisePool.query(query);
                 const transactions = [];
 
@@ -301,6 +301,29 @@ const implementations = {
             }
         } catch (error) {
             return callback({ code: grpc.status.INTERNAL, message: error });
+        }
+    },
+    currentBalance: async (call, callback) => {
+        try {
+            let { token } = call.request;
+
+            try {
+                // jwt.verify(token, process.env.JWT_SECRET);
+                jwt.verify(token, 'test123');
+            } catch {
+                return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
+            }
+
+            const { id } = getDataFromJWT(token);
+
+            try {
+                const [results, schema] = await promisePool.query('SELECT * FROM user WHERE id = ?', [id]);
+                return callback(null, { code: grpc.status.OK, eurCurrent: results[0].eur_balance, usdCurrent: results[0].usd_balance });
+            } catch (error) {
+                return callback({ code: grpc.status.INTERNAL, message: error });
+            }
+        } catch (err) {
+            return callback({ code: grpc.status.INTERNAL, message: err });
         }
     },
 };

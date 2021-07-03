@@ -102,11 +102,25 @@ const operations = {
         }
     },
     listTransactions: async (req, res, next) => {
-        console.log('hello');
         try {
             const { token, from, to, symbol } = req.query;
 
             await grpcUsersClient.listTransactions({ token, from, to, symbol }, (err, data) => {
+                if (err) {
+                    return res.status(400).json({ error: err.details });
+                }
+                return res.status(200).json({ status: 'OK', data: data });
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: error.details });
+        }
+    },
+    currentBalance: async (req, res, next) => {
+        try {
+            const { token } = req.query;
+
+            await grpcUsersClient.currentBalance({ token }, (err, data) => {
                 if (err) {
                     return res.status(400).json({ error: err.details });
                 }

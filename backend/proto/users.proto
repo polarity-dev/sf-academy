@@ -9,6 +9,7 @@ service Users {
     rpc withdraw(Movement) returns (CurrentBalance) {};
     rpc buy(Movement) returns (CurrentBalance) {};
     rpc listTransactions(Filter) returns (Transactions) {};
+    rpc currentBalance(Token) returns (CurrentBalance) {};
 }
 
 message User {
@@ -63,3 +64,5 @@ message Token {
 message Response {
     string response = 1;
 }
+
+message void {}

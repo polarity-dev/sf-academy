@@ -4,47 +4,6 @@ info:
   version: "1.0.0"
   description: "API for Exchange Microservice @ SF-Academy"
 paths:
-  /listTransactions:
-    get:
-      tags:
-        - "listTransactions"
-      summary: "Shows all transactions from an account"
-      description: "Shows all transactions and let's filter those transactions from an account"
-      operationId: "listTransactions"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: query
-          name: token
-          type: string
-          description: "Token for authorization"
-          required: true
-        - in: query
-          name: from
-          type: string
-          description: "Date to start filter from"
-          required: false
-        - in: query
-          name: to
-          type: string
-          description: "Date to finish filter to"
-          required: false
-        - in: query
-          name: symbol
-          type: string
-          description: "Currency to filer, can be $ or €"
-          required: false
-      responses:
-        200:
-          description: "OK"
-          schema:
-            type: object
-        400:
-          description: "Invalid input"        
-        500:
-          description: "Server error"
   /exchange:
     get:
       tags:
@@ -216,6 +175,73 @@ paths:
           description: "OK"
           schema:
             $ref: '#/definitions/CurrentBalance'
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /listTransactions:
+    get:
+      tags:
+        - "listTransactions"
+      summary: "Shows all transactions from an account"
+      description: "Shows all transactions and let's filter those transactions from an account"
+      operationId: "listTransactions"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: token
+          type: string
+          description: "Token for authorization"
+          required: true
+        - in: query
+          name: from
+          type: string
+          description: "Date to start filter from"
+          required: false
+        - in: query
+          name: to
+          type: string
+          description: "Date to finish filter to"
+          required: false
+        - in: query
+          name: symbol
+          type: string
+          description: "Currency to filer, can be $ or €"
+          required: false
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/CurrentBalance'
+        400:
+          description: "Invalid input"        
+        500:
+          description: "Server error"
+  /currentBalance:
+    get:
+      tags:
+        - "currentBalance"
+      summary: "Shows current balance of an account"
+      description: "Shows the current balance of both currencies of an account"
+      operationId: "currentBalance"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: query
+          name: token
+          type: string
+          description: "Token for authorization"
+          required: true
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: object
         400:
           description: "Invalid input"        
         500:

@@ -44,16 +44,18 @@ services:
             - "./proto:./proto"
         depends_on:
             - database
-    # api:
-    #     container_name: api
-    #     build: "./backend/api"
-    #     ports:
-    #         - "9002:9002"
-    #     restart: always  
-    #     depends_on: 
-    #         - database
-    #         - exchange
-    #         - users
+    api:
+        container_name: api
+        build: "./backend/api"
+        ports:
+            - "9002:9002"
+        restart: always
+        volumes:
+            - "./proto:./proto"
+        depends_on: 
+            - database
+            - exchange
+            - users
     # frontend
     frontend:
         container_name: frontend
@@ -64,4 +66,4 @@ services:
             - database
             - exchange
             - users
-            # - api
+            - api
