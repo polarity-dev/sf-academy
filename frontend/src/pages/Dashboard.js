@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth, baseRoute } from '../Auth';
 import { useHistory } from 'react-router-dom';
-import { GiMoneyStack, GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
+import { GiPayMoney, GiReceiveMoney, GiTakeMyMoney } from 'react-icons/gi';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { Form, Field } from 'react-final-form';
