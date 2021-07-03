@@ -2,10 +2,10 @@
 
 ## Obiettivi
 
-- [ ] Backend
+- [x] Backend
   - [x] Exchange Microservice
-  - [ ] Users Microservice
-  - [ ] API Microservice
+  - [x] Users Microservice
+  - [x] API Microservice
 - [ ] Frontend
   - [ ] React WebApp
 
@@ -13,3 +13,11 @@
 
 - gRPC:
   - [gRPC Crash Course](https://youtu.be/Yw4rkaTc0f8) - Hussein Nasser.
+  - [Proto3 | Protobuf](https://developers.google.com/protocol-buffers/docs/proto3)
+- OpenAPI
+  - [Swagger](https://swagger.io/docs/specification/2-0/basic-structure/)
+- Authentication/Authorization:
+  - [JWT](https://www.npmjs.com/package/jsonwebtoken)
+  - [React Auth Hook](https://usehooks.com/useAuth/)
+- Docker
+  - [Setting Up a MySQL Database in Docker](https://betterprogramming.pub/setting-up-mysql-database-in-a-docker-d6c69a3e9afe) - Ashutosh Karna.
