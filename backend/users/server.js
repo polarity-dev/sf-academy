@@ -8,21 +8,25 @@ const jwt = require('jsonwebtoken');
 var atob = require('atob');
 const mysql = require('mysql2');
 
+const pool = mysql.createPool({
+    host: process.env.DATABASE_URI,
+    port: 3306,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+});
+
 // const pool = mysql.createPool({
-//     host: process.env.DATABASE_URI,
+//     host: 'localhost',
 //     port: 3306,
-//     user: process.env.MYSQL_USER,
-//     password: process.env.MYSQL_PASSWORD,
-//     database: process.env.MYSQL_DATABASE,
+//     user: 'root',
+//     password: '',
+//     database: 'exchange_microservice_database',
 // });
 
-const pool = mysql.createPool({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'exchange_microservice_database',
-});
+const clientDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/exchange.proto')));
+const grpcClient = new clientDescriptor.exchange.Exchange('exchange:9000', grpc.credentials.createInsecure());
+// const grpcClient = new clientDescriptor.exchange.Exchange('0.0.0.0:9000', grpc.credentials.createInsecure());
 
 const promisePool = pool.promise();
 
@@ -63,10 +67,6 @@ const getDataFromJWT = (jwt) => {
         throw 'Error parsing JWT.';
     }
 };
-
-const clientDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/exchange.proto')));
-// const grpcClient = new clientDescriptor.exchange.Exchange('exchange:9000', grpc.credentials.createInsecure());
-const grpcClient = new clientDescriptor.exchange.Exchange('0.0.0.0:9000', grpc.credentials.createInsecure());
 
 const implementations = {
     signup: async (call, callback) => {
@@ -115,8 +115,8 @@ const implementations = {
                 try {
                     const match = await bcrypt.compare(password, passwordHash);
                     if (match) {
-                        // const token = jwt.sign({ id: userData.id, username: userData.username, email: userData.email, iban: userData.iban }, process.env.JWT_SECRET);
-                        const token = jwt.sign({ id: userData.id, username: userData.username, email: userData.email, iban: userData.iban }, 'test123');
+                        const token = jwt.sign({ id: userData.id, username: userData.username, email: userData.email, iban: userData.iban }, process.env.JWT_SECRET);
+                        // const token = jwt.sign({ id: userData.id, username: userData.username, email: userData.email, iban: userData.iban }, 'test123');
                         return callback(null, { code: grpc.status.OK, token: token });
                     } else {
                         return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Log in failed!' });
@@ -132,8 +132,8 @@ const implementations = {
     deposit: async (call, callback) => {
         const { token, value, symbol } = call.request;
         try {
-            // jwt.verify(token, process.env.JWT_SECRET);
-            jwt.verify(token, 'test123');
+            jwt.verify(token, process.env.JWT_SECRET);
+            // jwt.verify(token, 'test123');
         } catch {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
         }
@@ -161,8 +161,8 @@ const implementations = {
     withdraw: async (call, callback) => {
         const { token, value, symbol } = call.request;
         try {
-            // jwt.verify(token, process.env.JWT_SECRET);
-            jwt.verify(token, 'test123');
+            jwt.verify(token, process.env.JWT_SECRET);
+            // jwt.verify(token, 'test123');
         } catch {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
         }
@@ -196,8 +196,8 @@ const implementations = {
     buy: async (call, callback) => {
         const { token, value, symbol } = call.request;
         try {
-            // jwt.verify(token, process.env.JWT_SECRET);
-            jwt.verify(token, 'test123');
+            jwt.verify(token, process.env.JWT_SECRET);
+            // jwt.verify(token, 'test123');
         } catch {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
         }
@@ -257,8 +257,8 @@ const implementations = {
         const { token } = call.request;
         let { from, to, symbol } = call.request;
         try {
-            // jwt.verify(token, process.env.JWT_SECRET);
-            jwt.verify(token, 'test123');
+            jwt.verify(token, process.env.JWT_SECRET);
+            // jwt.verify(token, 'test123');
         } catch {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
         }
@@ -308,8 +308,8 @@ const implementations = {
             let { token } = call.request;
 
             try {
-                // jwt.verify(token, process.env.JWT_SECRET);
-                jwt.verify(token, 'test123');
+                jwt.verify(token, process.env.JWT_SECRET);
+                // jwt.verify(token, 'test123');
             } catch {
                 return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
             }
