@@ -43,7 +43,9 @@ const getCurrentDATETIME = () => {
     const mm = dateObject.getMinutes();
     const ss = dateObject.getSeconds();
 
-    return `${YYYY}-${MM}-${DD} ${hh}:${mm}:${ss}`;
+    const DATETIME = `${YYYY}-${MM}-${DD} ${hh}:${mm}:${ss}`;
+
+    return DATETIME;
 };
 
 const financial = (value) => {
@@ -261,15 +263,6 @@ const implementations = {
             return callback({ code: grpc.status.UNAUTHENTICATED, message: 'Token is invalid!' });
         }
 
-        if (checkDates(from, to)) {
-            [from, to] = [to, from];
-        }
-
-        if (from === to) {
-            from += ' 00:00:00';
-            to += ' 23:59:59';
-        }
-
         try {
             const { id } = getDataFromJWT(token);
             if (checkEmpty(from)) {
@@ -278,12 +271,19 @@ const implementations = {
             if (checkEmpty(to)) {
                 to = getCurrentDATETIME();
             }
+            if (from === to) {
+                from += ' 00:00:00';
+                to += ' 23:59:59';
+            }
+            if (checkDates(from, to)) {
+                [from, to] = [to, from];
+            }
             if (checkEmpty(symbol)) {
                 symbol = '_';
             }
             if (!checkEmpty(from) && !checkEmpty(to) && !checkEmpty(symbol)) {
                 const query = promisePool.format('SELECT * FROM exchange WHERE fk_id_user = ? AND currency LIKE ? AND execution_date BETWEEN ? AND ? ORDER BY id ASC', [id, symbol, from, to]);
-                // console.log(query);
+                console.log(query);
                 const [results, schema] = await promisePool.query(query);
                 const transactions = [];
 
