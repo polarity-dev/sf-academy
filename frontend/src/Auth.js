@@ -2,8 +2,8 @@ import React, { createContext, useState, useContext } from 'react';
 // import axios from 'axios';
 
 export const authContext = createContext();
-export const baseRoute = 'http://localhost:9002';
-// export const baseRoute = 'http://nginx/api';
+// export const baseRoute = 'http://localhost:9002';
+export const baseRoute = 'http://nginx/api';
 
 export default function ProvideAuth({ children }) {
     const auth = useProvideAuth();
