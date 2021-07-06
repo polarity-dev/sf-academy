@@ -16,7 +16,7 @@ function Round(number){
 }
 
 // Extract exchange rates for EUR from XML
-function GetExchangeRates(xml){
+function GetExchangeRates(){
   let header = Object.keys(xml_object)[0];
   let currency_list =  Object.values(xml_object[header].Cube[0].Cube[0])[1];
   for(let i = 0; i < currency_list.length; i++){
@@ -37,7 +37,7 @@ function GetXML(){
       parser.parseString(data, (error, result) => {
         if(error === null) {
           xml_object = result;
-          GetExchangeRates(xml_object);
+          GetExchangeRates();
         }
         else {
           console.log(error);
