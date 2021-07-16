@@ -25,7 +25,7 @@ const pool = mysql.createPool({
 // });
 
 const clientDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/exchange.proto')));
-const grpcClient = new clientDescriptor.exchange.Exchange('exchange:9000', grpc.credentials.createInsecure());
+const grpcClient = new clientDescriptor.exchange.Exchange(`${process.env.EXCHANGE_URI}:9000`, grpc.credentials.createInsecure());
 // const grpcClient = new clientDescriptor.exchange.Exchange('0.0.0.0:9000', grpc.credentials.createInsecure());
 
 const promisePool = pool.promise();

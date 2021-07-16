@@ -8,6 +8,10 @@ RUN npm install
 
 COPY ./ /app/
 
+ARG REACT_APP_NGINX_URI
+
+ENV REACT_APP_NGINX_URI=$REACT_APP_NGINX_URI
+
 RUN npm run build
 
 FROM nginx

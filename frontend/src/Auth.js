@@ -3,7 +3,8 @@ import React, { createContext, useState, useContext } from 'react';
 
 export const authContext = createContext();
 // export const baseRoute = 'http://localhost:9002';
-export const baseRoute = 'http://nginx/api';
+// https://create-react-app.dev/docs/adding-custom-environment-variables/
+export const baseRoute = `http://${process.env.REACT_APP_NGINX_URI}/api`;
 
 export default function ProvideAuth({ children }) {
     const auth = useProvideAuth();

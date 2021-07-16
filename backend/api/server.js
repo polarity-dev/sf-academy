@@ -11,12 +11,12 @@ const grpc = require('@grpc/grpc-js');
 
 // gRPC Client for Users
 const descriptorUsers = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/users.proto')));
-const grpcUsersClient = new descriptorUsers.users.Users('users:9001', grpc.credentials.createInsecure());
+const grpcUsersClient = new descriptorUsers.users.Users(`${process.env.USERS_URI}:9001`, grpc.credentials.createInsecure());
 // const grpcUsersClient = new descriptorUsers.users.Users('0.0.0.0:9001', grpc.credentials.createInsecure());
 
 // gRPC Client for Exchange
 const descriptorExchange = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, './proto/exchange.proto')));
-const grpcExchangeClient = new descriptorExchange.exchange.Exchange('exchange:9000', grpc.credentials.createInsecure());
+const grpcExchangeClient = new descriptorExchange.exchange.Exchange(`${process.env.EXCHANGE_URI}:9000`, grpc.credentials.createInsecure());
 // const grpcExchangeClient = new descriptorExchange.exchange.Exchange('0.0.0.0:9000', grpc.credentials.createInsecure());
 
 const operations = {
