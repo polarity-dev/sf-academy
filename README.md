@@ -49,13 +49,14 @@ Con l'utilizzo di Terraform è possibile riprodurre in maniera perfetta il siste
   - [x] gRPC Exchange  
   - [x] gRPC Users  
   - [x] API
-- [ ] S3
-  - [ ] Frontend React
+- [x] S3
+  - [x] Frontend React
 
 ### Requisiti
 
 - [AWS CLI](https://aws.amazon.com/it/cli/), necessario per gestire i servizi AWS.
 - [Terraform CLI](https://www.terraform.io/downloads.html), necessario per utilizzare il template Terraform.
+- [Node.js / NPM](https://nodejs.org/it/download/), necessario per la build del frontend.
 
 ### Come eseguire il deploy
 
@@ -89,10 +90,14 @@ Qui è presente una lista di media (principalmente delle tecnologie a me nuove) 
   - [Terraform Docs](https://www.terraform.io/docs/index.html)
   - [Terraform AWS Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
   - [Terraform AWS](https://learn.hashicorp.com/collections/terraform/aws-get-started)
-  - [Terraform Course](https://youtu.be/SLB_c_ayRMo) - freeCodeCamp.org
+  - [Terraform Course](https://youtu.be/SLB_c_ayRMo) - [freeCodeCamp.org](https://www.freecodecamp.org/).
   - [Create database schema with terraform](https://stackoverflow.com/questions/59922023/create-database-schema-with-terraform)
   - [Manage AWS RDS Instances](https://learn.hashicorp.com/tutorials/terraform/aws-rds?in=terraform/aws)
   - [Automation of AWS Cloud using Terraform (GitHub included)](https://www.linkedin.com/pulse/automation-aws-cloud-using-terraform-github-included-raghuwanshi/) - Sanya Raghuwanshi.
   - [Deploy an EC2 to run Docker with Terraform](https://klotzandrew.com/blog/deploy-an-ec2-to-run-docker-with-terraform) - Andrew Klotz.
   - [How To Install Docker Compose On Amazon Linux AMI](https://acloudxpert.com/how-to-install-docker-compose-on-amazon-linux-ami/)
   - [Is there a way to get the Public DNS address of an instance?](https://unix.stackexchange.com/questions/24355/is-there-a-way-to-get-the-public-dns-address-of-an-instance)
+  - [Deploying a React App with S3 and Terraform](https://www.davidbegin.com/deploying-a-react-app-to-s3-with-terrraform-and-bash/) - David Begin.
+  - [Resource: aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket)
+  - [Setting permissions for website access](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html)
+  - [templatefile Function](https://www.terraform.io/docs/language/functions/templatefile.html)

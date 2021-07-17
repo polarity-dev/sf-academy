@@ -4,6 +4,12 @@ variable "EC2_AMI" {
   default     = "ami-062fdd189639d3e93"
 }
 
+variable "BUCKET_NAME" {
+  description = "S3 Bucket name for React Frontend"
+  type        = string
+  default     = "exchange-microservice-frontend-s3-bucket"
+}
+
 variable "AWS_REGION" {
   description = "AWS region"
   type        = string
@@ -55,7 +61,7 @@ variable "JWT_SECRET" {
 variable "MYSQL_DATABASE" {
   description = "AWS RDS Database name"
   type        = string
-  default = "exchange_microservice_database"
+  default     = "exchange_microservice_database"
   sensitive   = true
 }
 
@@ -63,28 +69,33 @@ variable "MYSQL_DATABASE" {
 #   description = "URI for Database"
 #   type        = string
 #   default     = aws_db_instance.database.address
+#   sensitive   = true
 # }
 
 # variable "USERS_URI" {
 #   description = "URI for Users"
 #   type        = string
-#   sensitive   = aws_instance.container.public_dns
+#   default   = aws_instance.container.public_dns
+#   sensitive   = true
 # }
 
 # variable "EXCHANGE_URI" {
 #   description = "URI for Exchange"
 #   type        = string
-#   sensitive   = aws_instance.container.public_dns
+#   default   = aws_instance.container.public_dns
+#   sensitive   = true
 # }
 
 # variable "API_URI" {
 #   description = "URI for API"
 #   type        = string
-#   sensitive   = aws_instance.container.public_dns
+#   default   = aws_instance.container.public_dns
+#   sensitive   = true
 # }
 
 # variable "NGINX_URI" {
 #   description = "URI for NGINX"
 #   type        = string
-#   sensitive   = aws_instance.container.public_dns
+#   default   = aws_instance.container.public_dns
+#   sensitive   = true
 # }

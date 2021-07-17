@@ -1,0 +1,1 @@
+mysql --host=${address} --port=${port} --user=${username} --password=${password} < ddl_schema.sql
