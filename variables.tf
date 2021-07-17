@@ -1,7 +1,7 @@
 variable "EC2_AMI" {
-  description = "Amazon Machine Images (Ubuntu Server 18.04 LTS (HVM), SSD Volume Type)"
+  description = "Amazon Machine Images (Amazon Linux 2 AMI (HVM), SSD Volume Type)"
   type        = string
-  default     = "ami-06602da18c878f98d"
+  default     = "ami-062fdd189639d3e93"
 }
 
 variable "AWS_REGION" {
@@ -13,41 +13,78 @@ variable "AWS_REGION" {
 variable "ACCESS_KEY_ID" {
   description = "AWS access key ID"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
 variable "SECRET_ACCESS_KEY" {
   description = "AWS access key secret"
   type        = string
-  sensitive = true
+  sensitive   = true
 }
 
-variable "MYSQL_USER" {
-  description = "AWS RDS Database username"
+variable "GH_REPO" {
+  description = "GitHub repo to clone"
   type        = string
-  sensitive = true
+  default     = "https://github.com/nilaerdna/sf-academy.git"
 }
 
 variable "MYSQL_ROOT_PASSWORD" {
   description = "AWS RDS Database root password"
   type        = string
-  sensitive = true
+  sensitive   = true
+}
+
+variable "MYSQL_USER" {
+  description = "AWS RDS Database username"
+  type        = string
+  sensitive   = true
 }
 
 variable "MYSQL_PASSWORD" {
   description = "AWS RDS Database user password"
   type        = string
-  sensitive = true
+  sensitive   = true
+}
+
+variable "JWT_SECRET" {
+  description = "JSON Web Token Secret"
+  type        = string
+  sensitive   = true
 }
 
 variable "MYSQL_DATABASE" {
   description = "AWS RDS Database name"
   type        = string
-  sensitive = true
+  default = "exchange_microservice_database"
+  sensitive   = true
 }
 
-variable "DB_PORT" {
-  description = "AWS RDS Database port"
-  type        = string
-  sensitive = true
-}
+# variable "DATABASE_URI" {
+#   description = "URI for Database"
+#   type        = string
+#   default     = aws_db_instance.database.address
+# }
+
+# variable "USERS_URI" {
+#   description = "URI for Users"
+#   type        = string
+#   sensitive   = aws_instance.container.public_dns
+# }
+
+# variable "EXCHANGE_URI" {
+#   description = "URI for Exchange"
+#   type        = string
+#   sensitive   = aws_instance.container.public_dns
+# }
+
+# variable "API_URI" {
+#   description = "URI for API"
+#   type        = string
+#   sensitive   = aws_instance.container.public_dns
+# }
+
+# variable "NGINX_URI" {
+#   description = "URI for NGINX"
+#   type        = string
+#   sensitive   = aws_instance.container.public_dns
+# }

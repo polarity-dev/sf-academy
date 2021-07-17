@@ -3,4 +3,5 @@
 *.txt
 .terraform*
 *.tfstate*
-*.tfvars
+terraform.tfvars
+id_rsa*

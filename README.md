@@ -21,13 +21,13 @@ I componenti richiesti dalla prova sono quelle sottostanti.
 
 - [Docker](https://www.docker.com/get-started), necessario per la riproduzione in locale degli applicativi.
 
-### Come utilizzarlo
+### Come utilizzarlo in locale
 
-  1. Clonare la repository.
-  2. Rinomincare il file `.env.template` in `.env` e compilare i campi al suo interno.
-  3. Aprire un terminale
-  4. Entrare nella cartella `cd /percorso/della/cartella`
-  5. Eseguire il comando `docker-compose up --build`
+1. Clonare la repository.
+2. Rinomincare il file `.env.template` in `.env` e compilare i campi al suo interno.
+3. Aprire un terminale.
+4. Entrare nella cartella `cd /percorso/della/cartella`.
+5. Eseguire il comando `docker-compose up --build`.
 
 ### Informazioni aggiuntive
 
@@ -37,11 +37,36 @@ L'accesso all'API può essere effettuata sulla route `api` o direttamente alla p
 
 Le funzioni gRPC sono esposte sulla porta `9000` per `exchange` e `9001` per `users`.
 
-## Deploy
+## AWS
 
-Parte di AWS
+Con l'utilizzo di Terraform è possibile riprodurre in maniera perfetta il sistema.
 
-### Media utilizzati
+### Infrastruttura
+
+- [x] RDS
+  - [x] Database MySQL
+- [x] EC2
+  - [x] gRPC Exchange  
+  - [x] gRPC Users  
+  - [x] API
+- [ ] S3
+  - [ ] Frontend React
+
+### Requisiti
+
+- [AWS CLI](https://aws.amazon.com/it/cli/), necessario per gestire i servizi AWS.
+- [Terraform CLI](https://www.terraform.io/downloads.html), necessario per utilizzare il template Terraform.
+
+### Come eseguire il deploy
+
+1. Clonare la repository.
+2. Rinomincare il file `terraform_template.tfvars` in `terraform.tfvars` e compilare i campi al suo interno.
+3. Aprire un terminale.
+4. Entrare nella cartella `cd /percorso/della/cartella`.
+5. Eseguire il comando `terraform apply -auto-approve`.
+6. Attendere l'inizializzazione delle macchine AWS.
+
+## Media utilizzati
 
 Qui è presente una lista di media (principalmente delle tecnologie a me nuove) che ho utilizzato per la realizzazio della prova.
 
@@ -67,3 +92,7 @@ Qui è presente una lista di media (principalmente delle tecnologie a me nuove) 
   - [Terraform Course](https://youtu.be/SLB_c_ayRMo) - freeCodeCamp.org
   - [Create database schema with terraform](https://stackoverflow.com/questions/59922023/create-database-schema-with-terraform)
   - [Manage AWS RDS Instances](https://learn.hashicorp.com/tutorials/terraform/aws-rds?in=terraform/aws)
+  - [Automation of AWS Cloud using Terraform (GitHub included)](https://www.linkedin.com/pulse/automation-aws-cloud-using-terraform-github-included-raghuwanshi/) - Sanya Raghuwanshi.
+  - [Deploy an EC2 to run Docker with Terraform](https://klotzandrew.com/blog/deploy-an-ec2-to-run-docker-with-terraform) - Andrew Klotz.
+  - [How To Install Docker Compose On Amazon Linux AMI](https://acloudxpert.com/how-to-install-docker-compose-on-amazon-linux-ami/)
+  - [Is there a way to get the Public DNS address of an instance?](https://unix.stackexchange.com/questions/24355/is-there-a-way-to-get-the-public-dns-address-of-an-instance)
