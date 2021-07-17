@@ -43,30 +43,32 @@ message WithdrawRequest{
 message BuyRequest{
   string token = 1;
   float amount = 2;
-  string currency = 3;
+  string currencyFrom = 3;
+  string currencyTo = 4;
 }
 
 message ListTransactionsRequest{
   string token = 1;
-  string fliter = 2;
+  int32 fliter = 2;
 }
 
 // Replies
 message Reply{
-  int32 code = 1;
+  string errorMessage = 1;
 }
 
 message SignupReply{
-  int32 code = 1;
+  string errorMessage = 1;
   string token = 2;
 }
 
 message LoginReply{
-  int32 code = 1;
+  string errorMessage = 1;
   string token = 2;
+  string accounts = 3;
 }
 
 message ListTransactionsReply{
-  int32 code = 1;
-  string transactionList = 2;
+  string errorMessage = 1;
+  string transactions = 2;
 }
