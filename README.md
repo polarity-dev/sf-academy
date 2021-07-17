@@ -1,5 +1,7 @@
 # SF-Academy | exchange-microservice
 
+Puoi accedere al sito hostato su S3 da [qui](http://exchange-microservice-frontend-s3-bucket.s3-website.eu-west-3.amazonaws.com/)
+
 ## Traccia
 
 Le istruzioni della prova sono disponibili qui: [exchange-microservice.md](https://github.com/soluzionifutura/sf-academy/blob/master/prove/exchange-microservice.md)
@@ -64,8 +66,13 @@ Con l'utilizzo di Terraform è possibile riprodurre in maniera perfetta il siste
 2. Rinomincare il file `terraform_template.tfvars` in `terraform.tfvars` e compilare i campi al suo interno.
 3. Aprire un terminale.
 4. Entrare nella cartella `cd /percorso/della/cartella`.
-5. Eseguire il comando `terraform apply -auto-approve`.
-6. Attendere l'inizializzazione delle macchine AWS.
+   1. Se in un sistema Windows, modificare il file `s3_local-exec.sh` cambiare la keyword `export` con `set`.
+5. Configurare AWS con `aws configure`.
+6. Eseguire il comando `terraform init`.
+7. Eseguire il comando `terraform apply -auto-approve`.
+8. Attendere l'inizializzazione delle macchine AWS.
+   1. Puoi controllare i container facendo `docker ps` all'interno della console direttamente dal browser.
+   2. Se sono presenti 6 container all'interno della macchina EC2, vuol dire che è pronto.
 
 ## Media utilizzati
 
