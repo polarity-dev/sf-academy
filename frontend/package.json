@@ -8,6 +8,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
+    "final-form": "^4.20.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-final-form": "^6.5.3",
