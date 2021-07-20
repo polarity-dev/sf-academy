@@ -18,7 +18,7 @@ La piattaforma dovrà prevedere una registrazione degli utenti, la visualizzazio
 ### Backend
 Il backend e' costituito da tre microservizi hostati su una EC2, ed un database MySql su RDS.
 
-I microservizi devono comunicare tra loro in GRPC, esponendo rispettivamente la porta 9000 (exchange) e 9001 (users). L' API dovrà invece deve esporre pubblicamente sulla porta 80 gli endpoint dell'applicazione seguendo il comune paradigma RPC. Si suggerisce l'utilizzo di NGINX per la gestione del traffico da internet all'API. Tutti i microservizi devono essere sviluppati in NodeJs.
+I microservizi devono comunicare tra loro in GRPC, esponendo rispettivamente la porta 9000 (exchange) e 9001 (users). L' API dovrà invece deve esporre pubblicamente sulla porta 80 gli endpoint dell'applicazione seguendo il comune paradigma RPC. Si suggerisce l'utilizzo di NGINX per la gestione del traffico da internet all'API. Tutti i microservizi devono essere sviluppati in NodeJs e TypeScript.
 
  Suggeriamo di visionare un semplice esempio di implementazione di [GRPC](https://github.com/soluzionifutura/grpc-test)
  
@@ -38,7 +38,7 @@ L'interfaccia di questo microservizio è quindi molto semplice ed espone una sol
 - **API**: questo microservizio è l'unico accessibile direttamente da internet e deve essere sviluppato usando open api ed express [vedi esempio](https://github.com/soluzionifutura/open-api-demo). Lo scopo dell'api è quello di ricevere le chiamate dell'esterno e smistarle ai vari microservizi, rispondendo con i risultati effettivamente restituiti dagli stessi
 
 ### Frontend
-E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa deve essere realizzata con React, nello specifico usando solo componenti funzionali. La grafica e la UI della pagina non sarà discriminante per il successo della prova, ma apprezzata.
+E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa deve essere realizzata in TypeScript con React, nello specifico usando solo componenti funzionali. La grafica e la UI della pagina non sarà discriminante per il successo della prova, ma apprezzata.
 La webapp deve essere servita da AWS S3.
 
 ### NB
