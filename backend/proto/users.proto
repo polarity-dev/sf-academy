@@ -5,9 +5,9 @@ package users;
 service UserMethods{
   rpc Signup (SignupRequest) returns (SignupReply) {}
   rpc Login (LoginRequest) returns (LoginReply) {}
-  rpc Deposit (DepositRequest) returns (Reply) {}
-  rpc Withdraw (WithdrawRequest) returns (Reply) {}
-  rpc Buy (BuyRequest) returns (Reply) {}
+  rpc Deposit (DepositRequest) returns (AccountsReply) {}
+  rpc Withdraw (WithdrawRequest) returns (AccountsReply) {}
+  rpc Buy (BuyRequest) returns (AccountsReply) {}
   rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsReply) {}
 }
 
@@ -49,26 +49,36 @@ message BuyRequest{
 
 message ListTransactionsRequest{
   string token = 1;
-  int32 fliter = 2;
+  string filter = 2;
 }
 
 // Replies
 message Reply{
-  string errorMessage = 1;
+  string s = 1;
 }
 
 message SignupReply{
-  string errorMessage = 1;
+  int32 errorCode = 1;
   string token = 2;
+  string name = 3;
+  string iban = 4;
+  string accounts = 5;
 }
 
 message LoginReply{
-  string errorMessage = 1;
+  int32 errorCode = 1;
   string token = 2;
-  string accounts = 3;
+  string name = 3;
+  string iban = 4;
+  string accounts = 5;
+}
+
+message AccountsReply{
+  int32 errorCode = 1;
+  string accounts = 2;
 }
 
 message ListTransactionsReply{
-  string errorMessage = 1;
+  int32 errorCode = 1;
   string transactions = 2;
 }

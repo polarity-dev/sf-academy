@@ -1,0 +1,364 @@
+swagger: "2.0"
+info:
+  description: API for users and exchange microservices
+  title: exchange-ms API
+  version: "1.0.0"
+host: localhost:80
+basePath: "/v1"
+schemes:
+  - https
+  - http
+paths:
+  /exchangerates:
+    get:
+      tags:
+        - exchange
+      operationId: exchangeRates
+      summary: Returns exchange rates list
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              rates:
+                type: string
+                description: exchange rates in json format
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/login:
+    post:
+      tags:
+        - user
+      operationId: login
+      summary: Returns login token and list of user's accounts
+      parameters:
+        - name: email
+          in: formData
+          description: The email for login
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: The password for login in clear text
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: token for user session
+              name:
+                type: string
+                description: a name for the user
+              iban:
+                type: string
+                description: user's bank account
+              accounts:
+                type: string
+                description: list of user's accounts
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        401:
+          description: NOT OK. Wrong email or password
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/signup:
+    post:
+      tags:
+        - user
+      operationId: signup
+      summary: creates new user and returns token
+      parameters:
+        - name: email
+          in: formData
+          description: The email for signup
+          required: true
+          type: string
+        - name: password
+          in: formData
+          description: The password for signup in clear text
+          required: true
+          type: string
+        - name: name
+          in: formData
+          description: The user's name
+          required: true
+          type: string
+        - name: iban
+          in: formData
+          description: The user's iban
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: token for user session
+              name:
+                type: string
+                description: a name for the user
+              iban:
+                type: string
+                description: user's bank account
+              accounts:
+                type: string
+                description: list of user's accounts
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        401:
+          description: NOT OK. email alrady in use
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/deposit:
+    post:
+      tags:
+        - user
+      operationId: deposit
+      summary: adds balance to one account
+      parameters:
+        - name: token
+          in: formData
+          description: User's token
+          required: true
+          type: string
+        - name: currency
+          in: formData
+          description: Indicates which currency is being used
+          required: true
+          type: string
+        - name: amount
+          in: formData
+          description: Value of deposit
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              accounts:
+                type: string
+                description: updated list of user's accounts
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        402:
+          description: Invalid token
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/withdraw:
+    post:
+      tags:
+        - user
+      operationId: withdraw
+      summary: subtracts balance to one account
+      parameters:
+        - name: token
+          in: formData
+          description: User's token
+          required: true
+          type: string
+        - name: currency
+          in: formData
+          description: Indicates which currency is being used
+          required: true
+          type: string
+        - name: amount
+          in: formData
+          description: Value of withdraw
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              accounts:
+                type: string
+                description: updated list of user's accounts
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        401:
+          description: Insuffcient balance
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        402:
+          description: Invalid token
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/buy:
+    post:
+      tags:
+        - user
+      operationId: buy
+      summary: Exchanges money from one currency to another
+      parameters:
+        - name: token
+          in: formData
+          description: User's token
+          required: true
+          type: string
+        - name: currencyFrom
+          in: formData
+          description: Source account for transaction
+          required: true
+          type: string
+        - name: currencyTo
+          in: formData
+          description: Destination account for transaction
+          required: true
+          type: string
+        - name: amount
+          in: formData
+          description: Value of transaction
+          required: true
+          type: number
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              accounts:
+                type: string
+                description: updated list of user's accounts
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        401:
+          description: Insuffcient balance
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        402:
+          description: Invalid token
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+  /user/listtransactions:
+    post:
+      tags:
+        - user
+      operationId: listTransactions
+      summary: retrieves a list of transactions
+      parameters:
+        - name: token
+          in: formData
+          description: User's token
+          required: true
+          type: string
+        - name: filter
+          in: formData
+          description: filter for search
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              transactions:
+                type: string
+                description: list of user's transactions
+        400:
+          description: Unexpected error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message
+        402:
+          description: Invalid token
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                description: detailed error message

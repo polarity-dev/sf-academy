@@ -4,6 +4,11 @@ package exchange;
 
 service ExchangeValue{
   rpc Exchange (ExchangeRequest) returns (ExchangeReply) {}
+  rpc ExchangeRates (Empty) returns (ExchangeRatesReply) {}
+}
+
+message Empty{
+
 }
 
 message ExchangeRequest{
@@ -14,4 +19,8 @@ message ExchangeRequest{
 
 message ExchangeReply{
   float value = 1;
+}
+
+message ExchangeRatesReply{
+  string rates = 1;
 }

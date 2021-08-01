@@ -1,0 +1,109 @@
+html, body, #root{
+  height: 100%;
+  user-select: none;
+}
+
+.navbar-brand:hover{
+  cursor: pointer;
+}
+
+.navigation-bar{
+  background-color: #ffffff;
+  border-bottom: 3px solid #9e27e8;
+}
+
+.navigation-link{
+  font-size: 1.2rem;
+}
+
+.navigation-link:hover, .navigation-link:focus{
+  color: #9e27e8!important;
+}
+
+.custom-toggler .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(158, 39, 232, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler.navbar-toggler {
+  border: 2px solid #9e27e8;
+}
+
+.custom-toggler.navbar-toggler:active:focus:not(:disabled):not(.disabled){
+  box-shadow: 0 0 0 0.2rem #9719e6;
+}
+
+.custom-toggler:hover,
+.custom-toggler:focus,
+.custom-toggler.focus,
+.custom-toggler:active,
+.custom-toggler.active,
+.open>.dropdown-toggle.custom-toggler {
+  box-shadow: 0 0 0 0.2rem #b644fc;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:disabled{
+  background-color: #9e27e8;
+  border-color: #9e27e8;
+}
+
+.btn-primary:active:focus:not(:disabled):not(.disabled){
+  box-shadow: 0 0 0 0.2rem #9719e6;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary:active,
+.btn-primary.active,
+.open>.dropdown-toggle.btn-primary {
+  background-color: #a63ce8;
+  border-color: #a63ce8;
+  box-shadow: 0 0 0 0.2rem #b644fc;
+}
+
+#container{
+  text-align: center;
+  background: #fbc2eb;
+  background: -webkit-linear-gradient(to right, rgba(251, 194, 235, 0.5), rgba(166, 193, 238, 0.5));
+  background: linear-gradient(to right, rgba(251, 194, 235, 0.5), rgba(166, 193, 238, 0.5));
+}
+
+.content{
+  background-color: #ffffff;
+  border-radius: 15px;
+}
+
+.error-message{
+  font-size: 0.9rem;
+  color: red;
+}
+
+.currency-flag{
+  width: 46px;
+  height: 32px;
+}
+
+.currency-flag.eur{
+  margin-top: -10px;
+}
+
+.card-rate{
+  background-color: #f5f6ff;
+}
+
+.card-account{
+  background-color: #f5f6ff;
+}
+
+.card-account-image{
+  width: 100%;
+  height: 105.75px;
+}
+
+table.table{
+  font-size: 0.9rem;
+}
+
+.react-bootstrap-table-pagination{
+  text-align: left;
+}

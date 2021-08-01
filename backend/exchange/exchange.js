@@ -1,11 +1,11 @@
+require('dotenv').config();
 const protoLoader = require("@grpc/proto-loader");
 const grpc = require("@grpc/grpc-js");
 const https = require('https');
-const xml2js = require('xml2js');
 const { join } = require("path");
-const { PORT = 9000 } = process.env;
-
+const xml2js = require('xml2js');
 const parser = new xml2js.Parser();
+const PORT = process.env.PORT;
 
 var xml_object;
 var exchange_rates_EUR = new Map();
@@ -64,10 +64,16 @@ function Exchange(call, callback){
   callback(null, {value: value});
 }
 
-const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "./proto/exchange.proto")));
+function ExchangeRates(call, callback){
+  callback(null, {rates: JSON.stringify(Array.from(exchange_rates_EUR.entries()))});
+  console.log("Exchange rates request delivered");
+}
+
+
+const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "../proto/exchange.proto")));
 const server = new grpc.Server();
 
-server.addService(descriptor.exchange.ExchangeValue.service, {Exchange: Exchange});
+server.addService(descriptor.exchange.ExchangeValue.service, {Exchange: Exchange, ExchangeRates: ExchangeRates});
 server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
   server.start();
   xml_object = GetXML();
