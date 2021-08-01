@@ -53,9 +53,6 @@ message ListTransactionsRequest{
 }
 
 // Replies
-message Reply{
-  string s = 1;
-}
 
 message SignupReply{
   int32 errorCode = 1;
