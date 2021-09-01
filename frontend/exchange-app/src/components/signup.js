@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
-import TopNav from './navbar.js';
 import Homepage from './home';
 import App from '../App';
 

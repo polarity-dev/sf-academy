@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
 import { Redirect } from "react-router-dom";
 import image from  '../images/logo_small_icon_only_inverted.png'
-import TopNav from './navbar.js';
 import Homepage from './home';
 import App from '../App';
 
