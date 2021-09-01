@@ -138,10 +138,10 @@ const operations = {
 
 }
 
-const exch_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "../proto/exchange.proto")));
+const exch_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "/proto/exchange.proto")));
 const exch_service = new exch_descriptor.exchange.ExchangeValue(`0.0.0.0:${EXCH_PORT}`, grpc.credentials.createInsecure());
 
-const users_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "../proto/users.proto")));
+const users_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "/proto/users.proto")));
 const users_service = new users_descriptor.users.UserMethods(`0.0.0.0:${USERS_PORT}`, grpc.credentials.createInsecure());
 
 const app = express();

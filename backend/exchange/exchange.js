@@ -70,7 +70,7 @@ function ExchangeRates(call, callback){
 }
 
 
-const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "../proto/exchange.proto")));
+const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "/proto/exchange.proto")));
 const server = new grpc.Server();
 
 server.addService(descriptor.exchange.ExchangeValue.service, {Exchange: Exchange, ExchangeRates: ExchangeRates});

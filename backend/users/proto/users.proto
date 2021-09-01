@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package users;
+
+service UserMethods{
+  rpc Signup (SignupRequest) returns (SignupReply) {}
+  rpc Login (LoginRequest) returns (LoginReply) {}
+  rpc Deposit (DepositRequest) returns (AccountsReply) {}
+  rpc Withdraw (WithdrawRequest) returns (AccountsReply) {}
+  rpc Buy (BuyRequest) returns (AccountsReply) {}
+  rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsReply) {}
+}
+
+message Empty{
+
+}
+
+// Requests
+message SignupRequest{
+  string email = 1;
+  string password = 2;
+  string name = 3;
+  string iban = 4;
+}
+
+message LoginRequest{
+  string email = 1;
+  string password = 2;
+}
+
+message DepositRequest{
+  string token = 1;
+  float amount = 2;
+  string currency = 3;
+}
+
+message WithdrawRequest{
+  string token = 1;
+  float amount = 2;
+  string currency = 3;
+}
+
+message BuyRequest{
+  string token = 1;
+  float amount = 2;
+  string currencyFrom = 3;
+  string currencyTo = 4;
+}
+
+message ListTransactionsRequest{
+  string token = 1;
+  string filter = 2;
+}
+
+// Replies
+
+message SignupReply{
+  int32 errorCode = 1;
+  string token = 2;
+  string name = 3;
+  string iban = 4;
+  string accounts = 5;
+}
+
+message LoginReply{
+  int32 errorCode = 1;
+  string token = 2;
+  string name = 3;
+  string iban = 4;
+  string accounts = 5;
+}
+
+message AccountsReply{
+  int32 errorCode = 1;
+  string accounts = 2;
+}
+
+message ListTransactionsReply{
+  int32 errorCode = 1;
+  string transactions = 2;
+}
