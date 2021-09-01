@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Navbar, Nav } from 'react-bootstrap';
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SignupForm from './signup';
 import LoginForm from './login';
 import Homepage from './home';
@@ -38,34 +39,73 @@ class TopNav extends React.Component {
 
 
   render() {
-    
+
     let isLogged = (JSON.parse(localStorage.getItem("user")) === null) ? false : true;
-    let links;
+    let router;
 
     if (isLogged){
-      links = <Nav className="w-100 me-5 d-flex justify-content-end">
-                 <Nav.Link className="navigation-link mx-3" onClick={this.accountsClick}> Accounts </Nav.Link>
-                 <Nav.Link className="navigation-link mx-3" onClick={this.TransactionsClick}> Transactions </Nav.Link>
-                 <Nav.Link className="navigation-link mx-3" onClick={this.logoutClick}> Logout </Nav.Link>
-              </Nav>
+      router =  <Router>
+
+                  <Link to="/"> <Navbar.Brand>
+                    <img src= {logo}  className="d-inline-block align-top" alt="exchange logo"/>
+                  </Navbar.Brand> </Link>
+
+                  <Navbar.Toggle aria-controls="basic-navbar-nav" className = "custom-toggler"/>
+                  <Navbar.Collapse id="basic-navbar-nav" className ="mx-2 w-100">
+                    <Nav className="w-100 me-5 d-flex justify-content-end">
+                      <Link to="/accounts"> <Nav.Link className="navigation-link mx-3"> Accounts </Nav.Link> </Link>
+                      <Link to="/transactions"> <Nav.Link className="navigation-link mx-3"> Transactions </Nav.Link> </Link>
+                      <Nav.Link className="navigation-link mx-3" onClick={this.logoutClick}> Logout </Nav.Link>
+                     </Nav>
+                  </Navbar.Collapse>
+
+                  <Switch>
+                    <Route exact path="/">
+                      <Homepage />
+                    </Route>
+                    <Route path="/accounts">
+                      <Accounts />
+                    </Route>
+                    <Route path="/transactions">
+                      <Transactions />
+                    </Route>
+                  </Switch>
+                </Router>
+
     }
     else{
-      links = <Nav className="w-100 me-5 d-flex justify-content-end">
-                <Nav.Link className="navigation-link mx-3" onClick={this.signupClick}> Signup </Nav.Link>
-                <Nav.Link className="navigation-link mx-3" onClick={this.loginClick}> Login </Nav.Link>
-              </Nav>
+      router = <Router>
+
+                <Link to="/"> <Navbar.Brand>
+                  <img src= {logo}  className="d-inline-block align-top" alt="exchange logo"/>
+                </Navbar.Brand> </Link>
+
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className = "custom-toggler"/>
+                <Navbar.Collapse id="basic-navbar-nav" className ="mx-2 w-100">
+                  <Nav className="w-100 me-5 d-flex justify-content-end">
+                    <Link to="/signup"> <Nav.Link className="navigation-link mx-3"> Signup </Nav.Link> </Link>
+                    <Link to="/login"> <Nav.Link className="navigation-link mx-3"> Login </Nav.Link> </Link>
+                  </Nav>
+                </Navbar.Collapse>
+
+                <Switch>
+                  <Route exact path="/">
+                    <Homepage />
+                  </Route>
+                  <Route path="/accounts">
+                    <SignupForm />
+                  </Route>
+                  <Route path="/login">
+                    <LoginForm />
+                  </Route>
+                </Switch>
+              </Router>
     }
 
     return(
       <Navbar expand="lg" className="navigation-bar">
         <Container>
-          <Navbar.Brand>
-            <img src= {logo} onClick= {this.homeClick} className="d-inline-block align-top" alt="exchange logo"/>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" className = "custom-toggler"/>
-          <Navbar.Collapse id="basic-navbar-nav" className ="mx-2 w-100">
-            {links}
-          </Navbar.Collapse>
+          {router}
         </Container>
       </Navbar>
     );

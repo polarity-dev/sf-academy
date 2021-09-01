@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
+import { Redirect } from "react-router-dom";
 import image from  '../images/logo_small_icon_only_inverted.png'
 import TopNav from './navbar.js';
 import Homepage from './home';
+import App from '../App';
 
 class LoginForm extends React.Component {
   constructor() {
@@ -22,6 +24,7 @@ class LoginForm extends React.Component {
   fetchLogin(){
     let data = {email: this.state.email, password: this.state.password};
     let error = "";
+
     this.setState({loading: true});
     fetch('http://localhost:80/v1/user/login', {
       method: 'POST',
@@ -46,11 +49,11 @@ class LoginForm extends React.Component {
         }
 
         localStorage.setItem("user",JSON.stringify(json));
-        this.setState({loading: false});
-        ReactDOM.render(<TopNav />, document.getElementById('navbar'));
-        ReactDOM.render(<Homepage />, document.getElementById('container'));
+        this.setState({loading: false, logged: true});
+        ReactDOM.render(<App />,  document.getElementById('root'));
 
       }).catch(err => {
+        console.log(err);
         this.setState({loading: false});
         document.getElementById("error-login").innerHTML = "Connection to server failed";
       });
@@ -81,6 +84,7 @@ class LoginForm extends React.Component {
                 </Button>;
 
     return (
+
       <Container className= "content w-50 mx-auto my-3 py-5">
         <img src= {image} className="d-inline-block align-top mb-3" width="150" height="150" alt="exchange logo"/>
         <Row>

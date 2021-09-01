@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 import TopNav from './navbar.js';
 import Homepage from './home';
+import App from '../App';
 
 class SignupForm extends React.Component {
   constructor() {
@@ -51,8 +53,7 @@ class SignupForm extends React.Component {
 
           localStorage.setItem("user",JSON.stringify(json));
           this.setState({loading :false});
-          ReactDOM.render(<TopNav />, document.getElementById('navbar'));
-          ReactDOM.render(<Homepage />, document.getElementById('container'));
+          ReactDOM.render(<App />,  document.getElementById('root'));
 
       }).catch(err => {
         this.setState({loading: false});
