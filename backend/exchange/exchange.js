@@ -74,7 +74,7 @@ const descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirnam
 const server = new grpc.Server();
 
 server.addService(descriptor.exchange.ExchangeValue.service, {Exchange: Exchange, ExchangeRates: ExchangeRates});
-server.bindAsync(`localhost:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
+server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), () => {
   server.start();
   xml_object = GetXML();
   console.log("grpc exchange server started on port %O", PORT);
