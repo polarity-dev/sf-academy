@@ -20,7 +20,7 @@ class Homepage extends React.Component {
     this.setState({loading :true});
     let error = "";
 
-    fetch('http://localhost:80/v1/exchangerates', {
+    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/exchangerates', {
       method: 'GET'
       }).then(res => {
         switch (res.status) {
@@ -66,7 +66,7 @@ class Homepage extends React.Component {
                     <Card.Body className= "d-flex justify-content-around align-items-center">
                         <p className ="m-0 rate">{value}</p>
                         <p className ="m-0 currency">{key}</p>
-                        <img src= {`${process.env.PUBLIC_URL}/assets/flags_small/${key.toLowerCase()}.webp`} className ="currency-flag"/>
+                        <img src= {`${process.env.PUBLIC_URL}/assets/flags_small/${key.toLowerCase()}.webp`} className ="currency-flag" alt="flag"/>
                     </Card.Body>
                   </Card>
                     </Col>);
@@ -79,7 +79,7 @@ class Homepage extends React.Component {
     return (
       <Container className= "content w-75 mx-auto my-5 py-5">
         <h1 className="title p-0 m-0"> Exchange rates for 1 EUR
-          <img src= {`${process.env.PUBLIC_URL}/assets/flags_small/eur.webp`} className="currency-flag eur ms-3"/>
+          <img src= {`${process.env.PUBLIC_URL}/assets/flags_small/eur.webp`} className="currency-flag eur ms-3" alt="eur flag"/>
         </h1>
         {spinner}
         {cards}

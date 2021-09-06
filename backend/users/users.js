@@ -47,7 +47,7 @@ const implementations = {
       .then(res => {
         let token = jwt.sign({ user_id: res.insertId }, secret);
         console.log("SIGNUP SUCCESFUL. TOKEN = " + token);
-        callback(null, {token: token, name: name, iban: iban, accouts:'{}'});
+        callback(null, {token: token, name: name, iban: iban, accounts:'{}'});
       }).catch(err => {
         callback(null, {errorCode: 401}); // Unexpected error - or email already in use
       });
@@ -273,7 +273,9 @@ const implementations = {
 
 // Connection to exchange microservice
 const exch_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "/proto/exchange.proto")));
-const exch_service = new exch_descriptor.exchange.ExchangeValue(`0.0.0.0:${EXCH_PORT}`, grpc.credentials.createInsecure());
+const exch_service = new exch_descriptor.exchange.ExchangeValue(`172.17.0.1:${EXCH_PORT}`, grpc.credentials.createInsecure());
+
+// On Windows use host.docker.internal as IP instead
 
 const users_descriptor = grpc.loadPackageDefinition(protoLoader.loadSync(join(__dirname, "/proto/users.proto")));
 const users = new grpc.Server();

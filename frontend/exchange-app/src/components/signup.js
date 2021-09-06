@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
-import { useHistory } from "react-router-dom";
-import Homepage from './home';
 import App from '../App';
 
 class SignupForm extends React.Component {
@@ -27,7 +25,7 @@ class SignupForm extends React.Component {
     let error = "";
 
     this.setState({loading: true});
-    fetch('http://localhost:80/v1/user/signup', {
+    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/user/signup', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }

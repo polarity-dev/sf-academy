@@ -50,9 +50,9 @@ class Accounts extends React.Component {
 
   handleDepositSubmit(e) {
     e.preventDefault();
-    this.state.deposit_amount = parseFloat(this.state.deposit_amount)
+    let amount = parseFloat(this.state.deposit_amount)
 
-    if (!this.state.deposit_amount > 0) {
+    if (!amount > 0) {
       document.getElementById("error-deposit").innerHTML = "Insert a valid amount";
       return;
     }
@@ -63,11 +63,11 @@ class Accounts extends React.Component {
     }
 
     let user = JSON.parse(localStorage.getItem("user"));
-    let data = {token: user.token, currency: this.state.deposit_currency.toUpperCase(), amount: this.state.deposit_amount};
+    let data = {token: user.token, currency: this.state.deposit_currency.toUpperCase(), amount: amount};
     let error = false;
 
     this.setState({loading: true});
-    fetch('http://localhost:80/v1/user/deposit', {
+    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/user/deposit', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
@@ -104,9 +104,9 @@ class Accounts extends React.Component {
 
   handleWithdrawSubmit(e){
     e.preventDefault();
-    this.state.withdraw_amount = parseFloat(this.state.withdraw_amount)
+    let amount = parseFloat(this.state.withdraw_amount)
 
-    if (!this.state.withdraw_amount > 0) {
+    if (!amount > 0) {
       document.getElementById("error-withdraw").innerHTML = "Insert a valid amount";
       return;
     }
@@ -117,11 +117,11 @@ class Accounts extends React.Component {
     }
 
     let user = JSON.parse(localStorage.getItem("user"));
-    let data = {token: user.token, currency: this.state.withdraw_currency.toUpperCase(), amount: this.state.withdraw_amount};
+    let data = {token: user.token, currency: this.state.withdraw_currency.toUpperCase(), amount: amount};
     let error = false;
 
     this.setState({loading: true});
-    fetch('http://localhost:80/v1/user/withdraw', {
+    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/user/withdraw', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
@@ -180,7 +180,7 @@ class Accounts extends React.Component {
     let error = false;
 
     this.setState({loading: true});
-    fetch('http://localhost:80/v1/user/buy', {
+    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/user/buy', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
