@@ -23,7 +23,7 @@ class LoginForm extends React.Component {
     let error = "";
 
     this.setState({loading: true});
-    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/user/login', {
+    fetch(process.env.REACT_APP_API_ADDRESS + 'v1/user/login', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }

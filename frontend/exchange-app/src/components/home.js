@@ -20,7 +20,7 @@ class Homepage extends React.Component {
     this.setState({loading :true});
     let error = "";
 
-    fetch('http://ec2-3-143-5-22.us-east-2.compute.amazonaws.com:80/v1/exchangerates', {
+    fetch(process.env.REACT_APP_API_ADDRESS +'v1/exchangerates', {
       method: 'GET'
       }).then(res => {
         switch (res.status) {
