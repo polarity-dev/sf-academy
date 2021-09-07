@@ -86,13 +86,13 @@ EXCH_PORT = porta_desiderata_exchange
 <pre>
 EXCH_PORT = porta_desiderata_exchange
 USERS_PORT = porta_desiderata_users
-SECRET = secreto_desiderato
+SECRET = segreto_desiderato
 DB_HOST = endpoint_rds
 DB_USER = user_rds
 DB_PASSWORD = password_rds
 DB_DATABASE = exchangedb
 </pre>
-    Inserire la porta exchange scelta in precedenza; Scegliere una nuova porta per users e un secreto per la cifratura dei token jwt. Inoltre inserire i dati per l'accesso al       database, lasciando invariato l'ultimo campo. 
+    Inserire la porta exchange scelta in precedenza; Scegliere una nuova porta per users e un segreto per la cifratura dei token jwt. Inoltre inserire i dati per l'accesso al       database, lasciando invariato l'ultimo campo. 
     <br>
     In <code>sf-academy/backend/api</code> inserire: 
     <br>
