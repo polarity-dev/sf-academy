@@ -144,7 +144,7 @@ docker build -t api-ms backend/api/
 aws ecr get-login-password --region regione | docker login --username AWS --password-stdin URI
 </pre>
     Inserire al posto di <code>regione</code> la regione di utilizzo per ECR e al posto di <code>URI</code> il nome completo della propria repository.
-    Per eseguire il push bisogna assegnare un tag alle immagini costruite precedentemente; Il seguente codice può essere usato per associare l'ultima versione di <strong><em>exchange-ms</em></strong> alla repository ECR con tag <strong><em>exchange-ms-ecr</em></strong> ed effettuare il push. 
+    Per eseguire il push bisogna assegnare un tag alle immagini costruite precedentemente; Il seguente codice può essere usato per associare l'ultima versione di <strong><em>exchange-ms</em></strong> alla repository ECR <strong><em>exchange-repo</em></strong> con Image tag <strong><em>exchange-ms-ecr</em></strong> ed effettuare il push. 
     <br>
     <br>
 <pre>
@@ -185,7 +185,7 @@ Per creare l'istanza EC2 contenente i tre microservizi servirà [Amazon ECS](htt
     <img width="725" alt="cluster" src="https://user-images.githubusercontent.com/82449626/132515427-91511b36-912e-4fb9-913d-a0e08f6196ed.png">
     <br>
     <br>
-    Dare un nome al cluster e scegliere un Key Pair, eventualmente creandolo, per permettere la connessione all'istanza EC2 tramite SSH. Per il corretto funzionamento assicurarsi che il file contenente la chiave sia leggibile solamente dal proprio utente sul pc. La VPC può essere la stessa del database. Il security group deve essere configurato nel seguente modo: 
+    Dare un nome al cluster e scegliere un Key Pair, eventualmente creandolo, per permettere la connessione all'istanza EC2 tramite SSH. Per il corretto funzionamento assicurarsi che il file contenente la chiave sia leggibile solamente dal proprio utente sul pc (Su sistemi Linux eseguire <code>chmod 400 nome_file.pem</code>). La VPC può essere la stessa del database. Il security group deve essere configurato nel seguente modo: 
     <br>
     <br>
     <img width="859" alt="cluster_2" src="https://user-images.githubusercontent.com/82449626/132519462-24fb38d8-cd66-4a49-839d-1b1fb9a2e77c.png">
@@ -274,9 +274,74 @@ aws s3 sync build/ s3://exchange-app --acl public-read
     <br>
   </li>
 </ol>
-A questo punto l'applicazione è disponibile sul Web.
+A questo punto l'applicazione è disponibile sul Web, ma non potrà ancora collegarsi ai microservizi.
 <br>
 <strong> N.B </strong> Ricordarsi ora di aggiungere il dominio nella lista degli indirizzi consentiti per l'api, come spiegato in <strong><em>Step 2</strong></em>.
 
 _________
 
+### Step 5: Avviare i microservizi sulla EC2
+
+Andare su [EC2](https://console.aws.amazon.com/ec2) 
+
+<ol>
+  <li>
+    Modificare il file <code>sf-academy/backend/docker-compose.yml</code> in modo che le immagini corrispondano al rispettivo URI sulla repository ECR (con tag ripetuto una volta sola). Inoltre impostare le due porte scelte per i microservizi.
+    <br>
+    <br>
+<pre>
+version: "3"
+services:
+  exchange-ms:
+    image: URI:exchange-ms-ecr
+    ports:
+      - "PORTA_1:PORTA_1"
+  users-ms:
+    image: URI:exchange-ms-ecr:
+    ports:
+      - "PORTA_2:PORTA_2"
+  api-ms:
+    image: URI:api-ms-ecr
+    ports:
+      - "80:80"
+</pre>
+  </li>
+  <li> Connettersi via SSH alla istanza EC2 creata precedentemente. Per fare questo andare sulla propria istanza e quindi premere <strong>Connect</strong> e <strong>SSH Client</strong>
+    <br>
+    <br>
+    <img width="584" alt="ec2_ssh" src="https://user-images.githubusercontent.com/82449626/132584577-85c66a14-ab70-4c4b-a5e0-913e88420678.png">
+    <br>
+    <br>
+    Copiare l'esempio sotto il punto 4 nell'immagine ed eseguirlo sulla propria console per connetersi in remoto all'istanza. Oppure copiarlo da qua sotto e modificando i campi nome_file e public_dns:
+    <br>
+    <br>
+<pre>
+ssh -i "nome_file.pem" ec2-user@public_dns
+</pre>
+  </li>
+  <li> Installare il programma docker-compose sull'istanza eseguendo le due righe di codice in sequenza:
+<pre>
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+</pre>
+  </li>
+  <li>
+    Creare un file <code>docker-compose.yml</code> con il comando:
+    <br>
+    <br>
+<pre>
+cat > docker-compose.yml
+</pre>
+  E incollare il contenuto del file docker-compose.yml modificato nel primo passo di questo step. Premere Ctrl+D per terminare l'input e salvare il file.
+  </li>
+  <li>
+  Avviare i container docker attraverso con il comando:
+  <br>
+  <br>
+<pre>
+docker-compose up
+</pre>
+  </li>
+</ol>
+
+A questo punto il sito Web può connettersi ai microservizi.
