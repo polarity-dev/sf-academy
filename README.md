@@ -320,6 +320,8 @@ ssh -i "nome_file.pem" ec2-user@public_dns
 </pre>
   </li>
   <li> Installare il programma docker-compose sull'istanza eseguendo le due righe di codice in sequenza:
+  <br>
+  <br>
 <pre>
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
