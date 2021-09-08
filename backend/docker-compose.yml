@@ -1,14 +1,14 @@
 version: "3"
 services:
   exchange-ms:
-    image: 277114508977.dkr.ecr.us-east-2.amazonaws.com/exchange-ms:exchange-ms
+    image: exchange-ms
     ports:
       - "9000:9000"
   users-ms:
-    image: 277114508977.dkr.ecr.us-east-2.amazonaws.com/exchange-ms:users-ms
+    image: users-ms
     ports:
       - "9001:9001"
   api-ms:
-    image: 277114508977.dkr.ecr.us-east-2.amazonaws.com/exchange-ms:api-ms
+    image: api-ms
     ports:
       - "80:80"
