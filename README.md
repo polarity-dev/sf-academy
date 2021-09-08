@@ -337,7 +337,7 @@ cat > docker-compose.yml
   E incollare il contenuto del file docker-compose.yml modificato nel primo passo di questo step. Premere Ctrl+D per terminare l'input e salvare il file.
   </li>
   <li>
-  Avviare i container docker attraverso con il comando:
+  Avviare i container docker attraverso il comando:
   <br>
   <br>
 <pre>
