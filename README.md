@@ -282,7 +282,7 @@ _________
 
 ### Step 5: Avviare i microservizi sulla EC2
 
-Andare su [EC2](https://console.aws.amazon.com/ec2) 
+Link utili per lo step: [EC2](https://console.aws.amazon.com/ec2) 
 
 <ol>
   <li>
