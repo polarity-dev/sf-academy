@@ -3,7 +3,7 @@
 
 ### Step 1: Creare il database con RDS
 
-Per il salvataggio dati utenti è necessario creare un database MySQL. L'applicazione utilizza [RDS](https://us-east-2.console.aws.amazon.com/rds/home) per l'hosting di questo servizio. <br>
+Per il salvataggio dati utenti è necessario creare un database MySQL. L'applicazione utilizza [RDS](https://console.aws.amazon.com/rds/home) per l'hosting di questo servizio. <br>
 Un altro strumento utilizzato per la gestione del database è MySQL Workbench (Alternativamente anche MySQL Command Line Client) è reperibile al sito [MySQL](https://dev.mysql.com/downloads/). <br>
 
 <ol>
@@ -67,9 +67,12 @@ CREATE TABLE transactions(
 );  
 </pre>
 
+________________
+
 ### Step 2: Compilare le immagini docker per il backend e caricarle su ECR
 
-Per eseguire questo step bisogna dotarsi di [Docker](https://docs.docker.com/engine/install/) e [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) sul proprio pc. [Amazon ECR](https://us-east-2.console.aws.amazon.com/ecr) servirà per caricare le proprie immagini docker sulla piattaforma AWS.
+Per eseguire questo step bisogna dotarsi di [Docker](https://docs.docker.com/engine/install/) e [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) sul proprio pc. [Amazon ECR](https://console.aws.amazon.com/ecr) servirà per caricare le proprie immagini docker sulla piattaforma AWS. Per potere utilizzare AWS CLI è necessario effettuare la configurazione e collegamento al proprio account AWS. Una guida è disponibile [Qui](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html).
+
 <br>
 <ol>
   <li>
@@ -151,10 +154,12 @@ docker push URI:exchange-ms-ecr
     Ripetere per <strong><em>users-ms</em></strong> e <strong><em>api-ms</em></strong>.
   </li>
 </ol>
+
+________________
   
 ### Step 3: Creare Task Definition e Cluster con Servizio EC2
 
-Per creare l'istanza EC2 contenente i tre microservizi servirà [Amazon ECS](https://us-east-2.console.aws.amazon.com/ecs).
+Per creare l'istanza EC2 contenente i tre microservizi servirà [Amazon ECS](https://console.aws.amazon.com/ecs).
 
 <ol>
   <li>
@@ -199,4 +204,79 @@ Per creare l'istanza EC2 contenente i tre microservizi servirà [Amazon ECS](htt
   </li>
 </ol>
 
-Dopo aver creato il servizio dovrebbe apparire una nuova istanza nella propria [EC2](https://us-east-2.console.aws.amazon.com/ec2)
+Dopo aver creato il servizio dovrebbe apparire una nuova istanza nella propria [EC2](https://console.aws.amazon.com/ec2). 
+<br>
+<strong>N.B.</strong> Ricordarsi ora di aggiungere l'indirizzo IP dell'istanza al security group del database per la porta 3306, come spiegato in <strong><em>Step 1</strong></em>.
+
+____________
+
+### Step 4: Creare bucket S3 e includere il frontend
+
+Strumenti utilizzati: [S3](https://s3.console.aws.amazon.com/s3)
+
+<ol>
+  <li>
+    Creare un Bucket. Scegliere un nome, una regione e consentire l'accesso pubblico al bucket.
+    <br>
+    <br>
+    <img width="488" alt="bucket" src="https://user-images.githubusercontent.com/82449626/132539447-eea52e51-5d39-43b3-8ee6-7028f1a1dff4.png">
+    <br>
+    <br>
+  </li>
+  <li>
+    Selezionare il nuovo bucket creato e andare nella sezione <code>Permissions > Bucket Policy</code> e incollare il seguente codice: 
+    <br>
+    <br>
+<pre>
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicReadAccess",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::exchange-app/*"
+        }
+    ]
+}
+</pre>
+  </li>
+  <li>
+    Creare un file <code>.env</code> in <code>sf-academy/frontend/exchange-app/</code> avente il seguente contenuto:
+    <br>
+    <br>
+<pre>
+REACT_APP_API_ADDRESS = http:\\EC2_PUBLIC_ADDRESS:80/
+</pre>
+    Dove <code>EC2_PUBLIC_ADDRESS</code> è l'indirizzo pubblico IPv4 DNS della propria istanza EC2
+    <br>
+    <br>
+    <img width="724" alt="ec2_ip" src="https://user-images.githubusercontent.com/82449626/132545581-04900f4f-fb90-4f00-a456-bc17c945591c.png">
+    <br>
+    <br>
+  </li>
+  <li>
+    Aprire la console in <code>sf-academy/frontend/exchange-app/</code> ed eseguire il seguente codice per eseguire il build dell'app REACT e sincronizzarlo con S3.
+    <br>
+    <br>
+<pre>
+npm run build
+aws s3 sync build/ s3://exchange-app --acl public-read
+</pre>
+  </li>
+  <li>
+    Sul bucket di S3 andare nella sezione <code> Properties > Static Website Hosting</code> e cliccare su Edit. Configurare come visibile nella seguente immagine:
+    <br>
+    <br>
+    <img width="413" alt="s3_hosting" src="https://user-images.githubusercontent.com/82449626/132547492-125c38e3-e63c-4282-af1d-06f8bd005c01.png">
+    <br>
+    <br>
+  </li>
+</ol>
+A questo punto l'applicazione è disponibile sul Web.
+<br>
+<strong> N.B </strong> Ricordarsi ora di aggiungere il dominio nella lista degli indirizzi consentiti per l'api, come spiegato in <strong><em>Step 2</strong></em>.
+
+_________
+
