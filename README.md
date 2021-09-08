@@ -8,7 +8,7 @@ Un altro strumento utilizzato per la gestione del database è MySQL Workbench (A
 
 <ol>
   <li> Creare il database avente engine MySQL su RDS. Tenere traccia di master username e master password utilizzate. </li>
-  <li> Assicurarsi che nelle inbound rules del security group sia permesso l'accesso al database dal proprio indirizzo IP per la porta 3306.
+  <li> Assicurarsi che nelle inbound rules del security group sia permesso l'accesso al database dal proprio indirizzo IP pubblico per la porta 3306.
     <br>
     <br>
     <img width="850" alt="inbound_rules" src="https://user-images.githubusercontent.com/82449626/132405072-16fe8a1e-3714-48aa-bb82-037342c262d8.png">
@@ -110,9 +110,9 @@ DB_DATABASE = exchangedb
 <pre>
 EXCH_PORT = porta_desiderata_exchange
 USERS_PORT = porta_desiderata_users
-PORT = porta_desiderata_api
+PORT = 80
 </pre>
-    Inserire le due porte scelte precedentemente e una nuova per l'api. Inoltre, se si è già a conoscenza del il dominio su cui verrà verra hostato il frontend, andare su           <code>api.js:152</code> e impostare la riga nel seguente modo:
+    Inserire le due porte scelte precedentemente e 80 per l'api. Inoltre, se si è già a conoscenza del il dominio su cui verrà verra hostato il frontend, andare su           <code>api.js:152</code> e impostare la riga nel seguente modo:
     <br>
     <code>const allowedOrigins = ['http://miosito.com'];</code>
     <br>
@@ -120,6 +120,7 @@ PORT = porta_desiderata_api
     <br>
     <br>
   </li>
+  <br>
   <li>
     Adesso bisogna costruire le immagini docker. Aprire la console ed eseguire <code>docker build -t nome-microservizio dir-microservizio</code>. <br>
     In questo esempio userò i nomi <strong><em>exchange-ms</em></strong>, <strong><em>users-ms</em></strong> e <strong><em>api-ms</em></strong>. Se quindi siamo posizionati sulla directory <code>sf-academy/</code> eseguire in sequenza:
@@ -130,6 +131,7 @@ docker build -t exchange-ms backend/exchange/
 docker build -t users-ms backend/users/
 docker build -t api-ms backend/api/
 </pre>
+  <br>
   </li>
   <li>
     Effettuare il login alla propria repository attraverso AWS CLI e caricare le immagini. Per effettuare il login usare: 
@@ -139,17 +141,62 @@ docker build -t api-ms backend/api/
 aws ecr get-login-password --region regione | docker login --username AWS --password-stdin URI
 </pre>
     Inserire al posto di <code>regione</code> la regione di utilizzo per ECR e al posto di <code>URI</code> il nome completo della propria repository.
-    Per eseguire il push bisogna assegnare un tag alle immagini costruite precedentemente; Il seguente codice può essere usato per associare l'ultima versione di <code>exchange-ms</code> alla repository ECR con tag <code>exchange-ms-ecr</code> ed effettuare il push. 
+    Per eseguire il push bisogna assegnare un tag alle immagini costruite precedentemente; Il seguente codice può essere usato per associare l'ultima versione di <strong><em>exchange-ms</em></strong> alla repository ECR con tag <strong><em>exchange-ms-ecr</em></strong> ed effettuare il push. 
     <br>
     <br>
 <pre>
 docker tag exchange-ms:latest URI:exchange-ms-ecr
 docker push URI:exchange-ms-ecr
 </pre>
-    Ripetere per users e api.
+    Ripetere per <strong><em>users-ms</em></strong> e <strong><em>api-ms</em></strong>.
   </li>
 </ol>
   
 ### Step 3: Creare Task Definition e Cluster con Servizio EC2
 
-  
+Per creare l'istanza EC2 contenente i tre microservizi servirà [Amazon ECS](https://us-east-2.console.aws.amazon.com/ecs).
+
+<ol>
+  <li>
+    Creare una Task Definition con compatibilità EC2.
+    <br>
+    <br>
+    <img width="836" alt="task_definition" src="https://user-images.githubusercontent.com/82449626/132511038-5499197c-62c5-44eb-a1ce-d9f5737e3b29.png">
+    <br>
+    <br>
+    Sucessivamente dare un nome alla task e creare un container per il microservizio exchange:
+    <br>
+    <br>
+    <img width="756" alt="task_definition_2" src="https://user-images.githubusercontent.com/82449626/132512465-74518b9e-be0c-45e8-8d60-8eae82e981bb.png">
+    <br>
+    <br>
+    Usare l'URI dell'immagine su ECR con relativo tag, assegnare un limite di memoria (128MiB sono sufficienti) e assegnare la porta scelta. Ripetere la procedura per users ed api. Infine creare la task definition.
+  </li>
+  <br>
+  <li>
+    Creare un Cluster EC2 avente linux.
+    <br>
+    <br>
+    <img width="725" alt="cluster" src="https://user-images.githubusercontent.com/82449626/132515427-91511b36-912e-4fb9-913d-a0e08f6196ed.png">
+    <br>
+    <br>
+    Dare un nome al cluster e scegliere un Key Pair, eventualmente creandolo, per permettere la connessione all'istanza EC2 tramite SSH. Per il corretto funzionamento assicurarsi che il file contenente la chiave sia leggibile solamente dal proprio utente sul pc. La VPC può essere la stessa del database. Il security group deve essere configurato nel seguente modo: 
+    <br>
+    <br>
+    <img width="859" alt="cluster_2" src="https://user-images.githubusercontent.com/82449626/132519462-24fb38d8-cd66-4a49-839d-1b1fb9a2e77c.png">
+    <br>
+    <br>
+    La prima regola deve consentire la ricezione di messaggi dall'indirizzo IP del database RDS; La seconda consente la connessione tramite SSH da indirizzo IP personale; La terza consente a tutti gli indirizzi IP di accedere alla porta 80 dell'istanza per accedere all'API.  
+  </li>
+  <br>
+  <li>
+    Creare un servizio nel Cluster. Scegliere la task definition e cluster creati in precedenza ed impostare il tipo a <code>DAEMON</code>
+    <br>
+    <br>
+    <img width="690" alt="service" src="https://user-images.githubusercontent.com/82449626/132522955-becff1ea-56a7-4a58-b6eb-a3a54a91ac46.png">
+    <br>
+    <br>
+  </li>
+</ol>
+
+Dopo aver creato il servizio dovrebbe apparire una nuova istanza nella propria [EC2](https://us-east-2.console.aws.amazon.com/ec2)
