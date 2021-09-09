@@ -297,7 +297,7 @@ services:
     ports:
       - "PORTA_1:PORTA_1"
   users-ms:
-    image: URI:exchange-ms-ecr:
+    image: URI:exchange-ms-ecr
     ports:
       - "PORTA_2:PORTA_2"
   api-ms:
