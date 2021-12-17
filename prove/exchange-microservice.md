@@ -46,4 +46,4 @@ L'intero applicativo deve poter essere testato localmente con docker-compose anc
 L’infrastruttura deve essere realizzata sull'account di sandbox fornito da Soluzioni Futura.
 Verrà attentamente valutato l’utilizzo di GIT.
 Obbligatoria la stesura di un README con le istruzioni per lanciare l'intero stack software localmente.
-E' gradita la presenza DI UN UNICO SCRIPT di setup dell'ecosistema per il testing locale.
+E' gradita la presenza **di un unico script** di setup dell'ecosistema per il testing locale.
