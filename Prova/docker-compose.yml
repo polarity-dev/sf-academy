@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  server:
+    image: server
+    container_name: server
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    links:
+      - database
+
+  database:
+    image: mongo
+    env_file: .env
+    container_name: db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    ports:
+      - 27017:27017
+    volumes:
+     - data:/data/db
+     
+
+volumes: 
+  data:
+
+

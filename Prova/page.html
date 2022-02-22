@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<style>
+    body { font-family: Verdana, Helvetica, sans-serif;font-size: 20pt;background: #DDD;color: #000;}
+</style> 
+
+</head>
+
+<body>
+    <div id="login">
+        <fieldset style="display: inline-block">
+            <legend>Login</legend>
+            <form action="login" method="post">
+                Username: <input type="text" name="username"/>
+                Password: <input type="password" name="pwd" />
+                <button type="submit">Login</button>
+            </form>
+        </fieldset>
+    </div>
+    
+    <div id="research">
+        <fieldset style="display: inline-block">
+            <legend>Search user</legend>
+            <form action="listUsers" method="get">
+                Username: <input type="text" name="username" />
+                <button type="submit">Search</button>
+            </form>
+        </fieldset>
+    </div>
+
+    <div id="add">
+        <fieldset style="display: inline-block">
+            <legend>Add user</legend>
+            <form action="addUser" method="post">
+                Username: <input type="text" name="username"/>
+                Password: <input type="password" name="pwd" />
+                <button type="submit">Add</button>
+            </form>
+        </fieldset>
+    </div>
+</body>
+
+</html>
