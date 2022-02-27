@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    command: npm run dev
+    volumes:
+      - .:/app/
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+  mongodb:
+    image: 'mongo'
+    container_name: 'mongodb'
+    environment:
+      - MONGO_INITDB_DATABASE=sf
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    volumes:
+      - mongodb_data_container:/data/db
+    ports:
+      - '27017:27017'
+
+volumes:
+  mongodb_data_container:
