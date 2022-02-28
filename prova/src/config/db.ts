@@ -1,10 +1,11 @@
 import * as mongoDB from "mongodb";
 
-const connectDB = async () => {
-    const URI="mongodb://root:rootpassword@mongodb:27017";
-    const client=new mongoDB.MongoClient(URI);
-    await client.connect();
-    console.log("MONGO DB CONNECTED");
-}
+// docker-compose up -d ---> DOCKER CONTAINER URI BELOW
+//const URI="mongodb://root:rootpassword@mongodb:27017";
 
-export default connectDB;
+//LOCALHOST MONGO URI
+const URI="mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false";
+const client = new mongoDB.MongoClient(URI);
+client.connect();
+
+export default client;
