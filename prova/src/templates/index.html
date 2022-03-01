@@ -1,17 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
 
-        <link rel="stylesheet" href="css/main.css">
-    </head>
-
-    <body>
-        Home
-
-        <script type="text/javascript" src="js/main.js"></script>
-    </body>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <form class="form register">
+                <h3 class="form-heading">Register</h3>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Username" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Password" class="form-input">
+                </div>
+                <a href="#" class="submit register-submit">Submit</a>
+            </form>
+        </div>
+        
+        <div class="form-container">
+            <form class="form login">
+                <h3 class="form-heading">Login</h3>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username2" placeholder="Username" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password2" placeholder="Password" class="form-input">
+                </div>
+                <a href="#" class="submit login-submit">Submit</a>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</body>
 </html>

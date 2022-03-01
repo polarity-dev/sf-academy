@@ -7,7 +7,13 @@ import path from "path";
 const db = client.db("sfacademy");
 
 export function listUsers (req, res, next) {
-    res.send({message: "list users"});
+    const user = req.params.user;
+    db.collection("users").find({username: user}).toArray((err, results) => {
+        if(results.length == 0) {
+            return next(new ErrorResponse("User not found", 401));
+        }
+        res.send(results[0]);
+    });
 }
 
 export function addUser (req, res, next) {

@@ -1,3 +1,94 @@
 body {
-    background: red;
+    background: #333;
+    color: #fff;
+    font-family: "Helvetica";
+}
+.container {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+}
+.form-container {
+    margin: 0 50px;
+}
+.form-heading {
+    font-weight: 700;
+    font-size: 34px;
+    text-align: center;
+}
+.form-group {
+    width: 100%;
+    height: 40px;
+}
+.form-input {
+    padding: 10px;
+    outline: none;
+    float: right;   
+    margin-left: 10px;
+    border: none;
+}
+label {
+    float: left;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 800;
+}
+.submit {
+    text-decoration: none;
+    color: #333;
+    background: #fff;
+    font-weight: bold;
+    padding: 15px 40px;
+    margin-top: 10px;
+    position: relative;
+    border-radius: 3px;
+    transition: all 0.4s;
+    float: left;
+}
+.submit:hover {
+    background: #ddd;
+    
+}
+.submit:visited {
+    color: #333;
+}
+.list-users {
+    width: 650px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60%;
+}
+.list-users-input {
+    float: left;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 80%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+.list-users-submit {
+    float: right;
+    width: 20%;
+    padding: 10px 0;
+    text-align: center;
+    color: #fff;
+    background: rgb(31, 31, 31);
+    border: none;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.4s;
+}
+.list-users-submit:hover {
+    background: rgb(121, 121, 121);
 }
