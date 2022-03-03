@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+//generatore di pacchetto usato per comodità
+package users;
+
+service Users {
+    rpc Signup (SignUpRequest)returns (OperationReply) {}
+    rpc Login (LoginRequest) returns (UserInfoReply) {}
+    rpc Deposit (OperationRequest) returns (OperationReply){}
+    rpc Withdraw (OperationRequest) returns (OperationReply){}
+    rpc Buy (BuyRequest) returns (OperationReply) {}
+    rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsReply) {}
+    rpc GetBalance(UserInfoRequest) returns (BalanceReply) {}
+    rpc UserAuth (UserInfoRequest) returns (UserInfoReply)  {}
+
+}
+
+//Request
+
+message SignUpRequest{
+    string email=1;
+    string password=2;
+    string name=3;
+    string iban=4;
+}
+
+message LoginRequest{
+    string email=1;
+    string password=2;
+}
+
+message OperationRequest{
+    int32 value=1;
+    string symbol=2;
+    int32 id=3;
+}
+
+message BuyRequest{
+    int32 initialValue=1;
+    int32 value=2;
+    string symbol=3;
+    int32 id=4;
+}
+
+message ListTransactionsRequest{
+    string userId=1;
+}
+
+message UserInfoRequest{
+    string id=1;
+}
+
+
+
+
+
+// Reply
+
+message Empty{}
+
+message OperationReply{
+    string message=1;
+}
+
+message UserInfoReply{
+    string email=1;
+    int32 id=2;
+    string name=3;
+    string iban=4;
+    int32 balanceEUR=5;
+    int32 balanceUSD=6;
+    int32 balance=7;
+}
+
+message LListTransactions {
+    int32 id=1;
+    int32 userId=2;
+    int32 value=3;
+    string currency=4;
+    string date=5;
+    string typeOperations=6;
+}
+
+message ListTransactionsReply {
+    repeated LListTransactions list=1;
+}
+
+message BalanceReply{
+    int32 balanceEUR=1;
+    int32 balanceUSD=2;
+    int32 balance=3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

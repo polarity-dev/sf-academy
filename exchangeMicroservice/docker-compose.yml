@@ -1,0 +1,30 @@
+version: "3"
+services:
+  grpc-exchange-server:
+    container_name: grpc-exchange-server
+    build:
+      context: ./backendTS/exchange
+      dockerfile: Dockerfile
+    env_file: ./backendTS/exchange/.env
+  grpc-users-server:
+    container_name: grpc-users-server
+    build:
+      context: ./backendTS/users
+      dockerfile: Dockerfile
+    env_file: ./backendTS/users/.env
+  api:
+    container_name: api
+    build:
+      context: ./backendTS/api
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    env_file: ./backendTS/api/.env
+  react-app-exchange:
+    container_name: react-exchange
+    build:
+      context: ./frontend/exchange-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+ 

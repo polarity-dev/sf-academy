@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@200;300;400;500;600;700;800;900&display=swap");
+
+.App {
+  min-height: 100vh;
+  font-size: 20px;
+  font-family: "Lexend Deca", sans-serif;
+}
+
+.home-page,
+.signup-page,
+.exchange-page,
+.profile,
+.operation {
+  min-height: 100vh;
+}
+
+.operation,
+.exchange-page {
+  text-align: center;
+}
+
+/* navbar */
+.navbar {
+  top: 0;
+  z-index: 1;
+  position: sticky;
+  width: 100%;
+}
+
+/* footer */
+.footer {
+  color: white;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(3 22 61);
+  width: 100%;
+}
+
+.footer-content p {
+  font-size: 15px;
+}
+
+/* homePage */
+.home-page {
+  background-image: url("../img/home.jpg");
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* LoginModal */
+.modal {
+  top: 30%;
+}
+
+.btn-login {
+  color: #fff;
+  border-color: #fff;
+}
+
+.btn-login,
+.btn-signup {
+  font-weight: 700;
+  width: 100px;
+}
+
+.btn-login:hover {
+  color: rgb(5 86 197);
+  background-color: white;
+}
+
+.btn-signup {
+  background-color: white;
+  color: rgb(5 86 197);
+}
+
+.btn-signup:hover {
+  color: rgb(5 86 197);
+  background-color: rgb(5 86 197);
+  border: rgb(5 86 197);
+  color: #fff;
+  border-color: #fff;
+}
+
+/* Signup */
+.signup-page {
+  display: flex;
+  justify-content: center;
+  background-image: url("../img/singup.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+
+.signup-page form {
+  width: 600px;
+  font-size: 30px;
+  border-radius: 10px;
+  border: 1px solid white;
+  width: 600px;
+  font-size: 30px;
+  padding: 40px;
+}
+
+.signup-page h1 {
+  font-size: 55px;
+}
+
+.signup-page form button {
+  font-size: 20px;
+  border-color: white;
+  color: white;
+  width: 25%;
+}
+
+/* Exchange page */
+.exchange-page {
+  padding: 40px;
+  text-align: center;
+}
+
+/* Profile */
+.profile {
+  width: 100%;
+}
+
+.user-info {
+  font-size: 20px;
+}
+
+/* HomePage */
+.home-page-content {
+  color: white;
+  padding-right: 10rem;
+  align-items: end;
+}
+.home-page-content h1 {
+  font-size: 60px;
+  text-align: center;
+}
+.login-modal {
+  width: 100%;
+  justify-content: end;
+  display: flex;
+}
+
+/* mquery */
+
+@media screen and (max-width: 992px) {
+  .home-page-content {
+    padding-right: 0px;
+    align-items: center;
+  }
+
+  .login-modal {
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 577px) {
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .footer-content p {
+    margin-top: 1rem;
+  }
+}
