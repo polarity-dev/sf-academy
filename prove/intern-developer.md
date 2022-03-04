@@ -13,6 +13,6 @@ Realizzare un web server in NodeJs e Typescript che esponga la seguente lista di
 
 Utilizzare docker-compose per orchestrare la soluzione di sviluppo locale che dovrà contenere:
 - Applicativo di NodeJs
-- Database
+- Database relazionale
 
 Tutto quello che non e’ specificato nella consegna e’ intenzionalmente lasciato alla libera interpretazione del candidato.
