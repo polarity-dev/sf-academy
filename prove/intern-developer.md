@@ -13,12 +13,12 @@ Realizzare un web server in NodeJs e Typescript che esponga la seguente lista di
 Il file da processare avrà il seguente formato:
 
 - La prima riga contiene due numeri `A` e `B`
-- Successive `N` righe contenenti ognuna un numero `P` (con `1 <= P <= 5`) che rappresenta la priorità, un secondo valore `K` seguito da stringa `D`. Dovranno essere considerate solo le righe comprese tra gli indici indicati da `A` e `B`
+- Successive `N` righe contenenti ognuna un numero `P` (con `1 <= P <= 5`) che rappresenta la priorità, un secondo valore `K` seguito da stringa `D`. Dovranno essere considerate solo le righe comprese tra gli indici 1-based indicati da `A` e `B`
 
 esempio:
 
 ```txt
-4
+3 5
 1 128 ... dummy data ... 
 4 65 ... dummy data ... 
 3 0 prima riga utile
