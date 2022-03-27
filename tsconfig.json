@@ -1,12 +1,15 @@
 {
    "compilerOptions": {
-     "target": "es6",
+     "target": "es2015",
      "module": "commonjs",
+     "resolveJsonModule": true,
+     "moduleResolution": "node",
      "outDir": "./build",
      "strict": true,
-     "esModuleInterop": true,
+     "esModuleInterop": true
    },
    "include": [
       "api"
-   ]
+   ],
+   "compileOnSave": true
 }

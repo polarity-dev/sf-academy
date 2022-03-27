@@ -1,0 +1,14 @@
+title: amount
+type: object
+required:
+- value
+- symbol
+properties:
+value:
+  type: number
+  minimum: 0
+  exclusiveMinimum: true
+  nullable: false
+symbol:
+  type: string
+  nullable: false
