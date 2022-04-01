@@ -1,0 +1,36 @@
+openapi: 3.0.3
+info:
+  title: Sf Academy
+  version: 1.0.0
+  description: Generated docs from my candidacy test
+paths:
+  /exchange:
+    get:
+      description: Converts to other currency
+      operationId: exchange
+      x-eov-operation-handler: routes/exchange
+      parameters:
+        - name: value
+          in: query
+          schema:
+            type: number
+            minimum: 0
+            exclusiveMinimum: true
+            nullable: false
+        - name: from
+          in: query
+          schema:
+            type: string
+            nullable: false
+        - name: to
+          in: query
+          schema:
+            type: string
+            nullable: false
+      responses:
+        '200':
+          description: Succesful response
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/amount.yaml
