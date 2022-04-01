@@ -9,7 +9,7 @@
      "esModuleInterop": true
    },
    "include": [
-      "api"
+      "server/src"
    ],
    "compileOnSave": true
 }

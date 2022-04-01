@@ -1,0 +1,9 @@
+type: object
+required:
+- symbol
+- value
+properties:
+symbol:
+  type: string
+value:
+  type: number

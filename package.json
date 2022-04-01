@@ -4,28 +4,41 @@
   "description": "Candidacy to Soluzioni Futura",
   "main": "index.js",
   "scripts": {
-    "start:api": "nodemon build/server/src/server.js",
-    "start": "tsc && npm run start:api",
-    "watch:src": "rm -rf build && tsc-watch -p tsconfig.json --onSuccess \"node build/server/src/server.js\"",
-    "api": "cd api && npm start"
+    "prestart:api": "npm i && npm_scripts/prestart-api.sh",
+    "prestart:exchange": "npm i && npm_scripts/prestart-exchange.sh",
+    "start:api:local": "cd api && tsc-watch -p tsconfig.json --onSuccess \"node build/server/src/index.js\"",
+    "start:api:prod": "cd api && tsc -p tsconfig.json && node build/server/src/index.js",
+    "start:api": "if [ \"$NODE_ENV\" != 'Production' ]; then npm run start:api:local; else npm run start:api:prod; fi",
+    "start:exchange:local": "cd exchange && tsc-watch -p tsconfig.json --onSuccess \"node build/server/src/index.js\"",
+    "start:exchange:prod": "cd exchange && tsc -p tsconfig.json && node build/server/src/index.js",
+    "start:exchange": "if [ \"$NODE_ENV\" != 'Production' ]; then npm run start:exchange:local; else npm run start:exchange:prod; fi",
+    "start": "npm run start:api & npm run start:exchange"
   },
   "author": "Fabio Gulmini",
   "license": "ISC",
   "dependencies": {
+    "@grpc/grpc-js": "^1.6.0",
+    "@grpc/proto-loader": "^0.6.9",
+    "@protobuf-ts/plugin": "^2.4.0",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
+    "@types/isomorphic-fetch": "^0.0.36",
     "@types/node": "^17.0.23",
+    "@types/xml2js": "^0.4.9",
     "body-parser": "^1.19.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-openapi": "^10.1.0",
     "express-openapi-validator": "^4.13.7",
     "fs": "^0.0.1-security",
+    "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^3.2.3",
     "npm": "^8.5.5",
     "openapi-typescript": "^5.2.0",
     "openapi-typescript-codegen": "^0.20.1",
     "ts-node": "^10.7.0",
-    "tsc": "^2.0.4",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.3",
+    "xml2js": "^0.4.23"
   }
 }
