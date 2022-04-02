@@ -7,7 +7,7 @@ const URL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
 const parser = new xml2js.Parser()
 
 const Exchange = (call: ServerUnaryCall<ExchangeRequest, ExchangeResponse>, callback: sendUnaryData<ExchangeResponse>): void => {
-   const data = fetch(URL)
+   fetch(URL)
       .then(response => response.text())
       .then(content => parser.parseStringPromise(content))
       .then(data => data['gesmes:Envelope']['Cube'][0]['Cube'][0]['Cube'])
@@ -23,7 +23,7 @@ const Exchange = (call: ServerUnaryCall<ExchangeRequest, ExchangeResponse>, call
       .then(rates => {
          const { value, from, to } = call.request;
          callback(null, {
-            value: (value as number) * rates[to || "EUR"] / rates[from || "EUR"],
+            value: (value as number) * rates[to || ""] / rates[from || ""],
             symbol: to
          })
       })

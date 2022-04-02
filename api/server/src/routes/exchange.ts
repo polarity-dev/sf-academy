@@ -7,6 +7,7 @@ module.exports = {
       const value: number = parseFloat(req.query.value as string)
       const from: string = req.query.from as string
       const to: string = req.query.to as string
+      console.log(value, from, to)
       exchangeClient.Exchange({
          value,
          from,
