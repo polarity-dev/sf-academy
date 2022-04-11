@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: $PWD
+      dockerfile: api/Dockerfile
+    container_name: sf-academy-api
+    working_dir: /home/node/app/api
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      EXCHANGE_PORT: ${EXCHANGE_PORT}
+      EXCHANGE_HOST: ${EXCHANGE_HOST}
+      API_PORT: ${API_PORT}
+    entrypoint: node build/server/src/index.js
+  exchange:
+    build:
+      context: $PWD
+      dockerfile: exchange/Dockerfile
+    container_name: sf-academy-exchange
+    working_dir: /home/node/app/exchange
+    ports:
+      - 9000:9000
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      EXCHANGE_PORT: ${EXCHANGE_PORT}
+      EXCHANGE_HOST: ${EXCHANGE_HOST}
+    entrypoint: node build/server/src/index.js

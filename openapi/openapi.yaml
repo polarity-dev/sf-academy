@@ -20,18 +20,19 @@ paths:
             nullable: false
         - name: from
           in: query
-          required: true
           schema:
-            $ref: "./schemas/currency.yaml"
+            allOf:
+              - $ref: "./schemas/currency.yaml"
         - name: to
           in: query
-          required: true
           schema:
-            $ref: "./schemas/currency.yaml"
+            allOf:
+              - $ref: "./schemas/currency.yaml"
       responses:
         '200':
           description: Succesful response
           content:
             application/json:
               schema:
-                $ref: ./schemas/amount.yaml
+                allOf:
+                  - $ref: ./schemas/amount.yaml

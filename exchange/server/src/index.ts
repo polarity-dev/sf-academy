@@ -3,8 +3,12 @@ import * as grpc from "@grpc/grpc-js"
 import * as protoLoader from "@grpc/proto-loader"
 import { ProtoGrpcType } from "../../proto/exchange"
 import { Exchange } from "./services/exchange"
+import * as dotenv from "dotenv";
 
-const PORT = 9000
+const ENV_FILE = (process.env.NODE_ENV === "production" ? ".env" : ".env.dev")
+dotenv.config({ path: join(__dirname, "../../../..", ENV_FILE) });
+
+const PORT = process.env.EXCHANGE_PORT || 9000
 const PROTO_FILE = "../../proto/exchange.proto"
 const packageDef = protoLoader.loadSync(join(__dirname, PROTO_FILE))
 const grpcObj = (grpc.loadPackageDefinition(packageDef) as unknown) as ProtoGrpcType

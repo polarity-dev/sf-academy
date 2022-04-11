@@ -1,9 +1,9 @@
 #!/bin/bash
 
 cd exchange
-rm -rf proto/*
+rm -rf proto build
+mkdir -p proto build/proto
 cp ../proto/exchange.proto proto/exchange.proto
 npx proto-loader-gen-types --grpcLib=@grpc/grpc-js --outDir=proto proto/*.proto
-rm -rf build/*
-mkdir -p build/proto
 cp proto/exchange.proto build/proto/exchange.proto
+tsc-watch -p tsconfig.json --onSuccess "node build/server/src/index.js"
