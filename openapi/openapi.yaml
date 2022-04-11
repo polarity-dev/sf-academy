@@ -15,8 +15,8 @@ paths:
           required: true
           schema:
             type: number
-            minimum: 0
-            exclusiveMinimum: true
+            minimum: 1
+            maximum: 1000000
             nullable: false
         - name: from
           in: query

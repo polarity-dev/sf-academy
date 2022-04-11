@@ -17,6 +17,7 @@ paths:
             type: number
             minimum: 0
             exclusiveMinimum: true
+            maximum: 1000000000
             nullable: false
         - name: from
           in: query
