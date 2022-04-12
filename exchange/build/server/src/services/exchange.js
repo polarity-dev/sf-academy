@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Exchange = void 0;
 const xml2js_1 = __importDefault(require("xml2js"));
 require("isomorphic-fetch");
 const URL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
@@ -12,8 +11,8 @@ const Exchange = (call, callback) => {
     fetch(URL)
         .then(response => response.text())
         .then(content => parser.parseStringPromise(content))
-        .then(data => data['gesmes:Envelope']['Cube'][0]['Cube'][0]['Cube'])
-        .then(data => data.map((element) => element['$']))
+        .then(data => data["gesmes:Envelope"]["Cube"][0]["Cube"][0]["Cube"])
+        .then(data => data.map((element) => element["$"]))
         .then(data => {
         const rates = {};
         data.forEach((element) => {
@@ -29,6 +28,6 @@ const Exchange = (call, callback) => {
             symbol: to
         });
     })
-        .catch(err => console.log(err));
+        .catch(err => console.error(err));
 };
-exports.Exchange = Exchange;
+exports.default = Exchange;

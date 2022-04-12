@@ -1,0 +1,20 @@
+title: user
+type: object
+required:
+  - id
+  - firstname
+  - iban
+  - email
+  - password
+properties:
+  - id:
+    type: integer
+  - firstname:
+    type: string
+    format: password
+    minLength: 3
+  - iban:
+    type: string
+  - email:
+    type: string
+    format: email

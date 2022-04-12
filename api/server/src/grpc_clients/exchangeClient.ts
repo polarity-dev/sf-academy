@@ -6,8 +6,6 @@ import { ProtoGrpcType } from "../../../proto/exchange"
 const PORT = process.env.EXCHANGE_PORT || 9000
 const HOST = process.env.EXCHANGE_HOST || "0.0.0.0"
 
-console.log(PORT, HOST, process.env.NODE_ENV)
-
 const PROTO_FILE = "../../../proto/exchange.proto"
 
 const packageDef = protoLoader.loadSync(join(__dirname, PROTO_FILE))
@@ -18,4 +16,4 @@ const exchangeClient = new grpcObj.exchangePackage.Exchange(
    grpc.credentials.createInsecure()
 )
 
-export { exchangeClient }
+export default exchangeClient

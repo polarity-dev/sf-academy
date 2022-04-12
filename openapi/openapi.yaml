@@ -29,10 +29,64 @@ paths:
             allOf:
               - $ref: "./schemas/currency.yaml"
       responses:
-        '200':
-          description: Succesful response
+        "200":
+          description: Succesful exchange
           content:
             application/json:
               schema:
                 allOf:
                   - $ref: ./schemas/amount.yaml
+  /login:
+    post:
+      description: Release a JWT on succesful login
+      operationId: login
+      x-eov-operation-handler: routes/login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/userCredentials.yaml"
+      responses:
+        "201":
+          description: Create a new token on login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /listTransactions:
+    get:
+      description: Returns the list of transactions of authenticated user
+      operationId: listTransactions
+      x-eov-operation-handler: routes/listTransactions
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          required: true
+      responses:
+        "200":
+          description: Succesful list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "./schemas/transaction.yaml"
+                  required:
+                    - eurDelta
+                    - usdDelta
+                    - date
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

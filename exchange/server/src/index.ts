@@ -2,15 +2,10 @@ import { join } from "path"
 import * as grpc from "@grpc/grpc-js"
 import * as protoLoader from "@grpc/proto-loader"
 import { ProtoGrpcType } from "../../proto/exchange"
-import { Exchange } from "./services/exchange"
-import * as dotenv from "dotenv";
+import Exchange from "./services/exchange"
+import { exchangePort } from "../../config"
 
-const ENV_FILE = (process.env.NODE_ENV === "production" ? ".env" : ".env.dev")
-dotenv.config({ path: join(__dirname, "../../../..", ENV_FILE) });
-
-const PORT = process.env.EXCHANGE_PORT || 9000
-const PROTO_FILE = "../../proto/exchange.proto"
-const packageDef = protoLoader.loadSync(join(__dirname, PROTO_FILE))
+const packageDef = protoLoader.loadSync(join(__dirname, "../../proto/exchange.proto"))
 const grpcObj = (grpc.loadPackageDefinition(packageDef) as unknown) as ProtoGrpcType
 const exchangePackage = grpcObj.exchangePackage
 
@@ -21,11 +16,11 @@ server.addService(exchangePackage.Exchange.service, {
 })
 
 server.bindAsync(
-   `0.0.0.0:${PORT}`,
+   `0.0.0.0:${exchangePort}`,
    grpc.ServerCredentials.createInsecure(),
    err => {
       if (err) throw err
-      console.log(`Listening grpc exchange server on port ${PORT}`)
+      console.log(`Listening grpc exchange server on port ${exchangePort}`)
       server.start()
    }
 )

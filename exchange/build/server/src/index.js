@@ -22,26 +22,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const grpc = __importStar(require("@grpc/grpc-js"));
 const protoLoader = __importStar(require("@grpc/proto-loader"));
-const exchange_1 = require("./services/exchange");
-const dotenv = __importStar(require("dotenv"));
-const ENV_FILE = (process.env.NODE_ENV === "production" ? ".env" : ".env.dev");
-dotenv.config({ path: (0, path_1.join)(__dirname, "../../../..", ENV_FILE) });
-const PORT = process.env.EXCHANGE_PORT || 9000;
-const PROTO_FILE = "../../proto/exchange.proto";
-const packageDef = protoLoader.loadSync((0, path_1.join)(__dirname, PROTO_FILE));
+const exchange_1 = __importDefault(require("./services/exchange"));
+const config_1 = require("../../config");
+const packageDef = protoLoader.loadSync((0, path_1.join)(__dirname, "../../proto/exchange.proto"));
 const grpcObj = grpc.loadPackageDefinition(packageDef);
 const exchangePackage = grpcObj.exchangePackage;
 const server = new grpc.Server();
 server.addService(exchangePackage.Exchange.service, {
-    Exchange: exchange_1.Exchange
+    Exchange: exchange_1.default
 });
-server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(), err => {
+server.bindAsync(`0.0.0.0:${config_1.exchangePort}`, grpc.ServerCredentials.createInsecure(), err => {
     if (err)
         throw err;
-    console.log(`Listening grpc exchange server on port ${PORT}`);
+    console.log(`Listening grpc exchange server on port ${config_1.exchangePort}`);
     server.start();
 });

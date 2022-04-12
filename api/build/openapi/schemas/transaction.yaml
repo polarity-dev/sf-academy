@@ -1,0 +1,19 @@
+title: transaction
+type: object
+required:
+  - usdDelta
+  - eurDelta
+  - date
+properties:
+  userId:
+    type: integer
+  id:
+    type: integer
+  usdDelta:
+    type: number
+  eurDelta:
+    type: number
+  date:
+    type: string
+    format: date-time
+    
