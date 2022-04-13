@@ -8,7 +8,7 @@ const login = (req: Request, res: Response) => {
       tokenSecret as Secret,
       { expiresIn: "1d" }
    )
-   res.status(201).send({ token })
+   res.status(200).send({ token })
 }
 
 export default login

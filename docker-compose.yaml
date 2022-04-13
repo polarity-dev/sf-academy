@@ -7,7 +7,7 @@ services:
     container_name: sf-academy-api
     working_dir: /home/node/app/api
     ports:
-      - 3000:3000
+      - 80:80
     environment:
       NODE_ENV: ${NODE_ENV}
       EXCHANGE_PORT: ${EXCHANGE_PORT}
