@@ -6,8 +6,9 @@
   "scripts": {
     "start:api:local": "npm_scripts/start-api-local.sh",
     "start:exchange:local": "npm_scripts/start-exchange-local.sh",
+    "start:users:local": "npm_scripts/start-users-local.sh",
     "start:prod": "docker-compose build && docker-compose up && docker-compose down",
-    "start:dev": "NODE_ENV=development concurrently \"npm run start:api:local\" \"npm run start:exchange:local\"",
+    "start:dev": "NODE_ENV=development concurrently \"npm run start:api:local\" \"npm run start:exchange:local\" \"npm run start:users:local\"",
     "start": "if [ \"$NODE_ENV\" != \"production\" ]; then npm run start:dev; else npm run start:prod; fi"
   },
   "author": "Fabio Gulmini",

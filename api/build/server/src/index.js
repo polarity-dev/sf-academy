@@ -25,4 +25,4 @@ app.use((0, express_openapi_validator_1.middleware)({
         }
     }
 }));
-app.listen(config_1.apiPort, () => { console.log(`listening on port ${config_1.apiPort}`); });
+app.listen(config_1.apiPort, () => { console.log(`Api server listening on port ${config_1.apiPort}`); });

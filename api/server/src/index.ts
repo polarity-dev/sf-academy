@@ -28,4 +28,4 @@ app.use(
   }),
 )
 
-app.listen(apiPort, () => { console.log(`listening on port ${apiPort}`) })
+app.listen(apiPort, () => { console.log(`Api server listening on port ${apiPort}`) })

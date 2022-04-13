@@ -1,14 +1,16 @@
+import usersClient from "../grpc_clients/usersClient"
 import { Request, Response } from "express"
-import { Secret, sign } from "jsonwebtoken"
-import { tokenSecret } from "../../../config"
 
 const login = (req: Request, res: Response) => {
-   const token: String = sign(
-      { message: "empty" },
-      tokenSecret as Secret,
-      { expiresIn: "1d" }
-   )
-   res.status(200).send({ token })
+   const email: string = req.body.email as string
+   const password: string = req.body.password as string
+   usersClient.Login({
+      email,
+      password
+   }, (err, data) => {
+      if (err) throw err
+      res.status(200).send(data)
+   })
 }
 
 export default login

@@ -7,8 +7,7 @@ if (process.env.NODE_ENV !== "production") {
 
 export const 
    tokenSecret = process.env.TOKEN_SECRET,
-   apiPort = process.env.API_PORT,
-   exchangePort = process.env.EXCHANGE_PORT,
-   exchangeHost = process.env.EXCHANGE_HOST,
    usersPort = process.env.USERS_PORT,
-   usersHost = process.env.USERS_HOST
+   dbPassword = process.env.DB_PASSWORD,
+   dbPort = process.env.DB_PORT,
+   dbHost = process.env.DB_HOST

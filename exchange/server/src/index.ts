@@ -20,7 +20,7 @@ server.bindAsync(
    grpc.ServerCredentials.createInsecure(),
    err => {
       if (err) throw err
-      console.log(`Listening grpc exchange server on port ${exchangePort}`)
+      console.log(`Exchange listening server on port ${exchangePort}`)
       server.start()
    }
 )

@@ -41,6 +41,6 @@ server.addService(exchangePackage.Exchange.service, {
 server.bindAsync(`0.0.0.0:${config_1.exchangePort}`, grpc.ServerCredentials.createInsecure(), err => {
     if (err)
         throw err;
-    console.log(`Listening grpc exchange server on port ${config_1.exchangePort}`);
+    console.log(`Exchange listening server on port ${config_1.exchangePort}`);
     server.start();
 });
