@@ -49,14 +49,17 @@ paths:
                 - $ref: "./schemas/userCredentials.yaml"
       responses:
         "200":
-          description: Create a new token on login
+          description: Succesful login
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
+                $ref: "./schemas/okResponse.yaml"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/errorResponse.yaml"
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user

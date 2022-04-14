@@ -1,3 +1,3 @@
 "use strict";
 // Original file: proto/exchange.proto
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

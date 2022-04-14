@@ -1,10 +1,10 @@
 version: "3.9"
 services:
   api:
+    container_name: sf-academy-api
     build:
       context: $PWD
       dockerfile: api/Dockerfile
-    container_name: sf-academy-api
     working_dir: /home/node/app/api
     ports:
       - ${API_PORT}:${API_PORT}
@@ -18,27 +18,27 @@ services:
       TOKEN_SECRET: ${TOKEN_SECRET}
     entrypoint: node build/server/src/index.js
   exchange:
+    container_name: sf-academy-exchange
     build:
       context: $PWD
       dockerfile: exchange/Dockerfile
-    container_name: sf-academy-exchange
     working_dir: /home/node/app/exchange
-    ports:
-      - ${EXCHANGE_PORT}:${EXCHANGE_PORT}
+    expose:
+      - ${EXCHANGE_PORT}
     environment:
       NODE_ENV: ${NODE_ENV}
       EXCHANGE_PORT: ${EXCHANGE_PORT}
     entrypoint: node build/server/src/index.js
   users:
+    container_name: sf-academy-users
     depends_on:
       - db
     build:
       context: $PWD
       dockerfile: users/Dockerfile
-    container_name: sf-academy-users
     working_dir: /home/node/app/users
-    ports:
-      - ${USERS_PORT}:${USERS_PORT}
+    expose:
+      - ${USERS_PORT}
     environment:
       NODE_ENV: ${NODE_ENV}
       USERS_PORT: ${USERS_PORT}
@@ -50,13 +50,13 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     entrypoint: node build/server/src/index.js
   db:
+    container_name: sf-academy-db
     image: postgres:14-alpine
     environment:
       POSTGRES_PORT: ${DB_PORT}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-      - ${DB_PORT}:${DB_PORT}
-
+    expose:
+      - ${DB_PORT}
     

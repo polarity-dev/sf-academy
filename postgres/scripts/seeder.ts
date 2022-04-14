@@ -1,3 +1,4 @@
+import { createHash } from "crypto"
 import { Knex } from "knex"
 
 const usersData = [
@@ -68,6 +69,9 @@ const transactionsData = [
 
 const seedUsers = async (db: Knex) : Promise<void> => {
    usersData.forEach(async user => {
+		user.password = createHash("sha256")
+		.update(user.password)
+		.digest("hex")
       await db("users").insert(user)
    })
 	console.log("Table users seeded")

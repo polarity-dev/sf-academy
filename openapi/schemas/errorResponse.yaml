@@ -1,0 +1,7 @@
+title: errorResponse
+type: object
+required:
+  - status
+properties:
+  status:
+    type: string
