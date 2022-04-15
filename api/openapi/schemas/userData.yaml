@@ -1,20 +1,17 @@
-title: user
+title: userData
 type: object
 required:
-  - id
-  - firstname
+  - username
   - iban
   - email
   - password
 properties:
-  - id:
-    type: integer
-  - firstname:
+  username:
     type: string
     format: password
     minLength: 3
-  - iban:
+  iban:
     type: string
-  - email:
+  email:
     type: string
     format: email

@@ -6,7 +6,7 @@ const createUsersTable = async (db: Knex) => {
    .then(exists => {if (exists) throw Error()})
    .then(() => db.schema.createTable("users", table => {
       table.increments("userId").primary()
-      table.string("email").notNullable()
+      table.string("email").notNullable().unique()
       table.string("username").notNullable()
       table.string("password").notNullable()
       table.string("iban").notNullable()

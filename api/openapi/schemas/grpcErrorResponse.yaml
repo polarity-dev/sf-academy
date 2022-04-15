@@ -1,7 +1,0 @@
-title: grpcErrorResponse
-type: object
-required:
-  - code
-properties:
-  code:
-    type: string

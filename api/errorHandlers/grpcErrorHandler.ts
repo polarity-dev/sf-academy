@@ -7,6 +7,10 @@ const grpcErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
          res.status(401).send({ message: "Invalid credentials" })
          break
       }
+      case (status.ALREADY_EXISTS): {
+         res.status(409).send({ message: "Email already taken" })
+         break
+      }
       default: {
          next(err)
          break

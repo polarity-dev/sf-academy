@@ -64,6 +64,30 @@ paths:
               schema:
                 oneOf:
                   - $ref: "./schemas/errorResponse.yaml"
+  /signup:
+    post:
+      description: Inserts new user on succesful signup
+      operationId: signup
+      x-eov-operation-handler: routes/signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/userData.yaml"
+      responses:
+        "201":
+          description: Succesful signup
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/okResponse.yaml"
+        "409":
+          description: Email already taken
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/errorResponse.yaml"
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user
@@ -92,6 +116,7 @@ paths:
                   - $ref: "./schemas/errorResponse.yaml"
       security:
         - bearerAuth: []
+
 components:
   securitySchemes:
     bearerAuth:

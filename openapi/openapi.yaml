@@ -82,6 +82,12 @@ paths:
             application/json:
               schema:
                 $ref: "./schemas/okResponse.yaml"
+        "409":
+          description: Email already taken
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/errorResponse.yaml"
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user

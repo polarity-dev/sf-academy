@@ -1,5 +1,5 @@
 import usersClient from "../grpc_clients/usersClient"
-import { ServiceError, status } from "@grpc/grpc-js"
+import { ServiceError } from "@grpc/grpc-js"
 import { NextFunction, Request, Response } from "express"
 import { LoginResponse__Output } from "../../../proto/usersPackage/LoginResponse"
 
