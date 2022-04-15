@@ -4,6 +4,7 @@
   "description": "Candidacy to Soluzioni Futura",
   "main": "index.js",
   "scripts": {
+    "test": "mocha -r ts-node/register \"test/**\"",
     "start:api:local": "npm_scripts/start-api-local.sh",
     "start:exchange:local": "npm_scripts/start-exchange-local.sh",
     "start:users:local": "npm_scripts/start-users-local.sh",
@@ -44,6 +45,12 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "concurrently": "^7.1.0"
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "concurrently": "^7.1.0",
+    "mocha": "^9.2.2",
+    "superagent": "^7.1.2"
   }
 }

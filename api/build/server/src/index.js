@@ -8,6 +8,7 @@ const path_1 = require("path");
 const express_openapi_validator_1 = require("express-openapi-validator");
 const verifyToken_1 = __importDefault(require("../../middlewares/verifyToken"));
 const config_1 = require("../../config");
+const badRequest_1 = __importDefault(require("../../errorHandlers/badRequest"));
 const apiSpec = (0, path_1.join)(__dirname, "../../openapi/openapi.yaml");
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: false }));
@@ -25,4 +26,5 @@ app.use((0, express_openapi_validator_1.middleware)({
         }
     }
 }));
+app.use(badRequest_1.default);
 app.listen(config_1.apiPort, () => { console.log(`Api server listening on port ${config_1.apiPort}`); });
