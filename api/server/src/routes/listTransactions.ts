@@ -1,18 +1,20 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
+import usersClient from "../grpc_clients/usersClient"
+import { decode, JwtPayload } from "jsonwebtoken"
+import { ServiceError } from "@grpc/grpc-js"
+import { ListTransactionsResponse__Output } from "../../../proto/usersPackage/ListTransactionsResponse"
 
-const listTransactions = (req: Request, res: Response) => {
-   res.status(200).send([
-      {
-         usdDelta: 100,
-         eurDelta: 0,
-         date: "2022-04-12T16:00:00Z"
-      },
-      {
-         usdDelta: 0,
-         eurDelta: -10,
-         date: "2022-04-12T12:00:00Z"
+const listTransactions = (req: Request, res: Response, next: NextFunction) => {
+   const token: string = req.headers.authorization?.replace("Bearer ", "") as string
+   const { userId } = decode(token) as JwtPayload
+   usersClient.ListTransactions({ userId },
+      (err: ServiceError | null, data: ListTransactionsResponse__Output | undefined) => {
+      if (err) {
+         next(err)
+         return
       }
-   ])
+      res.status(200).send((data as ListTransactionsResponse__Output).transactions)
+   })
 }
 
 export default listTransactions

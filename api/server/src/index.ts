@@ -4,7 +4,8 @@ import { middleware } from "express-openapi-validator"
 import { OpenAPIV3 } from "openapi-types";
 import verifyToken from "../../middlewares/verifyToken"
 import { apiPort } from "../../config"
-import badRequestHandler from "../../errorHandlers/badRequest";
+import apiErrorHandler from "../../errorHandlers/apiErrorHandler";
+import grpcErrorHandler from "../../errorHandlers/grpcErrorHandler";
 
 const apiSpec = join(__dirname, "../../openapi/openapi.yaml")
 const app = express()
@@ -27,6 +28,7 @@ app.use(
     }
   })
 )
-app.use(badRequestHandler)
+app.use(apiErrorHandler)
+app.use(grpcErrorHandler)
 
 app.listen(apiPort, () => { console.log(`Api server listening on port ${apiPort}`) })

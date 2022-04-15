@@ -48,29 +48,45 @@ paths:
               allOf:
                 - $ref: "./schemas/userCredentials.yaml"
       responses:
-        "200":
+        "201":
           description: Succesful login
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                type: object
+                properties:
+                  token:
+                    type: string
         "401":
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: "./schemas/errorResponse.yaml"
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
+  /signup:
+    post:
+      description: Inserts new user on succesful signup
+      operationId: signup
+      x-eov-operation-handler: routes/signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/userData.yaml"
+      responses:
+        "201":
+          description: Succesful signup
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/okResponse.yaml"
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user
       operationId: listTransactions
       x-eov-operation-handler: routes/listTransactions
-      parameters:
-        - name: userId
-          in: query
-          schema:
-            type: integer
-          required: true
       responses:
         "200":
           description: Succesful list
@@ -84,15 +100,17 @@ paths:
                   required:
                     - eurDelta
                     - usdDelta
-                    - date
+                    - timestamp
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: "./schemas/errorResponse.yaml"
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
       security:
         - bearerAuth: []
+
 components:
   securitySchemes:
     bearerAuth:

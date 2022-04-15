@@ -1,14 +1,11 @@
-title: user
+title: userData
 type: object
 required:
-  - id
   - firstname
   - iban
   - email
   - password
 properties:
-  - id:
-    type: integer
   - firstname:
     type: string
     format: password

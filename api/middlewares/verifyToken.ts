@@ -9,7 +9,7 @@ const verifyToken = (req: Request) : boolean => {
       return true
    }
    catch (err) {
-      return false
+      throw { status: 401, message: "Invalid token" }
    }
 }
 

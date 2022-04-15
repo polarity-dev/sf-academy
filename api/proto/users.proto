@@ -5,6 +5,7 @@ package usersPackage;
 service Users {
    rpc Login (LoginRequest) returns (LoginResponse) {}
    rpc Signup (SignupRequest) returns (SignupResponse) {}
+   rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsResponse) {}
 }
 
 message LoginRequest {
@@ -25,4 +26,18 @@ message SignupRequest {
 
 message SignupResponse {
    
+}
+
+message ListTransactionsRequest {
+   string userId = 1;
+}
+
+message Transaction {
+   double usdDelta = 1;
+   double eurDelta = 2;
+   string timestamp = 3;
+}
+
+message ListTransactionsResponse {
+   repeated Transaction transactions = 1;
 }
