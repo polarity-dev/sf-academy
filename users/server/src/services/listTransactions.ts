@@ -11,7 +11,7 @@ const ListTransactions = (call: ServerUnaryCall<ListTransactionsRequest, ListTra
    db.select("usdDelta", "eurDelta", "timestamp")
    .from("transactions")
    .where("userId", userId)
-   .then(data =>
+   .then(data => 
       data.map(transaction => {
          transaction.timestamp = new Date(transaction.timestamp).toISOString()
          return transaction

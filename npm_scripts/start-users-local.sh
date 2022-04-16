@@ -2,8 +2,8 @@
 
 cd users
 rm -rf proto build
-mkdir -p proto build/proto
-cp ../proto/users.proto proto/users.proto
+mkdir -p build/proto
+cp -r ../proto .
 npx proto-loader-gen-types --grpcLib=@grpc/grpc-js --outDir=proto proto/*.proto
-cp proto/users.proto build/proto/users.proto
+cp -r proto build
 tsc-watch -p tsconfig.json --onSuccess "node build/server/src/index.js"

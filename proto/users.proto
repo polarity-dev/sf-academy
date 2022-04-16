@@ -6,6 +6,9 @@ service Users {
    rpc Login (LoginRequest) returns (LoginResponse) {}
    rpc Signup (SignupRequest) returns (SignupResponse) {}
    rpc ListTransactions (ListTransactionsRequest) returns (ListTransactionsResponse) {}
+   rpc Deposit (DepositRequest) returns (DepositResponse) {}
+   rpc Withdraw (WithdrawRequest) returns (WithdrawResponse) {}
+   rpc Buy (BuyRequest) returns (BuyResponse) {}
 }
 
 message LoginRequest {
@@ -40,4 +43,34 @@ message Transaction {
 
 message ListTransactionsResponse {
    repeated Transaction transactions = 1;
+}
+
+message DepositRequest {
+   string userId = 1;
+   string symbol = 2;
+   double value = 3;
+}
+
+message DepositResponse {
+
+}
+
+message WithdrawRequest {
+   string userId = 1;
+   string symbol = 2;
+   double value = 3;
+}
+
+message WithdrawResponse {
+
+}
+
+message BuyRequest {
+   string userId = 1;
+   string symbol = 2;
+   double value = 3;
+}
+
+message BuyResponse {
+
 }

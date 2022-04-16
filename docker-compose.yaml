@@ -43,6 +43,8 @@ services:
       NODE_ENV: ${NODE_ENV}
       USERS_PORT: ${USERS_PORT}
       TOKEN_SECRET: ${TOKEN_SECRET}
+      EXCHANGE_HOST: ${EXCHANGE_HOST}
+      EXCHANGE_PORT: ${EXCHANGE_PORT}
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
       DB_HOST: ${DB_HOST}
@@ -51,7 +53,12 @@ services:
     entrypoint: node build/server/src/index.js
   db:
     container_name: sf-academy-db
-    image: postgres:14-alpine
+    logging:
+      driver: none
+    build:
+      context: $PWD
+      dockerfile: db/Dockerfile
+    working_dir: /home/node/app/db
     environment:
       POSTGRES_PORT: ${DB_PORT}
       POSTGRES_PASSWORD: ${DB_PASSWORD}

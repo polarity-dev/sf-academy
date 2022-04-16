@@ -1,8 +1,10 @@
 import { Knex } from "knex"
 import { dbHost, dbPort, dbUser, dbPassword, dbName } from "./config"
 
+console.log(dbName)
+
 const knexConfig: Knex.Config = {
-   client: "postgres",
+   client: "pg",
    connection: {
       host: dbHost,
       port: parseInt(dbPort as string),

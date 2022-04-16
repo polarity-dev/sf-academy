@@ -1,20 +1,29 @@
 import { it, describe } from "mocha"
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import { apiPort } from "./config"
+import { apiPort, apiHost } from "./config"
 
 chai.use(chaiHttp)
+const url = `${apiHost}:${apiPort}`
+
+const goodData = {
+   value: 100,
+   from: "USD",
+   to: "EUR"
+}
+
+const badData = {
+   value: -1,
+   from: "USD",
+   to: "EUR"
+}
 
 describe("GET /exchange", () => {
+   
    it("200 good request", done => {
-      const data = {
-         value: 100,
-         from: "USD",
-         to: "EUR"
-      }
-      chai.request(`0.0.0.0:${apiPort}`)
-      .get(`/exchange`)
-      .query(data)
+      chai.request(url)
+      .get("/exchange")
+      .query(goodData)
       .end((err, res) => {
          expect(res).to.have.status(200)
          expect(res).to.be.a("object")
@@ -23,17 +32,11 @@ describe("GET /exchange", () => {
    })
 
    it("400 bad request", done => {
-      const data = {
-         value: -10,
-         from: "EUR",
-         to: "USD"
-      }
-      chai.request(`0.0.0.0:${apiPort}`)
-      .get(`/exchange`)
-      .query(data)
+      chai.request(url)
+      .get("/exchange")
+      .query(badData)
       .end((err, res) => {
          expect(res).to.have.status(400)
-         console.log(res.body)
          expect(res.body).to.be.a("object")
          done()
       })

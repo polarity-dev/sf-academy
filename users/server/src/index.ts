@@ -4,6 +4,8 @@ import * as protoLoader from "@grpc/proto-loader"
 import { ProtoGrpcType } from "../../proto/users"
 import Login from "./services/login"
 import Signup from "./services/signup"
+import Deposit from "./services/deposit"
+import Withdraw from "./services/withdraw"
 import ListTransactions from "./services/listTransactions"
 import { usersPort } from "../../config"
 
@@ -16,7 +18,9 @@ const server = new grpc.Server()
 server.addService(usersPackage.Users.service, {
    Login,
    Signup,
-   ListTransactions
+   ListTransactions,
+   Deposit,
+   Withdraw
 })
 
 server.bindAsync(

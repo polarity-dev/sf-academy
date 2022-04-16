@@ -1,4 +1,4 @@
-import exchangeClient from "../grpc_clients/exchangeClient"
+import exchangeClient from "../../../grpcClients/exchangeClient"
 import { NextFunction, Request, Response } from "express"
 import { ServiceError } from "@grpc/grpc-js"
 import { ExchangeResponse__Output } from "../../../proto/exchangePackage/ExchangeResponse"

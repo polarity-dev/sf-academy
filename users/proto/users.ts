@@ -9,6 +9,10 @@ type SubtypeConstructor<Constructor extends new (...args: any) => any, Subtype> 
 
 export interface ProtoGrpcType {
   usersPackage: {
+    BuyRequest: MessageTypeDefinition
+    BuyResponse: MessageTypeDefinition
+    DepositRequest: MessageTypeDefinition
+    DepositResponse: MessageTypeDefinition
     ListTransactionsRequest: MessageTypeDefinition
     ListTransactionsResponse: MessageTypeDefinition
     LoginRequest: MessageTypeDefinition
@@ -17,6 +21,8 @@ export interface ProtoGrpcType {
     SignupResponse: MessageTypeDefinition
     Transaction: MessageTypeDefinition
     Users: SubtypeConstructor<typeof grpc.Client, _usersPackage_UsersClient> & { service: _usersPackage_UsersDefinition }
+    WithdrawRequest: MessageTypeDefinition
+    WithdrawResponse: MessageTypeDefinition
   }
 }
 

@@ -88,6 +88,60 @@ paths:
             application/json:
               schema:
                 $ref: "./schemas/errorResponse.yaml"
+  /deposit:
+    post:
+      description: Create a deposit-like transaction
+      operationId: deposit
+      x-eov-operation-handler: routes/deposit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/amount.yaml"
+      responses:
+        "201":
+          description: Succesful deposit
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/okResponse.yaml"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
+      security:
+        - bearerAuth: []
+  /withdraw:
+    post:
+      description: Create a withdraw-like transaction
+      operationId: withdraw
+      x-eov-operation-handler: routes/withdraw
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/amount.yaml"
+      responses:
+        "201":
+          description: Succesful withdraw
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/okResponse.yaml"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
+      security:
+        - bearerAuth: []   
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user
@@ -116,7 +170,6 @@ paths:
                   - $ref: "./schemas/errorResponse.yaml"
       security:
         - bearerAuth: []
-
 components:
   securitySchemes:
     bearerAuth:

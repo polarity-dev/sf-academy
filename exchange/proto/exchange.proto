@@ -7,12 +7,12 @@ service Exchange {
 }
 
 message ExchangeRequest {
-   float value = 1;
+   double value = 1;
    string from = 2;
    string to = 3;
 }
 
 message ExchangeResponse {
-   float value = 1;
+   double value = 1;
    string symbol = 2;
 }
