@@ -32,7 +32,7 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
          if (usdBalance + usdDelta < 0 || eurBalance + eurDelta < 0)
             throw new Error()
       })
-      .then(data => {
+      .then(() => {
          db("transactions")
          .insert({
             userId,
@@ -40,6 +40,15 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
             usdDelta,
             timestamp: new Date().toISOString()
          })
+         .then(() => {})
+      })
+      .then(() => {
+         db("users")
+         .update({
+            "usdBalance": db.raw(`"usdBalance" + ${usdDelta}`),
+            "eurBalance": db.raw(`"eurBalance" + ${eurDelta}`)
+         })
+         .where("userId", userId)
          .then(() => {})
       })
       .then(data => callback(null, {}))

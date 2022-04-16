@@ -13,6 +13,8 @@ export interface ProtoGrpcType {
     BuyResponse: MessageTypeDefinition
     DepositRequest: MessageTypeDefinition
     DepositResponse: MessageTypeDefinition
+    GetUserRequest: MessageTypeDefinition
+    GetUserResponse: MessageTypeDefinition
     ListTransactionsRequest: MessageTypeDefinition
     ListTransactionsResponse: MessageTypeDefinition
     LoginRequest: MessageTypeDefinition

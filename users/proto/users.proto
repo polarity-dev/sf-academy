@@ -9,6 +9,7 @@ service Users {
    rpc Deposit (DepositRequest) returns (DepositResponse) {}
    rpc Withdraw (WithdrawRequest) returns (WithdrawResponse) {}
    rpc Buy (BuyRequest) returns (BuyResponse) {}
+   rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
 }
 
 message LoginRequest {
@@ -73,4 +74,16 @@ message BuyRequest {
 
 message BuyResponse {
 
+}
+
+message GetUserRequest {
+   string userId = 1;
+}
+
+message GetUserResponse {
+   string username = 1;
+   string email = 2;
+   string iban = 3;
+   double usdBalance = 4;
+   double eurBalance = 5;
 }

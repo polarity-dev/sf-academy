@@ -211,6 +211,32 @@ paths:
                   - $ref: "./schemas/errorResponse.yaml"
       security:
         - bearerAuth: []
+  /getUser:
+    get:
+      description: Returns user info
+      operationId: getUser
+      x-eov-operation-handler: routes/getUser
+      responses:
+        "200":
+          description: Succesful get
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/userInfo.yaml"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/errorResponse.yaml"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/errorResponse.yaml"
+      security:
+        - bearerAuth: []
 components:
   securitySchemes:
     bearerAuth:

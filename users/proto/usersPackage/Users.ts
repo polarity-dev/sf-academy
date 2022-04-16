@@ -6,6 +6,8 @@ import type { BuyRequest as _usersPackage_BuyRequest, BuyRequest__Output as _use
 import type { BuyResponse as _usersPackage_BuyResponse, BuyResponse__Output as _usersPackage_BuyResponse__Output } from '../usersPackage/BuyResponse';
 import type { DepositRequest as _usersPackage_DepositRequest, DepositRequest__Output as _usersPackage_DepositRequest__Output } from '../usersPackage/DepositRequest';
 import type { DepositResponse as _usersPackage_DepositResponse, DepositResponse__Output as _usersPackage_DepositResponse__Output } from '../usersPackage/DepositResponse';
+import type { GetUserRequest as _usersPackage_GetUserRequest, GetUserRequest__Output as _usersPackage_GetUserRequest__Output } from '../usersPackage/GetUserRequest';
+import type { GetUserResponse as _usersPackage_GetUserResponse, GetUserResponse__Output as _usersPackage_GetUserResponse__Output } from '../usersPackage/GetUserResponse';
 import type { ListTransactionsRequest as _usersPackage_ListTransactionsRequest, ListTransactionsRequest__Output as _usersPackage_ListTransactionsRequest__Output } from '../usersPackage/ListTransactionsRequest';
 import type { ListTransactionsResponse as _usersPackage_ListTransactionsResponse, ListTransactionsResponse__Output as _usersPackage_ListTransactionsResponse__Output } from '../usersPackage/ListTransactionsResponse';
 import type { LoginRequest as _usersPackage_LoginRequest, LoginRequest__Output as _usersPackage_LoginRequest__Output } from '../usersPackage/LoginRequest';
@@ -33,6 +35,15 @@ export interface UsersClient extends grpc.Client {
   deposit(argument: _usersPackage_DepositRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_usersPackage_DepositResponse__Output>): grpc.ClientUnaryCall;
   deposit(argument: _usersPackage_DepositRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_DepositResponse__Output>): grpc.ClientUnaryCall;
   deposit(argument: _usersPackage_DepositRequest, callback: grpc.requestCallback<_usersPackage_DepositResponse__Output>): grpc.ClientUnaryCall;
+  
+  GetUser(argument: _usersPackage_GetUserRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  GetUser(argument: _usersPackage_GetUserRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  GetUser(argument: _usersPackage_GetUserRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  GetUser(argument: _usersPackage_GetUserRequest, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  getUser(argument: _usersPackage_GetUserRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  getUser(argument: _usersPackage_GetUserRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  getUser(argument: _usersPackage_GetUserRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
+  getUser(argument: _usersPackage_GetUserRequest, callback: grpc.requestCallback<_usersPackage_GetUserResponse__Output>): grpc.ClientUnaryCall;
   
   ListTransactions(argument: _usersPackage_ListTransactionsRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_usersPackage_ListTransactionsResponse__Output>): grpc.ClientUnaryCall;
   ListTransactions(argument: _usersPackage_ListTransactionsRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_usersPackage_ListTransactionsResponse__Output>): grpc.ClientUnaryCall;
@@ -77,6 +88,8 @@ export interface UsersHandlers extends grpc.UntypedServiceImplementation {
   
   Deposit: grpc.handleUnaryCall<_usersPackage_DepositRequest__Output, _usersPackage_DepositResponse>;
   
+  GetUser: grpc.handleUnaryCall<_usersPackage_GetUserRequest__Output, _usersPackage_GetUserResponse>;
+  
   ListTransactions: grpc.handleUnaryCall<_usersPackage_ListTransactionsRequest__Output, _usersPackage_ListTransactionsResponse>;
   
   Login: grpc.handleUnaryCall<_usersPackage_LoginRequest__Output, _usersPackage_LoginResponse>;
@@ -90,6 +103,7 @@ export interface UsersHandlers extends grpc.UntypedServiceImplementation {
 export interface UsersDefinition extends grpc.ServiceDefinition {
   Buy: MethodDefinition<_usersPackage_BuyRequest, _usersPackage_BuyResponse, _usersPackage_BuyRequest__Output, _usersPackage_BuyResponse__Output>
   Deposit: MethodDefinition<_usersPackage_DepositRequest, _usersPackage_DepositResponse, _usersPackage_DepositRequest__Output, _usersPackage_DepositResponse__Output>
+  GetUser: MethodDefinition<_usersPackage_GetUserRequest, _usersPackage_GetUserResponse, _usersPackage_GetUserRequest__Output, _usersPackage_GetUserResponse__Output>
   ListTransactions: MethodDefinition<_usersPackage_ListTransactionsRequest, _usersPackage_ListTransactionsResponse, _usersPackage_ListTransactionsRequest__Output, _usersPackage_ListTransactionsResponse__Output>
   Login: MethodDefinition<_usersPackage_LoginRequest, _usersPackage_LoginResponse, _usersPackage_LoginRequest__Output, _usersPackage_LoginResponse__Output>
   Signup: MethodDefinition<_usersPackage_SignupRequest, _usersPackage_SignupResponse, _usersPackage_SignupRequest__Output, _usersPackage_SignupResponse__Output>

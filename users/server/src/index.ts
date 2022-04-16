@@ -8,6 +8,7 @@ import Deposit from "./services/deposit"
 import Withdraw from "./services/withdraw"
 import ListTransactions from "./services/listTransactions"
 import Buy from "./services/buy"
+import GetUser from "./services/getUser"
 import { usersPort } from "../../config"
 
 const packageDef = protoLoader.loadSync(join(__dirname, "../../proto/users.proto"))
@@ -22,7 +23,8 @@ server.addService(usersPackage.Users.service, {
    ListTransactions,
    Deposit,
    Withdraw,
-   Buy
+   Buy,
+   GetUser
 })
 
 server.bindAsync(
