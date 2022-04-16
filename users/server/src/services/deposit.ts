@@ -18,6 +18,15 @@ const Deposit = (call: ServerUnaryCall<DepositRequest, DepositResponse>, callbac
       eurDelta,
       timestamp
    })
+   .then((data) => {
+      db("users")
+      .update({
+         "usdBalance": db.raw(`"usdBalance" + ${usdDelta}`),
+         "eurBalance": db.raw(`"eurBalance" + ${eurDelta}`)
+      })
+      .where("userId", userId)
+      .then(() => {})
+   })
    .then(data => callback(null, {}))
    .catch(err => {
       callback({

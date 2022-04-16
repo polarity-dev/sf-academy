@@ -148,7 +148,41 @@ paths:
                 oneOf:
                   - $ref: "./schemas/errorResponse.yaml"
       security:
-        - bearerAuth: []   
+        - bearerAuth: []
+  /buy:
+    post:
+      description: Create a buy-like transaction
+      operationId: buy
+      x-eov-operation-handler: routes/buy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "./schemas/amount.yaml"
+      responses:
+        "201":
+          description: Succesful buy
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/okResponse.yaml"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
+        "409":
+          description: Insufficient credit
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
+      security:
+        - bearerAuth: []
   /listTransactions:
     get:
       description: Returns the list of transactions of authenticated user

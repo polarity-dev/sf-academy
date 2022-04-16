@@ -18,7 +18,14 @@ const Signup = (call: ServerUnaryCall<SignupRequest, SignupResponse>, callback: 
    .then(data => {
       if (data.length > 0) throw new Error()
       db("users")
-      .insert({ username, email, password: hash, iban })
+      .insert({
+         username,
+         email,
+         password: hash,
+         iban,
+         usdBalance: 0,
+         eurBalance: 0
+      })
       .then(data => callback(null, {}))
    })
    .catch(err => callback({

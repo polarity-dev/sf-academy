@@ -1,5 +1,6 @@
 import { createHash } from "crypto"
-import { Knex } from "knex"
+import { knex, Knex } from "knex"
+import knexConfig from "../knexConfig"
 
 const usersData = [
 	{
@@ -33,14 +34,6 @@ const usersData = [
 		"password": "CVF88FYY4RT",
 		"usdBalance": 232.22,
 		"eurBalance": 320.21
-	},
-	{
-		"email": "auctor.ullamcorper.nisl@yahoo.net",
-		"username": "Scarlet Barber",
-		"iban": "DO46761743751611624224758765",
-		"password": "CAR48FPT9QL",
-		"usdBalance": 264.88,
-		"eurBalance": 120.81
 	}
 ]
 
@@ -77,28 +70,36 @@ const transactionsData = [
 	}
 ]
 
-const seedUsers = async (db: Knex) : Promise<void> => {
-   usersData.forEach(async user => {
+const seedUsers = () => {
+	const userInsertions: Array<Promise<void>> = []
+	const db: Knex = knex(knexConfig)
+   usersData.forEach(user => {
 		user.password = createHash("sha256")
 		.update(user.password)
 		.digest("hex")
-      await db("users").insert(user)
+      userInsertions.push(db("users").insert(user))
    })
-	console.log("Table users seeded")
-	return db.raw(";").catch()
+	return Promise.all(userInsertions)
+	.then(() => console.log("Table users seeded"))
+	.finally(() => db.destroy())
+	.catch(() => {})
 }
 
-const seedTransactions = (db: Knex) => {
-	transactionsData.forEach(async transaction => {
-		await db("transactions").insert(transaction)
+const seedTransactions = () => {
+	const transactionInsertions: Array<Promise<void>> = []
+	const db: Knex = knex(knexConfig)
+	transactionsData.forEach(transaction => {
+		transactionInsertions.push(db("transactions").insert(transaction))
 	})
-	console.log("Table transactions seeded")
-	return db.raw(";").catch()
+	return Promise.all(transactionInsertions)
+	.then(() => console.log("Table transactions seeded"))
+	.finally(() => db.destroy())
 }
 
-const seedTables = async (db: Knex) => {
-	return seedUsers(db)
-	.then(() => seedTransactions(db))
+const seedTables = () => {
+	return seedUsers()
+	.then(() => seedTransactions())
+	.catch(() => {})
 }
 
 export default seedTables

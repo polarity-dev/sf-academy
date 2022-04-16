@@ -3,6 +3,7 @@
 ./api/openapi
 ./api/proto
 ./exchange/proto
+./users/proto
 .idea
 # Logs
 logs

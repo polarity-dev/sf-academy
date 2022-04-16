@@ -7,9 +7,9 @@ import knexConfig from "../../../knexConfig"
 const db: Knex = knex(knexConfig)
 
 const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, callback: sendUnaryData<WithdrawResponse>): void => {
-   const userId: string = call.request.userId as string
-   const usdDelta: number = (call.request.symbol === "USD") ? -(call.request.value as number) : 0
-   const eurDelta: number = (call.request.symbol === "EUR") ? -(call.request.value as number) : 0
+   const { userId, symbol, value } = call.request
+   const usdDelta: number = (symbol === "USD") ? - (value as number) : 0
+   const eurDelta: number = (symbol === "EUR") ? - (value as number) : 0
    const timestamp: string = new Date().toISOString()
 
    db("users")
@@ -17,12 +17,11 @@ const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, call
    .where("userId", userId)
    .then(rows => rows[0])
    .then(data => {
-      if (
-         data.usdBalance + usdDelta < 0 ||
-         data.eurBalance + eurDelta < 0
-      ) throw new Error()
+      const { usdBalance, eurBalance } = data
+      if (usdBalance + usdDelta < 0 || eurBalance + eurDelta < 0)
+         throw new Error()
    })
-   .then(data => {
+   .then(() => {
       db("transactions")
       .insert({
          userId,
@@ -30,15 +29,24 @@ const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, call
          eurDelta,
          timestamp
       })
-      .then(data => callback(null, {}))
+      .then(() => {})
    })
+   .then(() => {
+      db("users")
+      .update({
+         "usdBalance": db.raw(`"usdBalance" + ${usdDelta}`),
+         "eurBalance": db.raw(`"eurBalance" + ${eurDelta}`)
+      })
+      .where("userId", userId)
+      .then(() => {})
+   })
+   .then(data => callback(null, {}))
    .catch(err => {
       callback({
          code: status.ABORTED,
          message: "Insufficient credit"
       })
    })
-
 }
 
 export default Withdraw

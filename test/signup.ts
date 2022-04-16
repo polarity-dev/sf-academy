@@ -7,10 +7,12 @@ chai.use(chaiHttp)
 const url = `${apiHost}:${apiPort}`
 
 const goodData = {
-   email: "valid.email@gmail.com",
-   username: "valid username",
-   iban: "EE842136117487831851",
-   password: "password"
+   "email": "auctor.ullamcorper.nisl@yahoo.net",
+   "username": "Scarlet Barber",
+   "iban": "DO46761743751611624224758765",
+   "password": "CAR48FPT9QL",
+   "usdBalance": 264.88,
+   "eurBalance": 120.81
 }
 
 const alreadyTakenData = {

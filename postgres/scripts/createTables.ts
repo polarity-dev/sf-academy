@@ -1,6 +1,8 @@
-import { Knex } from 'knex'
+import { knex, Knex } from 'knex'
+import knexConfig from '../knexConfig'
 
-const createUsersTable = async (db: Knex) => {
+const createUsersTable = () => {
+   const db: Knex = knex(knexConfig)
    return db.schema.hasTable("users")
    .catch(err => console.log(err))
    .then(exists => {if (exists) throw Error()})
@@ -15,9 +17,11 @@ const createUsersTable = async (db: Knex) => {
       console.log("Table users created")
    }))
    .catch(() => console.log("Table users already exists"))
+   .finally(() => db.destroy())
 }
 
-const createTransactionTable = async (db: Knex) => {
+const createTransactionTable = () => {
+   const db: Knex = knex(knexConfig)
    return db.schema.hasTable("transactions")
    .catch(err => console.log(err))
    .then(exists => {if (exists) throw Error()})
@@ -30,11 +34,12 @@ const createTransactionTable = async (db: Knex) => {
       console.log("Table transactions created")
    }))
    .catch(() => console.log("Table transactions already exists"))
+   .finally(() => db.destroy())
 }
 
-const createTables = async (db: Knex) => {
-   return createUsersTable(db)
-   .then(() => createTransactionTable(db))
+const createTables = () => {
+   return createUsersTable()
+   .then(() => createTransactionTable())
 }
 
 export default createTables
