@@ -13,8 +13,14 @@ const Signup = (call: ServerUnaryCall<SignupRequest, SignupResponse>, callback: 
    .update(password as string)
    .digest("hex")
    db("users")
-   .insert({ username, email, password: hash, iban })
-   .then(data => callback(null, {}))
+   .select("*")
+   .where("email", email)
+   .then(data => {
+      if (data.length > 0) throw new Error()
+      db("users")
+      .insert({ username, email, password: hash, iban })
+      .then(data => callback(null, {}))
+   })
    .catch(err => callback({
       code: status.ALREADY_EXISTS,
       message: "Email already taken"

@@ -6,8 +6,6 @@ import { apiPort, apiHost } from "./config"
 chai.use(chaiHttp)
 const url = `${apiHost}:${apiPort}`
 
-console.log(url)
-
 const goodData = {
    email: "valid.email@gmail.com",
    username: "valid username",

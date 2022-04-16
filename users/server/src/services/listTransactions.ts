@@ -20,8 +20,8 @@ const ListTransactions = (call: ServerUnaryCall<ListTransactionsRequest, ListTra
    .then(data => callback(null, { transactions: data }))
    .catch(err => {
       callback({
-         code: status.NOT_FOUND,
-         message: "Invalid Id"
+         code: status.INTERNAL,
+         message: "Internal database error"
       })
    })
 }

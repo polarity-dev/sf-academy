@@ -140,6 +140,13 @@ paths:
               schema:
                 oneOf:
                   - $ref: "./schemas/errorResponse.yaml"
+        "409":
+          description: Insufficient credit
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./schemas/errorResponse.yaml"
       security:
         - bearerAuth: []   
   /listTransactions:

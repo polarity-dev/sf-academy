@@ -11,6 +11,10 @@ const grpcErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
          res.status(409).send({ message: "Email already taken" })
          break
       }
+      case (status.ABORTED): {
+         res.status(409).send({ message: "Insufficient credit"})
+         break
+      }
       default: {
          next(err)
          break

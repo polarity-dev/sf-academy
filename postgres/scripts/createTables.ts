@@ -10,6 +10,8 @@ const createUsersTable = async (db: Knex) => {
       table.string("username").notNullable()
       table.string("password").notNullable()
       table.string("iban").notNullable()
+      table.double("usdBalance").defaultTo(0)
+      table.double("eurBalance").defaultTo(0)
       console.log("Table users created")
    }))
    .catch(() => console.log("Table users already exists"))
