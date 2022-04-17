@@ -1,10 +1,9 @@
 import { it, describe } from "mocha"
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import { apiPort, apiHost } from "./config"
+import { baseUrl } from "./config"
 
 chai.use(chaiHttp)
-const url = `${apiHost}:${apiPort}`
 
 const data1 = {
    email: "est@yahoo.couk",
@@ -24,7 +23,7 @@ const badData = {
 describe("POST /login", () => {
 
    it("201 good request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/login")
       .send(data1)
       .end((err, res) => {
@@ -34,7 +33,7 @@ describe("POST /login", () => {
    })
 
    it("401 invalid credentials", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/login")
       .send(invalidData)
       .end((err, res) => {
@@ -45,7 +44,7 @@ describe("POST /login", () => {
    })
    
    it("400 bad request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/login")
       .send(badData)
       .end((err, res) => {

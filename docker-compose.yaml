@@ -53,8 +53,6 @@ services:
     entrypoint: node server/src/index.js
   db:
     container_name: sf-academy-db
-    logging:
-      driver: none
     build:
       context: $PWD
       dockerfile: db/Dockerfile

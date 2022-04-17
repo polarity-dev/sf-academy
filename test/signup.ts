@@ -1,10 +1,9 @@
 import { it, describe } from "mocha"
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import { apiPort, apiHost } from "./config"
+import { baseUrl } from "./config"
 
 chai.use(chaiHttp)
-const url = `${apiHost}:${apiPort}`
 
 const goodData = {
    "email": `${Date.now()}.changing@email.com`,
@@ -33,7 +32,7 @@ const badData = {
 describe("POST /signup", () => {
 
    it("201 good request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/signup")
       .send(goodData)
       .end((err, res) => {
@@ -44,7 +43,7 @@ describe("POST /signup", () => {
    })
    
    it("400 bad request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/signup")
       .send(badData)
       .end((err, res) => {
@@ -55,7 +54,7 @@ describe("POST /signup", () => {
    })
    
    it("409 already taken", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .post("/signup")
       .send(alreadyTakenData)
       .end((err, res) => {

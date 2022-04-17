@@ -3,6 +3,8 @@ info:
   title: Sf Academy
   version: 1.0.0
   description: Generated docs from my candidacy test
+servers:
+  - url: http://${API_HOST}:${API_PORT}/api
 paths:
   /exchange:
     get:

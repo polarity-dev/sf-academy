@@ -1,11 +1,10 @@
 import { it, describe } from "mocha"
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import { apiPort, apiHost } from "./config"
+import { baseUrl } from "./config"
 import getToken from "./getToken"
 
 chai.use(chaiHttp)
-const url = `${apiHost}:${apiPort}`
 
 const invalidToken = "invalidToken"
 
@@ -28,7 +27,7 @@ getToken().then(token => {
    describe("POST /buy", () => {
       
       it("201 good request", done => {
-         chai.request(url)
+         chai.request(baseUrl)
          .post("/buy")
          .set("Authorization", "Bearer " + token)
          .send(goodData)
@@ -40,7 +39,7 @@ getToken().then(token => {
       })
    
       it("400 bad request", done => {
-         chai.request(url)
+         chai.request(baseUrl)
          .post("/buy")
          .set("Authorization", "Bearer " + token)
          .send(badData)
@@ -52,7 +51,7 @@ getToken().then(token => {
       })
    
       it("401 invalid token", done => {
-         chai.request(url)
+         chai.request(baseUrl)
          .post("/buy")
          .set("Authorization", "Bearer " + invalidToken)
          .send(goodData)
@@ -64,7 +63,7 @@ getToken().then(token => {
       })
    
       it("409 insufficient credit", done => {
-         chai.request(url)
+         chai.request(baseUrl)
          .post("/buy")
          .set("Authorization", "Bearer " + token)
          .send(exceedingRequestData)

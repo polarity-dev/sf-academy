@@ -1,9 +1,7 @@
 import axios from "axios"
-import { apiPort, apiHost } from "./config"
+import { baseUrl } from "./config"
 
-const URL = `http://${apiHost}:${apiPort}`
-
-const getToken = () => axios.post(URL + "/login", {
+const getToken = () => axios.post(baseUrl + "/login", {
    "email": "est@yahoo.couk",
    "password": "XEV22DZU5SO"
 })

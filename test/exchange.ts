@@ -1,10 +1,9 @@
 import { it, describe } from "mocha"
 import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
-import { apiPort, apiHost } from "./config"
+import { baseUrl } from "./config"
 
 chai.use(chaiHttp)
-const url = `${apiHost}:${apiPort}`
 
 const goodData = {
    value: 100,
@@ -21,7 +20,7 @@ const badData = {
 describe("GET /exchange", () => {
    
    it("200 good request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .get("/exchange")
       .query(goodData)
       .end((err, res) => {
@@ -32,7 +31,7 @@ describe("GET /exchange", () => {
    })
 
    it("400 bad request", done => {
-      chai.request(url)
+      chai.request(baseUrl)
       .get("/exchange")
       .query(badData)
       .end((err, res) => {

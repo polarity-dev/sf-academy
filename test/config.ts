@@ -11,4 +11,5 @@ export const
    exchangePort = process.env.EXCHANGE_PORT,
    exchangeHost = process.env.EXCHANGE_HOST,
    usersPort = process.env.USERS_PORT,
-   usersHost = process.env.USERS_HOST
+   usersHost = process.env.USERS_HOST,
+   baseUrl = `http://${apiHost}:${apiPort}/api`
