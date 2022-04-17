@@ -16,7 +16,7 @@ services:
       USERS_PORT: ${USERS_PORT}
       USERS_HOST: ${USERS_HOST}
       TOKEN_SECRET: ${TOKEN_SECRET}
-    entrypoint: node build/server/src/index.js
+    entrypoint: node server/src/index.js
   exchange:
     container_name: sf-academy-exchange
     build:
@@ -28,7 +28,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       EXCHANGE_PORT: ${EXCHANGE_PORT}
-    entrypoint: node build/server/src/index.js
+    entrypoint: node server/src/index.js
   users:
     container_name: sf-academy-users
     depends_on:
@@ -50,7 +50,7 @@ services:
       DB_HOST: ${DB_HOST}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-    entrypoint: node build/server/src/index.js
+    entrypoint: node server/src/index.js
   db:
     container_name: sf-academy-db
     logging:

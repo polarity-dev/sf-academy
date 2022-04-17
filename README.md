@@ -10,11 +10,11 @@ It is recommended to substitute the line `API_PORT=3000` with `API_PORT=80` in `
 ### Docker instructions
 Start containers
 ```
-npm run start:prod
+NODE_ENV=production npm start
 ```
 Test (run in another shell while containers are running)
 ```
-npm run test:prod
+NODE_ENV=production npm test
 ```
 
 ### Local instructions
