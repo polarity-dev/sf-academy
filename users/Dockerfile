@@ -3,7 +3,7 @@ FROM node:17-alpine
 WORKDIR /home/node/app/users
 
 COPY ./package.json ./package.json
-RUN npm i --quiet --no-update-notifier
+RUN npm i --silent --no-update-notifier --dev
 
 COPY ./proto ./proto
 COPY ./npm_scripts ./npm_scripts

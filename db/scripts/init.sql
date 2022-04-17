@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS "users";
+DROP TABLE IF EXISTS "transactions";
+
 CREATE TABLE IF NOT EXISTS "users" (
    "userId" serial primary key,
    "username" varchar (255),

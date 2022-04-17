@@ -7,19 +7,17 @@ chai.use(chaiHttp)
 const url = `${apiHost}:${apiPort}`
 
 const goodData = {
-   "email": "auctor.ullamcorper.nisl@yahoo.net",
+   "email": `${Date.now()}.changing@email.com`,
    "username": "Scarlet Barber",
    "iban": "DO46761743751611624224758765",
-   "password": "CAR48FPT9QL",
-   "usdBalance": 264.88,
-   "eurBalance": 120.81
+   "password": "CAR48FPT9QL"
 }
 
 const alreadyTakenData = {
-   email: "est@yahoo.couk",
-   username: "other username",
-   iban: "EE842136117487831859",
-   password: "password"
+   "email": "est@yahoo.couk",
+   "username": "other username",
+   "iban": "EE842136117487831859",
+   "password": "password"
 }
 
 const invalidData = {
@@ -54,16 +52,16 @@ describe("POST /signup", () => {
          expect(res.body.message).to.be.equal("Bad request")
          done()
       })
+   })
    
-      it("409 already taken", done => {
-         chai.request(url)
-         .post("/signup")
-         .send(alreadyTakenData)
-         .end((err, res) => {
-            expect(res).to.have.status(409)
-            expect(res.body.message).to.be.equal("Already taken")
-            done()
-         })
+   it("409 already taken", done => {
+      chai.request(url)
+      .post("/signup")
+      .send(alreadyTakenData)
+      .end((err, res) => {
+         expect(res).to.have.status(409)
+         expect(res.body.message).to.be.equal("Email already taken")
+         done()
       })
    })
 })
