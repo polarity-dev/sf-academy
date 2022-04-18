@@ -4,6 +4,8 @@ import { SignupRequest } from "../../../proto/usersPackage/SignupRequest"
 import { SignupResponse } from "../../../proto/usersPackage/SignupResponse"
 import knexConfig from "../../../knexConfig"
 import { createHash } from "crypto"
+import { sign } from "jsonwebtoken"
+import { tokenSecret } from "../../../config"
 
 const db: Knex = knex(knexConfig)
 
@@ -26,7 +28,20 @@ const Signup = (call: ServerUnaryCall<SignupRequest, SignupResponse>, callback: 
          usdBalance: 0,
          eurBalance: 0
       })
-      .then(data => callback(null, {}))
+      .then(data => {
+         db("users")
+         .select("userId")
+         .where("email", email)
+         .then(rows => rows[0].userId)
+         .then(userId => {
+            const token = sign(
+               { userId },
+               tokenSecret as string,
+               { expiresIn: "1d"}
+            )
+            callback(null, { token })
+         })
+      })
    })
    .catch(err => callback({
       code: status.ALREADY_EXISTS,

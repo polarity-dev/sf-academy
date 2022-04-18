@@ -29,7 +29,7 @@ message SignupRequest {
 }
 
 message SignupResponse {
-   
+   string token = 1;
 }
 
 message ListTransactionsRequest {

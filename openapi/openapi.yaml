@@ -3,8 +3,6 @@ info:
   title: Sf Academy
   version: 1.0.0
   description: Generated docs from my candidacy test
-servers:
-  - url: http://${API_HOST}:${API_PORT}/api
 paths:
   /exchange:
     get:
@@ -83,7 +81,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                type: object
+                properties:
+                  token:
+                    type: string
         "409":
           description: Email already taken
           content:
