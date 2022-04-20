@@ -42,31 +42,36 @@ const transactionsData = [
 		"usdDelta": 188.18,
 		"eurDelta": 146.06,
 		"timestamp": "2023-01-08 12:54:29",
-		"userId": 4
+		"userId": 4,
+		"type": "BUY"
 	},
 	{
 		"usdDelta": 10.94,
 		"eurDelta": 185.80,
 		"timestamp": "2021-10-18 09:55:35",
-		"userId": 4
+		"userId": 4,
+		"type": "DEPOSIT"
 	},
 	{
 		"usdDelta": 27.54,
 		"eurDelta": 45.77,
 		"timestamp": "2022-04-06 02:25:51",
-		"userId": 1
+		"userId": 1,
+		"type": "WITHDRAW"
 	},
 	{
 		"usdDelta": 175.45,
 		"eurDelta": 162.16,
 		"timestamp": "2021-09-04 17:24:28",
-		"userId": 2
+		"userId": 2,
+		"type": "BUY"
 	},
 	{
 		"usdDelta": 161.98,
 		"eurDelta": 190.21,
 		"timestamp": "2022-01-06 21:59:40",
-		"userId": 1
+		"userId": 1,
+		"type": "WITHDRAW"
 	}
 ]
 

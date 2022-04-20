@@ -16,5 +16,6 @@ CREATE TABLE IF NOT EXISTS "transactions" (
    "userId" integer not null,
    "usdDelta" float not null,
    "eurDelta" float not null,
+   "type" varchar (255) not null,
    "timestamp" timestamp not null
 );

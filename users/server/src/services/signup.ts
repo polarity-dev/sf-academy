@@ -28,20 +28,7 @@ const Signup = (call: ServerUnaryCall<SignupRequest, SignupResponse>, callback: 
          usdBalance: 0,
          eurBalance: 0
       })
-      .then(data => {
-         db("users")
-         .select("userId")
-         .where("email", email)
-         .then(rows => rows[0].userId)
-         .then(userId => {
-            const token = sign(
-               { userId },
-               tokenSecret as string,
-               { expiresIn: "1d"}
-            )
-            callback(null, { token })
-         })
-      })
+      .then(() => callback(null, {}))
    })
    .catch(err => callback({
       code: status.ALREADY_EXISTS,

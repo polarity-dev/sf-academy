@@ -110,3 +110,10 @@ footer {
   margin-top: 30px;
   text-align: center;
 }
+
+table {
+  border: #fff;
+  text-align: left;
+  align-items: stretch;
+  width: 100%;
+}

@@ -8,7 +8,7 @@ const db: Knex = knex(knexConfig)
 
 const ListTransactions = (call: ServerUnaryCall<ListTransactionsRequest, ListTransactionsResponse>, callback: sendUnaryData<ListTransactionsResponse>): void => {
    const userId: string = call.request.userId as string
-   db.select("usdDelta", "eurDelta", "timestamp")
+   db.select("usdDelta", "eurDelta", "timestamp", "type")
    .from("transactions")
    .where("userId", userId)
    .then(data => 

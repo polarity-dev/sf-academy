@@ -27,7 +27,8 @@ const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, call
          userId,
          usdDelta,
          eurDelta,
-         timestamp
+         timestamp,
+         type: "WITHDRAW"
       })
       .then(() => {})
    })

@@ -11,6 +11,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       API_PORT: ${API_PORT}
+      API_HOST: ${API_HOST}
       EXCHANGE_PORT: ${EXCHANGE_PORT}
       EXCHANGE_HOST: ${EXCHANGE_HOST}
       USERS_PORT: ${USERS_PORT}
@@ -70,13 +71,13 @@ services:
       context: $PWD
       dockerfile: client/Dockerfile
       args:
-        EXTERNAL_PORT: ${EXTERNAL_PORT}
-        HOST: ${HOST}
+        API_HOST: ${API_HOST}
         API_PORT: ${API_PORT}
+        CLIENT_PORT: ${CLIENT_PORT}
     working_dir: /home/node/app/client
     environment:
-      EXTERNAL_PORT: ${EXTERNAL_PORT}
-      HOST: ${HOST}
+      API_HOST: ${API_HOST}
       API_PORT: ${API_PORT}
+      CLIENT_PORT: ${CLIENT_PORT}
     ports:
-      - ${EXTERNAL_PORT}:${EXTERNAL_PORT}
+      - ${CLIENT_PORT}:${CLIENT_PORT}

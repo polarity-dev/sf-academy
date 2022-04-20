@@ -16,7 +16,8 @@ const Deposit = (call: ServerUnaryCall<DepositRequest, DepositResponse>, callbac
       userId,
       usdDelta,
       eurDelta,
-      timestamp
+      timestamp,
+      type: "DEPOSIT"
    })
    .then((data) => {
       db("users")

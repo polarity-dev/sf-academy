@@ -10,11 +10,19 @@ const verifyToken_1 = __importDefault(require("../../middlewares/verifyToken"));
 const config_1 = require("../../config");
 const apiErrorHandler_1 = __importDefault(require("../../errorHandlers/apiErrorHandler"));
 const grpcErrorHandler_1 = __importDefault(require("../../errorHandlers/grpcErrorHandler"));
+const cors_1 = __importDefault(require("cors"));
 const apiSpec = (0, path_1.join)(__dirname, "../../openapi/openapi.yaml");
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.text());
 app.use(express_1.default.json());
+app.use((req, resp, next) => { next(); }, (0, cors_1.default)({ maxAge: 84600 }));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "OPTIONS, GET, POST, DELETE, PATCH, PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, content-type, Accept, Authorization");
+    next();
+});
 app.use("/spec", express_1.default.static(apiSpec));
 app.use((0, express_openapi_validator_1.middleware)({
     apiSpec,

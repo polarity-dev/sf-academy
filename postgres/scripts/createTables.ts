@@ -31,6 +31,7 @@ const createTransactionTable = () => {
       table.double("usdDelta").notNullable()
       table.double("eurDelta").notNullable()
       table.datetime("timestamp").notNullable()
+      table.string("type").notNullable()
       console.log("Table transactions created")
    }))
    .catch(() => console.log("Table transactions already exists"))

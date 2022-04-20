@@ -5,6 +5,7 @@ import { Configuration } from "webpack"
 import { Configuration as DevConfiguration } from "webpack-dev-server"
 import { merge } from "webpack-merge"
 import { host, externalPort } from "./config"
+import Dotenv from "dotenv-webpack"
 
 const baseConfig: Configuration = {
    mode: (process.env.NODE_ENV === "production") ? "production" : "development",
@@ -35,6 +36,9 @@ const baseConfig: Configuration = {
          template: join(__dirname, 'public/index.html')
       }),
       new MiniCssExtractPlugin(),
+      new Dotenv({
+         path: (process.env.NODE_ENV === "production") ? ".env" : ".env.dev"
+      })
    ]
 }
 

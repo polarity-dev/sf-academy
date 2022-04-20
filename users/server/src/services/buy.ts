@@ -38,7 +38,8 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
             userId,
             eurDelta,
             usdDelta,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            type: "BUY"
          })
          .then(() => {})
       })

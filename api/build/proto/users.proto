@@ -29,7 +29,7 @@ message SignupRequest {
 }
 
 message SignupResponse {
-   string token = 1;
+   
 }
 
 message ListTransactionsRequest {
@@ -40,6 +40,7 @@ message Transaction {
    double usdDelta = 1;
    double eurDelta = 2;
    string timestamp = 3;
+   string type = 4;
 }
 
 message ListTransactionsResponse {
