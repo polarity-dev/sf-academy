@@ -1,44 +1,44 @@
 # Sf Academy: exchange microservice
-A simple app to exchange USD & EUR
+Una piccola app per convertire e comprare euro e dollari
 
-### Installation
-To copy sample credentials (substitute the line `API_PORT=80` with `API_PORT=3000` in `.env.dev` to avoid permission errors)
+### Installazione
+Per copiare i file env
 ```
-cp .env-sample .env .env.dev
+cp .env-sample-prod .env
+cp .env-sample-dev .env.dev
 ```
 
-To grant permission for the build and start scripts
+Per rendere eseguibili gli scripts
 ```
 chmod +x npm_scripts/*
 ```
 
-### Docker instructions
-Start containers
+### Istruzioni per Docker
+Per avviare i containers
 ```
 NODE_ENV=production npm start
 ```
-Test (run in another shell while containers are running)
+Per testarli (da eseguire in un'altra shell mentre i container sono attivi)
 ```
 NODE_ENV=production npm test
 ```
-To build services separately without running docker
+Per compilare i singoli servizi senza eseguirli nei container
 ```
 sh npm_scripts/build-<service-name>.sh
 ```
-The output will be on `<service-name>/build`
+I file compilati saranno nella cartella `<service-name>/build`
 
-### Local instructions
-Start
+### Istruzioni locali
+Per avviare i processi node
 ```
 npm start
 ```
-Test (run in another shell while node is running)
+Per testarli (da eseguire in un'altra shell mentre i processi sono attivi)
 ```
 npm test
 ```
 
-### Notes
-With docker-compose, the nginx container `client` will serve the static webapp at `/` and forward calls starting with `/api` to the api.
-Therefore the api is both reachable from `${API_HOST}:${API_PORT}` and `${CLIENT_HOST}:${CLIENT_PORT}/api`
-pp
-For local development (without containers), api and frontend will be reachable from separate ports, respectively `${API_PORT}` and `${CLIENT_PORT}`
+### Note
+Con docker-compose, il container nginx `client` servira' la webapp statica su `/` e inoltrera' le richieste che iniziano con `api` all'api.
+Dunque l'api e' sia raggiungibile da `${API_HOST}:${API_PORT}` sia da`${CLIENT_HOST}:${CLIENT_PORT}/api`
+In locale (senza containers), l'api e il frontend saranno raggiungibili da porte diverse, rispettivamente `${API_PORT}` e `${CLIENT_PORT}`

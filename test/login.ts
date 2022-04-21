@@ -1,58 +1,58 @@
-import { it, describe } from "mocha"
-import chai, { expect } from "chai"
-import chaiHttp from "chai-http"
-import { baseUrl } from "./config"
+import { it, describe } from "mocha";
+import chai, { expect } from "chai";
+import chaiHttp from "chai-http";
+import { baseUrl } from "./config";
 
-chai.use(chaiHttp)
+chai.use(chaiHttp);
 
 const data1 = {
-   email: "est@yahoo.couk",
-   password: "XEV22DZU5SO"
-}
+	email: "est@yahoo.couk",
+	password: "XEV22DZU5SO",
+};
 
 const invalidData = {
-   email: "random@gmail.com",
-   password: "invalidPassword"
-}
+	email: "random@gmail.com",
+	password: "invalidPassword",
+};
 
 const badData = {
-   email: 12,
-   password: "password"
-}
+	email: 12,
+	password: "password",
+};
 
 describe("POST /login", () => {
+	it("201 good request", (done) => {
+		chai
+			.request(baseUrl)
+			.post("/login")
+			.send(data1)
+			.end((err, res) => {
+				expect(res.body).to.have.property("token");
+				done();
+			});
+	});
 
-   it("201 good request", done => {
-      chai.request(baseUrl)
-      .post("/login")
-      .send(data1)
-      .end((err, res) => {
-         expect(res.body).to.have.property("token")
-         done()
-      })
-   })
+	it("401 invalid credentials", (done) => {
+		chai
+			.request(baseUrl)
+			.post("/login")
+			.send(invalidData)
+			.end((err, res) => {
+				expect(res).to.have.status(401);
+				expect(res.body.message).to.be.equal("Invalid credentials");
+				done();
+			});
+	});
 
-   it("401 invalid credentials", done => {
-      chai.request(baseUrl)
-      .post("/login")
-      .send(invalidData)
-      .end((err, res) => {
-         expect(res).to.have.status(401)
-         expect(res.body.message).to.be.equal("Invalid credentials")
-         done()
-      })
-   })
-   
-   it("400 bad request", done => {
-      chai.request(baseUrl)
-      .post("/login")
-      .send(badData)
-      .end((err, res) => {
-         expect(res).to.have.status(400)
-         expect(res.body.message).to.be.equal("Bad request")
-         done()
-      })
-   })
-})
-
-
+	it("400 bad request", (done) => {
+		chai
+			.request(baseUrl)
+			.post("/login")
+			.send(badData)
+			.end((err, res) => {
+				expect(res).to.have.status(400);
+				expect(res.body.message).to.be.equal("Bad request");
+				done();
+			});
+	});
+});

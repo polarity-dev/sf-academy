@@ -37,5 +37,5 @@ axios
 						headers: { Authorization: "Bearer " + token },
 					}
 				);
-			})
+			});
 	});

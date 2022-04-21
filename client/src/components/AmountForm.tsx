@@ -18,7 +18,7 @@ export const AmountForm: React.FC<Props> = ({ action, handleSubmit }) => {
 	};
 
 	const onSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-      setState({ ...state, choice: event.target.value });
+		setState({ ...state, choice: event.target.value });
 	};
 
 	const onClick = (event: React.MouseEvent) => {

@@ -21,7 +21,7 @@ export const Textfield: React.FC<Props> = ({
 }) => {
 	return (
 		<>
-			<label>{title}</label> <br/>
+			<label>{title}</label> <br />
 			<input
 				name={name}
 				type={password ? "password" : "text"}
