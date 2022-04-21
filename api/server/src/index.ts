@@ -12,17 +12,8 @@ const apiSpec = join(__dirname, "../../openapi/openapi.yaml");
 const app = express();
 
 const options: cors.CorsOptions = {
-	allowedHeaders: [
-		"Origin",
-		"X-Requested-With",
-		"Content-Type",
-		"Accept",
-		"X-Access-Token",
-	],
 	credentials: true,
-	origin: `http://${clientHost}:${clientPort}`,
-	methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-	preflightContinue: false,
+	origin: ["http://localhost", `http://${clientHost}`],
 };
 
 app.use(express.urlencoded({ extended: false }));

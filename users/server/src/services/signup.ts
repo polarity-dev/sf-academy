@@ -4,6 +4,8 @@ import { SignupRequest } from "../../../proto/usersPackage/SignupRequest";
 import { SignupResponse } from "../../../proto/usersPackage/SignupResponse";
 import knexConfig from "../../../knexConfig";
 import { createHash } from "crypto";
+import { Secret, sign } from "jsonwebtoken";
+import { tokenSecret } from "../../../config";
 
 const db: Knex = knex(knexConfig);
 
@@ -29,14 +31,26 @@ const Signup = (
 					usdBalance: 0,
 					eurBalance: 0,
 				})
-				.then(() => callback(null, {}));
+				.then(() => {
+					db("users")
+						.select("userId")
+						.where("email", email)
+						.then((rows) => rows[0])
+						.then((data) => {
+							callback(null, {
+								token: sign(data, tokenSecret as Secret, {
+									expiresIn: "1d",
+								}),
+							});
+						});
+				});
 		})
 		.catch((err) => {
 			callback({
 				code: status.ALREADY_EXISTS,
 				message: "Email already taken",
-			})
-      });
+			});
+		});
 };
 
 export default Signup;

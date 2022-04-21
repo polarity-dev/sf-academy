@@ -61,12 +61,13 @@ services:
       dockerfile: db/Dockerfile
     working_dir: /home/node/app/db
     environment:
+      POSTGRES_HOST: ${DB_HOST}
       POSTGRES_PORT: ${DB_PORT}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_DB: ${DB_NAME}
-    ports:
-      - ${DB_PORT}:${DB_PORT}
+    expose:
+      - ${DB_PORT}
   client:
     container_name: sf-academy-client
     build:

@@ -81,7 +81,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                type: object
+                properties:
+                  token:
+                    type: string
         "409":
           description: Email already taken
           content:

@@ -1,4 +1,4 @@
-FROM nginx:1.21-alpine
+FROM nginx:1.21.6-alpine
 
 ARG API_PORT
 ARG CLIENT_HOST
