@@ -8,8 +8,10 @@ if (process.env.NODE_ENV !== "production") {
 export const 
    tokenSecret = process.env.TOKEN_SECRET,
    apiPort = process.env.API_PORT,
+   apiHost = process.env.API_HOST,
    exchangePort = process.env.EXCHANGE_PORT,
    exchangeHost = process.env.EXCHANGE_HOST,
    usersPort = process.env.USERS_PORT,
    usersHost = process.env.USERS_HOST,
-   host = process.env.HOST
+   clientPort = process.env.CLIENT_PORT,
+   clientHost = process.env.CLIENT_HOST

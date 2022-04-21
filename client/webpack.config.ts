@@ -4,7 +4,7 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin"
 import { Configuration } from "webpack"
 import { Configuration as DevConfiguration } from "webpack-dev-server"
 import { merge } from "webpack-merge"
-import { host, externalPort } from "./config"
+import { clientHost, clientPort } from "./config"
 import Dotenv from "dotenv-webpack"
 
 const baseConfig: Configuration = {
@@ -44,8 +44,8 @@ const baseConfig: Configuration = {
 
 const devConfig: Configuration = {
    devServer: {
-      host: host,
-      port: externalPort,
+      host: clientHost,
+      port: clientPort,
       static: {
          directory: join(__dirname, 'build'),
       }
@@ -57,6 +57,6 @@ const prodConfig: Configuration = {
 }
 const config = merge(
    baseConfig,
-   (process.env.NODE_ENV === "production") ? prodConfig :  devConfig as Configuration)
+   (process.env.NODE_ENV === "production") ? prodConfig : devConfig as Configuration)
    
 export default config

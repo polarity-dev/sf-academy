@@ -11,6 +11,8 @@ const Deposit = (call: ServerUnaryCall<DepositRequest, DepositResponse>, callbac
    const usdDelta: number = (call.request.symbol === "USD") ? call.request.value as number : 0
    const eurDelta: number = (call.request.symbol === "EUR") ? call.request.value as number : 0
    const timestamp: string = new Date().toISOString()
+   const type: string = "DEPOSIT"
+
    db("transactions")
    .insert({
       userId,
@@ -28,7 +30,9 @@ const Deposit = (call: ServerUnaryCall<DepositRequest, DepositResponse>, callbac
       .where("userId", userId)
       .then(() => {})
    })
-   .then(data => callback(null, {}))
+   .then(data => callback(null, {
+      transaction: { eurDelta, usdDelta, timestamp, type }
+   }))
    .catch(err => {
       callback({
          code: status.INTERNAL,

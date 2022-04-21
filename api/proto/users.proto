@@ -54,7 +54,7 @@ message DepositRequest {
 }
 
 message DepositResponse {
-
+   Transaction transaction = 1;
 }
 
 message WithdrawRequest {
@@ -64,7 +64,7 @@ message WithdrawRequest {
 }
 
 message WithdrawResponse {
-
+   Transaction transaction = 1;
 }
 
 message BuyRequest {
@@ -74,7 +74,7 @@ message BuyRequest {
 }
 
 message BuyResponse {
-
+   Transaction transaction = 1;
 }
 
 message GetUserRequest {

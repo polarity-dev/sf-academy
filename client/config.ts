@@ -6,6 +6,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export const
-   externalPort = process.env.EXTERNAL_PORT,
-   host = process.env.HOST,
-   apiPort = process.env.API_PORT
+   clientPort = process.env.CLIENT_PORT,
+   apiHost = process.env.API_HOST,
+   apiPort = process.env.API_PORT,
+   clientHost = process.env.CLIENT_HOST

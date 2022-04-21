@@ -7,10 +7,10 @@ dotenv.config({ path: join(__dirname, "..", ENV_FILE) })
 
 export const 
    apiPort = process.env.API_PORT,
-   host = process.env.HOST,
+   apiHost = process.env.API_HOST,
    exchangePort = process.env.EXCHANGE_PORT,
    exchangeHost = process.env.EXCHANGE_HOST,
    usersPort = process.env.USERS_PORT,
    usersHost = process.env.USERS_HOST,
    externalPort = process.env.EXTERNAL_PORT,
-   baseUrl = `http://${host}:${apiPort}/`
+   baseUrl = `http://${apiHost}:${apiPort}`

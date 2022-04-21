@@ -1,7 +1,7 @@
 FROM nginx:1.21-alpine
 
 ARG API_PORT
-ARG API_HOST
+ARG CLIENT_HOST
 ARG CLIENT_PORT
 
 COPY ./client/nginx.conf .

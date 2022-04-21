@@ -11,6 +11,7 @@ const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, call
    const usdDelta: number = (symbol === "USD") ? - (value as number) : 0
    const eurDelta: number = (symbol === "EUR") ? - (value as number) : 0
    const timestamp: string = new Date().toISOString()
+   const type: string = "WITHDRAW"
 
    db("users")
    .select("usdBalance", "eurBalance")
@@ -41,7 +42,9 @@ const Withdraw = (call: ServerUnaryCall<WithdrawRequest, WithdrawResponse>, call
       .where("userId", userId)
       .then(() => {})
    })
-   .then(data => callback(null, {}))
+   .then(data => callback(null, {
+      transaction: { eurDelta, usdDelta, timestamp, type }
+   }))   
    .catch(err => {
       callback({
          code: status.ABORTED,

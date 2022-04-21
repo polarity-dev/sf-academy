@@ -14,6 +14,9 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
    const value: number = call.request.value as number
    const from: string = call.request.symbol as string
 
+   const timestamp: string = new Date().toISOString()
+   const type: string = "BUY"
+
    exchangeClient.Exchange({
       from,
       to: (from === "USD") ? "EUR" : "USD",
@@ -38,8 +41,8 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
             userId,
             eurDelta,
             usdDelta,
-            timestamp: new Date().toISOString(),
-            type: "BUY"
+            timestamp,
+            type
          })
          .then(() => {})
       })
@@ -52,7 +55,9 @@ const Buy = (call: ServerUnaryCall<BuyRequest, BuyResponse>, callback: sendUnary
          .where("userId", userId)
          .then(() => {})
       })
-      .then(data => callback(null, {}))
+      .then(data => callback(null, {
+         transaction: { eurDelta, usdDelta, timestamp, type }
+      }))
       .catch(err => {
          callback({
             code: status.ABORTED,

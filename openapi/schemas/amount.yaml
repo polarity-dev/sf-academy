@@ -9,5 +9,6 @@ properties:
     minimum: 0
     exclusiveMinimum: true
     nullable: false
+    maximum: 1000000
   symbol:
     $ref: "./currency.yaml"

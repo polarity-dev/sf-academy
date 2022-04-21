@@ -105,7 +105,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                $ref: "./schemas/transaction.yaml"
         "401":
           description: Unauthorized
           content:
@@ -132,7 +132,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                $ref: "./schemas/transaction.yaml"
         "401":
           description: Unauthorized
           content:
@@ -166,7 +166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./schemas/okResponse.yaml"
+                $ref: "./schemas/transaction.yaml"
         "401":
           description: Unauthorized
           content:

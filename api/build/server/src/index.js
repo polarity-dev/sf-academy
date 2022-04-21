@@ -13,10 +13,26 @@ const grpcErrorHandler_1 = __importDefault(require("../../errorHandlers/grpcErro
 const cors_1 = __importDefault(require("cors"));
 const apiSpec = (0, path_1.join)(__dirname, "../../openapi/openapi.yaml");
 const app = (0, express_1.default)();
+const options = {
+    allowedHeaders: [
+        "Origin",
+        "X-Requested-With",
+        "Content-Type",
+        "Accept",
+        "X-Access-Token",
+    ],
+    credentials: true,
+    origin: `http://${config_1.clientHost}:${config_1.clientPort}`,
+    methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+};
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.text());
 app.use(express_1.default.json());
-app.use((req, resp, next) => { next(); }, (0, cors_1.default)({ maxAge: 84600 }));
+app.use((0, cors_1.default)(options));
+// app.use((req, res, next) => {
+// 	next();
+// }, cors({ maxAge: 84600 }));
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "OPTIONS, GET, POST, DELETE, PATCH, PUT");
@@ -31,10 +47,12 @@ app.use((0, express_openapi_validator_1.middleware)({
     operationHandlers: (0, path_1.join)(__dirname),
     validateSecurity: {
         handlers: {
-            bearerAuth: (req, scopes, schema) => (0, verifyToken_1.default)(req)
-        }
-    }
+            bearerAuth: (req, scopes, schema) => (0, verifyToken_1.default)(req),
+        },
+    },
 }));
 app.use(apiErrorHandler_1.default);
 app.use(grpcErrorHandler_1.default);
-app.listen(config_1.apiPort, () => { console.log(`Api server listening on port ${config_1.apiPort}`); });
+app.listen(config_1.apiPort, () => {
+    console.log(`Api server listening on port ${config_1.apiPort}`);
+});

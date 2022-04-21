@@ -17,7 +17,7 @@ const deposit = (req: Request, res: Response, next: NextFunction) => {
          next(err)
          return
       }
-      res.status(201).send()
+      res.status(201).send(data?.transaction)
    })
 }
 

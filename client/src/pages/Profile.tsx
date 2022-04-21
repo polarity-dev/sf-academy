@@ -21,7 +21,7 @@ export const Profile: React.FC<Props> = ({ token }) => {
    const navigate: NavigateFunction = useNavigate()
 
    useEffect(() => {
-      console.log(token)
+      (token)
       axios.get(apiUrl, { headers: { Authorization: "Bearer " + token } })
       .then((res: AxiosResponse) => res.data)
       .then(data => {
