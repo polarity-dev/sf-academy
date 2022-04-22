@@ -1,7 +1,0 @@
-title: errorResponse
-type: object
-properties:
-  status:
-    type: string
-  code:
-    type: string

@@ -1,9 +1,9 @@
 .DS_Store
 **/build
-./api/openapi
-./api/proto
-./exchange/proto
-./users/proto
+api/openapi
+api/proto
+exchange/proto
+users/proto
 .idea
 # Logs
 logs
