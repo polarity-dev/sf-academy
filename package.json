@@ -4,7 +4,9 @@
   "description": "my test for sf-academy",
   "main": "src/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/app.ts",
+    "test": "nodemon --exec ts-node src/app.ts",
+    "populator": "ts-node src/utilities/populator.ts"
   },
   "repository": {
     "type": "git",
@@ -31,9 +33,9 @@
   },
   "devDependencies": {
     "@soluzioni-futura/eslint-config-soluzioni-futura": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.19.0",
-    "eslint": "^8.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.14.0",
     "nodemon": "^2.0.15"
   }
 }
