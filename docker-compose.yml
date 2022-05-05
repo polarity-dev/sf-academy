@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    container_name: ${DB_HOST}
+    restart: always
+    environment:
+      - TZ=${DB_TIMEZONE}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DATABASE}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes: 
+      - ./db/data:/var/lib/postgresql/data
+          # copy the sql script to create tables
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  api:
+    container_name: sf-academy-api
+    build: .
+    ports:
+      - ${API_PORT}:${API_PORT}
+    depends_on:
+      - postgres
+  
+volumes:
+  db:
+  
