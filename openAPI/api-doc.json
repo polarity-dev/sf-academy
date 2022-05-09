@@ -1,0 +1,271 @@
+{
+  "openapi": "3.0.3",
+  "x-express-openapi-validation-strict": true,
+  "x-express-openapi-additional-middleware": [],
+  "info": {
+    "title": "Intern Delevolper test",
+    "description": "My Intern Developer test for SF-academy",
+    "version": "1.0.0"
+  },
+  "components": {
+    "requestBodies": {},
+    "schemas": {
+      "id" : {
+        "type": "integer",
+        "description": "An unique ID for each table",
+        "example": 1
+      },
+      "priority": {
+        "type": "integer",
+        "description": "A value from 1 to 5 indicating the execution priority; 5 is the highest priority",
+        "example": 5
+      },
+      "int_k": {
+        "type": "integer",
+        "description": "the K value added by the user throught file",
+        "example": 20
+      },
+      "str_d": {
+        "type": "string",
+        "format": "byte",
+        "description":"the D value added by the user throught file",
+        "example": "Lorem Ipsum"
+      },
+      "timestamp": {
+        "type": "string",
+        "format": "date-time",
+        "description": "The timestamp of the time of adding to the table"
+
+      },
+      "pendingData": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/id"
+            },
+            "priority": {
+              "$ref":"#/components/schemas/priority"
+            },
+            "int_k": {
+              "$ref": "#/components/schemas/int_k"
+            },
+            "str_d": {
+              "$ref":"#/components/schemas/str_d"
+            },
+            "timestamp": {
+              "$ref":"#/components/schemas/timestamp"
+            }
+          }
+        }
+      },
+      "processedData": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/id"
+            },
+            "int_k": {
+              "$ref": "#/components/schemas/int_k"
+            },
+            "str_d": {
+              "$ref":"#/components/schemas/str_d"
+            },
+            "timestamp": {
+              "$ref":"#/components/schemas/timestamp"
+            }
+          }
+        }
+      },
+       "genericError": {
+        "type": "object",
+        "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "message": {
+              "type": "string",
+              "nullable": true
+            },
+            "details": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        }
+      },
+    "responses": {
+      "notFoundResponse": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/genericError"
+            }
+          }
+        }
+      },
+      "serverError": {
+        "description": "Generic error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/genericError"
+            },
+            "example": {
+              "code": 500,
+              "message": "Cannot connect to Postgres server"
+            }
+          }
+        }
+      },
+      "missingData": {
+        "description": "File required",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/genericError"
+            },
+            "example": {
+              "code": 400,
+              "message": "File required"
+            }
+          }
+        }
+      },
+      "correctResponse": {
+        "description": "Success",
+        "content": {
+          "text/html": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/importDataFromFile": {
+      "post": {
+        "summary": "Import data from a user's file",
+        "description": "File must be called fileData",
+        "operationId": "importFromFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dataFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File proccessed",
+            "content": {
+              "text": {
+                "schema": {
+                  "$ref": "#/components/responses/correctResponse"
+                },
+                "example": "File proccessed"
+              }
+            }
+          },
+          "409": {
+            "description": "Check file name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/genericError"
+                },
+                "example": {
+                  "code": 409,
+                  "message": "Check file name"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/missingData"
+          },
+          "500": {
+            "$ref": "#/components/responses/serverError"
+          }
+        }
+      }
+    },
+    "/pendingData" : {
+      "get": {
+        "summary": "Get pending data",
+        "operationId": "getPendingData",
+        "responses": {
+          "200": {
+            "description": "List of pending data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/pendingData"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/serverError"
+          }
+        }
+      }
+    },
+    "/data" : {
+      "get": {
+        "summary": "Get processed data",
+        "operationId": "getData",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "$ref": "#/components/schemas/timestamp"
+            },
+            "description": "the data will follow the timestamp passed",
+            "example" : "2022-04-15 09:00:46.434727"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The numbers of items to return",
+            "example": 15
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of processed data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/processedData"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/serverError"
+          }
+        }
+      }
+    }
+  }
+
+}
