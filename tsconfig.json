@@ -1,11 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "declaration": true,
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "moduleResolution":"node"
   },
   "include": [
     "./src"

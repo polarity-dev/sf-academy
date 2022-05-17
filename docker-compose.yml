@@ -21,7 +21,7 @@ services:
     ports:
       - ${API_PORT}:${API_PORT}
     depends_on:
-      - postgres
+      - db
   
 volumes:
   db:

@@ -1,4 +1,4 @@
-const fs = require("fs")
+import * as fs from "fs"
 import { generateSlug } from "random-word-slugs"
 
 function getRandomInt(max: number, min = 0): number {
@@ -14,7 +14,7 @@ for (var i = 1; i <= maxElements; i++) {
   message += (getRandomInt(6, 1).toString() + " " + getRandomInt(300, -300).toString() + " " + generateSlug(4, { format: "title" }) + "\n")
 }
 
-fs.writeFile("fileData.txt", message, (err: object) => {
+fs.writeFile("fileData.txt", message, (err) => {
   // throws an error, you could also catch it here
   if (err) {
     throw err
