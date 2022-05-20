@@ -1,4 +1,3 @@
-
 import express from "express"
 import bodyParser from "body-parser"
 import { join } from "path"
@@ -15,6 +14,12 @@ app.use(fileupload())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json())
+
+app.use(express.static(join(__dirname, "../public")))
+
+app.get("/", function(req: express.Request, res: express.Response) {
+  res.sendFile(join(__dirname, "../home.html"))
+})
 
 app.use(
   "/api-documentation",

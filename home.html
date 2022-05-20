@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/css/home.css">
+	<title>Intern Developer Test</title>
+</head>
+<body>
+	<!--NAVBAR-->
+	<div class="navbar">
+		<div class="navbar-center">
+      <h1>Intern Developer Test - Filippo Tondelli</h1>
+		</div>
+	</div>
+	<!--BOX-->
+	<div class="endpoint-container box bg-first">
+		<div class="endpoint text-margin">
+			<form target="_blank" action="importDataFromFile" method="post" enctype="multipart/form-data">
+				<h1>Upload data via .txt file</h1>
+				<div class="input-container">
+					<input type="file" id="myFile" name="dataFile"><br> 
+					<input type="submit">
+				</div>
+			</form>
+
+			<form target="_blank" action="data" method="GET">
+				<h1>Get the data list</h1>
+				<label for="from">From (Timestamp):</label><br>
+				<input type="datetime-local" id="from" name="from"/><br> 
+				<label for="limit">Limit:</label><br>
+				<input type="number" id="limit" name="limit" value="" /><br> 
+				<input type="submit" /> 
+			</form>
+		</div>
+	</div><br> 
+	<div class="documentation-container box bg-first">
+		<div class="documentation text-margin">
+			<h1>Documentation</h1>
+			<form target="_blank" action="/api-documentation">
+				<input type="submit" value="Go the documentation" />
+			</form>
+		</div>
+	</div>
+</body>
+</html>
