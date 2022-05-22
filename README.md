@@ -1,75 +1,48 @@
-# SF Academy  
+# SF Academy - Intern Developer test
+Una webApp che permette di caricare dati da un file, processandoli salvandoli in un database e poterli recuperare in formato JSON.
 
-istruzioni, materiale di studio e prove per candidarsi ad SF Academy
+## Installazione con Docker
+Per inizializzare il Docker container, si deve eseguire il comando:
+```
+docker-compose up
+```
+(Per cambiare le environment variables, aggiornare il file .env senza modificare i nomi delle variabili. Poi rieseguire il comando)
+## Installazione script
+La prima volta che si utilizza lo script bisogna eseguire il comando:
+```
+npm run firstPopulator
+```
+Dal momento che si hanno installato la dependencies per gli script, si può procedere con l'esecuzione dello script:
+```
+npm run populator
+```
 
-## Introduzione
+## Utilizzo
+- Per utilizzare l'applicativo come webApp, accere all'url `{HOSTNAME}:3000` (ad esempio `localhost:3000`)
+- Oppure per utilizzarlo come API, usare i seguenti endpoints:
+  - `POST /importDataFromFile`: permette di caricare un file da processare
+  - `GET /pendingData`: restituisce in formato JSON la lista dei dati non ancora processati
+  - `GET /data`: restituisce in formato JSON la lista dei dati già processati, ordinati secondo il timestamp di elaborazione. In query string potranno essere passati 2 parametri:
+    - `from`: se presente vengono restituiti i dati elaborati da questo valore (inteso come timestamp) in poi
+    - `limit`: se presente vengono limitati a questo valore il numero di messaggi restituiti
 
-SF Academy è un percorso di formazione e selezione per candidati intern o collaboratori di Soluzioni Futura
+È disponibile una documentazione completa sull'API all'url `{HOSTNAME}:3000/api-documentation` (ad esempio `localhost:3000/api-documentation`)
 
-### Percorsi
+### Il file da processare deve avere il seguente formato:
+- La prima riga contiene due numeri `A` e `B`
+- Successive `N` righe contenenti ognuna un numero `P` (con `1 <= P <= 5`) che rappresenta la priorità, un secondo valore `K` seguito da stringa `D`. Vengono considerate solo le righe comprese tra gli indici 1-based indicati da `A` e `B`
 
-ogni utente può candidarsi a sostenere una delle seguenti prove suddivise per area di competenza e livello di difficoltà:
+esempio:
+```txt
+3 5
+1 128 ... dummy data ... 
+4 65 ... dummy data ... 
+3 0 prima riga utile
+5 -165 seconda riga
+3 0 terza riga
+5 -165 ... dummy data ... 
+```
+È disponibile uno [script](#installazione-script) per generare un file con il formato richiesto.
 
-- [intern-developer.md](./prove/intern-developer.md) <img src = "https://img.shields.io/static/v1?label=level&message=easy&color=green"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
-
-- [exchange-microservice.md](./prove/exchange-microservice.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=microservices&color=informational">
-
-- [crypto-exchange.md](./prove/crypto-exchange.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=blockchain&color=informational">
-
-- [recensioni-film.md](./prove/recensioni-film.md) <img src = "https://img.shields.io/static/v1?label=level&message=medium&color=orange"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
-
-### Per candidarsi a sostenere una prova è necessario:  
-
-- creare una issue su questa repository che abbia come titolo il proprio nome e cognome specificando nel testo per quale prova ci si candida
-- creare un fork del repository `soluzionifutura/sf-academy` e aprire una pull request con la prova realizzata entro la deadline comunicata come risposta alla candidatura da [**giowe**](https://github.com/giowe) o [**nicofuccella**](https://github.com/nicofuccella)
-- al termine della prova richiedere la review di [**giowe**](https://github.com/giowe) e [**nicofuccella**](https://github.com/nicofuccella)
-- attendere responso
-
-### Comunicazioni  
-
-ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramite issue su questa repository.
-
-## Materiale di studio
-
-### Web Development
-
-- [GIT](http://rogerdudler.github.io/git-guide/index.it.html)
-- [GIT guida tascabile](https://rogerdudler.github.io/git-guide/index.html)
-- [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
-- [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML)
-- [CSS](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-- [Corso “javascripting”](https://nodeschool.io)
-- [NodeJS](https://nodejs.org/en/)
-- [Corso “learnyounode”](https://nodeschool.io)
-- [Benefits of a database](https://opentextbc.ca/dbdesign01/chapter/chapter-3-characteristics-and-benefits-of-a-database/)
-- [MySQL](https://www.w3schools.com/sql/default.asp)
-- [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
-- [RPC/REST](https://blog.jscrambler.com/rpc-style-vs-rest-web-apis)
-- [GRPC](https://grpc.io/docs/)
-
-### Infrastruttura
-
-- [Getting started with AWS EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html)
-- [Ipv4 networking on AWS](https://docs.aws.amazon.com/vpc/latest/userguide/getting-started-ipv4.html)
-- [DNS on AWS Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
-- [LAMP stack on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-lamp-amazon-linux-2.html)
-- [Hosting Wordpress on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hosting-wordpress.html)
-- [Docker: Getting Started](https://docs.docker.com/get-started/)
-- [Terraform](https://www.terraform.io/)
-- [AWS ECS](https://aws.amazon.com/ecs/)
-
-### IoT
-- [MQTT](https://en.wikipedia.org/wiki/MQTT)
-- [AWS IoT Core](https://aws.amazon.com/iot-core/)
-
-### Blockchain
-
-- [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf)
-- [Ethereum whitepaper](http://blockchainlab.com/pdf/Ethereum_white_paper-a_next_generation_smart_contract_and_decentralized_application_platform-vitalik-buterin.pdf)
-- [Solidity](https://solidity.readthedocs.io/en/v0.4.24/index.html)
-- [Truffle suite](https://truffleframework.com/docs/truffle/overview) 
-- [Ethereum Geth JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC)
-- [Infura](https://infura.io/)
-- [web3.js](https://web3js.readthedocs.io/en/1.0/index.html)
-- [web3.py](https://web3py.readthedocs.io/en/v3.16.5/) 
+## Note
+Di default,  i dati del database non vengono mantenuti ogni volta che si rifà un `docker-compose up`; scommentando la [line 15 docker-compose](https://github.com/Tond28/sf-academy/blob/a74ac10757acd00c07ae71bcac4f3130c45d7917/docker-compose.yml#L15), i dati verranno salvati in `/db/data` e per resettare il db, bisogna cancellare la cartella `/db/data` prima di fare un `docker-compose up`

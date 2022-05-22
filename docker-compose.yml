@@ -12,7 +12,7 @@ services:
     ports:
       - ${DB_PORT}:${DB_PORT}
     volumes: 
-      - ./db/data:/var/lib/postgresql/data
+      #- ./db/data:/var/lib/postgresql/data #save bd's data through different docker-compose
           # copy the sql script to create tables
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
   api:
