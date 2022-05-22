@@ -1,5 +1,5 @@
 # SF Academy - Intern Developer test
-Una webApp che permette di caricare dati da un file, processandoli salvandoli in un database e poterli recuperare in formato JSON.
+Questa webApp permette di caricare dati tramite un file txt, processandoli e salvandoli in un database e per poi poterli recuperare tramite una chiamata HTTP.
 
 ## Installazione con Docker
 Per inizializzare il Docker container, si deve eseguire il comando:
@@ -45,4 +45,4 @@ esempio:
 È disponibile uno [script](#installazione-script) per generare un file con il formato richiesto.
 
 ## Note
-Di default,  i dati del database non vengono mantenuti ogni volta che si rifà un `docker-compose up`; scommentando la [line 15 docker-compose](https://github.com/Tond28/sf-academy/blob/a74ac10757acd00c07ae71bcac4f3130c45d7917/docker-compose.yml#L15), i dati verranno salvati in `/db/data` e per resettare il db, bisogna cancellare la cartella `/db/data` prima di fare un `docker-compose up`
+Di default,  i dati del database non vengono mantenuti ogni volta che si rifà un `docker-compose up`; scommentando la [line 15 docker-compose](https://github.com/Tond28/sf-academy/blob/98442ff1ca669d4bc98113cd0bed20eae70a70b1/docker-compose.yml#L15), i dati verranno salvati in `/db/data` e per resettare il db, bisogna cancellare la cartella `/db/data` prima di fare un `docker-compose up`
