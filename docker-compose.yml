@@ -1,0 +1,57 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    expose:
+      - 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend/
+      target: dev
+    volumes:
+      - /usr/app/node_modules
+      - ./backend/:/usr/app
+    command: npm run start:dev
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres
+    environment:
+      ## Server ##
+      PORT: 3001
+      HOST: localhost
+      ## Database ##
+      DB_HOST: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_SCHEMA: postgres
+      DB_LOG: "true"
+      ## Setup jet-logger ##
+      JET_LOGGER_MODE: CONSOLE
+      JET_LOGGER_FILEPATH: jet-logger.log
+      JET_LOGGER_TIMESTAMP: "TRUE"
+      JET_LOGGER_FORMAT: LINE
+
+  frontend:
+    build:
+      context: ./frontend/
+      target: dev
+    volumes:
+      - /usr/app/node_modules
+      - ./frontend/:/usr/app
+    command: npm start
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    environment:
+      WATCHPACK_POLLING: "true"
+      REACT_APP_API_PATH: "http://localhost:3001"
+volumes:
+  db:

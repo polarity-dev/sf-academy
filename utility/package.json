@@ -1,0 +1,18 @@
+{
+  "name": "utility",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "ts-node": "^10.8.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.4"
+  },
+  "scripts": {
+    "generate:data": "ts-node data.ts"
+  },
+  "keywords": [],
+  "author": "Nereo Berardozzi",
+  "license": "ISC"
+}

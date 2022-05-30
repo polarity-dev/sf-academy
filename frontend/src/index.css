@@ -1,0 +1,17 @@
+* { box-sizing: border-box!important; }
+
+.table > :not(caption) > * > * {
+  border-top-width: 0.8px;
+}
+
+.navbar {
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar-brand {
+  font-size: 1.75rem;
+}
+
+.navbar .btn {
+  margin-right: 8px;
+}
