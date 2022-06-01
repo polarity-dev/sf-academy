@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import logger from "jet-logger";
+import { DataQueue, Data } from "@models/index";
 
 function log(sql: string, timing?: number): void {
     logger.info(sql);
@@ -19,5 +20,8 @@ const sequelize = new Sequelize({
 
     logging: loggingEnabled() ? log : false
 });
+
+DataQueue.start(sequelize);
+Data.start(sequelize);
 
 export default sequelize;

@@ -8,14 +8,15 @@ import * as schedule from './schedule';
 const serverStartMsg = 'Express server started on port: ',
         port = (process.env.PORT || 3000);
 
-// Sync models to database
-sequelize.sync();
+(async () => {
+    // Sync models to database
+    await sequelize.sync();
 
-// Start server
-server.listen(port, () => {
-    logger.info(serverStartMsg + port);
-});
+    // Start server
+    server.listen(port, () => {
+        logger.info(serverStartMsg + port);
+    });
 
-// Scheduled jobs
-schedule.init()
-
+    // Scheduled jobs
+    schedule.init()
+})();
