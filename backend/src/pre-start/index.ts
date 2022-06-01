@@ -6,7 +6,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import commandLineArgs, { CommandLineOptions } from 'command-line-args';
-import "module-alias/register";
 
 interface ISetupCommandLineOptions extends CommandLineOptions {
     env: string;
