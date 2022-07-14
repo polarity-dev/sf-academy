@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+    database:
+        image: mysql
+        command: --init-file /data/application/init.sql --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./utils/sfAcademy.sql:/data/application/init.sql
+        environment:
+            MYSQL_DATABASE: $DB_DATABASE
+            MYSQL_USER: $DB_USER
+            MYSQL_PASSWORD: $DB_PASSWORD
+            MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/usr/app 
+        ports:
+            - "3000:3000"
+        depends_on:
+            - database
+        environment:
+            - DB_HOST=database
+            - DB_PORT=3306
+            - DB_USER=$DB_USER
+            - DB_PASSWORD=$DB_PASSWORD
+            - DB_DATABASE=$DB_DATABASE
