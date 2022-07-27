@@ -16,9 +16,9 @@ La piattaforma dovrà prevedere una registrazione degli utenti, la visualizzazio
 	- react webapp
 
 ### Backend
-Il backend e' costituito da tre microservizi hostati su una EC2, ed un database Postgres su RDS.
+Il backend e' costituito da tre microservizi scritti in NodeJS, ed un database Postgres. 
 
-I microservizi devono comunicare tra loro in GRPC, esponendo rispettivamente la porta 9000 (exchange) e 9001 (users). L' API invece deve esporre pubblicamente sulla porta 80 gli endpoint dell'applicazione. Si suggerisce l'utilizzo di NGINX per la gestione del traffico da internet all'API. Tutti i microservizi devono essere sviluppati in NodeJs e TypeScript.
+I microservizi devono comunicare tra loro in rete privata via GRPC, esponendo rispettivamente la porta 9000 (exchange) e 9001 (users). L' API invece è l'unico microservizio raggiungibile esternamente ed espone sulla porta 80 gli endpoint necessari al frontend per funzionare. Tutti i microservizi devono essere sviluppati in NodeJs e TypeScript.
 
 Suggeriamo di visionare un semplice esempio di implementazione di [GRPC](https://github.com/soluzionifutura/grpc-test)
  
@@ -35,15 +35,16 @@ L'interfaccia di questo microservizio è quindi molto semplice ed espone una sol
 	- `withdraw(number value, string synbol)`: permette all'utente di spostare dalla piattaforma al suo iban la quantità di denaro specificata nella valuta specificata. NB. le due funzioni `deposit` e `withdraw` sono funzioni che simulano unicamente degli spostamenti di denaro limitandosi ad aggiornare dei valori sul DB dell'applicativo
 	- `buy(number value, string symbol)`: permette all'utente di comprare con una valuta la quantità specificata di denaro nell'altra valuta disponibile secondo il tasso di cambio recuperato dall'Exchange microservice; per ogni transazione è necessario archiviare in una tabella di DB appositamente strutturata tutte le informazioni riguardo l'operazione
 	- `listTransactions(object filter)`: permette all'utente di visualizzare le sue transazioni con la possibilità di filtrarle per date e/o valuta di riferimento
-- **API**: questo microservizio è l'unico accessibile direttamente da internet e deve essere sviluppato usando open api ed express [vedi esempio](https://github.com/soluzionifutura/open-api-demo). Lo scopo dell'api è quello di ricevere le chiamate dell'esterno e smistarle ai vari microservizi, rispondendo con i risultati effettivamente restituiti dagli stessi
+- **API**: questo microservizio è l'unico accessibile direttamente dall'esterno e deve essere sviluppato usando Open Api ed Express [vedi esempio](https://github.com/soluzionifutura/open-api-demo). Lo scopo dell'api è quello di ricevere le chiamate dell'esterno e smistarle ai vari microservizi.
 
 ### Frontend
-E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa deve essere realizzata in TypeScript con React. La grafica e la UI della pagina non sarà discriminante per il successo della prova, ma apprezzata.
-La webapp deve essere servita da AWS S3.
+E’ richiesto lo sviluppo di una semplice pagina web interattiva che permetta l’interazione con tutte le componenti dell’API (signup, login, acquisto, vendita e visualizzazione ordini). Questa deve essere realizzata in TypeScript con React.
+
+### Infrastruttura
+L'intero applicativo deve poter essere testato localmente con Docker e docker-compose.
 
 ### NB
-L'intero applicativo deve poter essere testato localmente con docker-compose anche se non è richiesto che gli applicativi siano eseguiti effettivamente su Docker nella EC2.
-L’infrastruttura deve essere realizzata sull'account di sandbox fornito da Soluzioni Futura.
-Verrà attentamente valutato l’utilizzo di GIT.
-Obbligatoria la stesura di un README con le istruzioni per lanciare l'intero stack software localmente.
-E' gradita la presenza **di un unico script** di setup dell'ecosistema per il testing locale.
+- Verrà attentamente valutato l’utilizzo di GIT.
+- Obbligatoria la stesura di un README con le istruzioni per lanciare l'intero stack software localmente.
+- E' gradita la presenza **di un unico script** di setup dell'ambiente per il testing locale.
+- E' gradita la presenza **di un unico script** di avvio dell'ambiente di testing locale.
