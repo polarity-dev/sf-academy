@@ -27,7 +27,7 @@ esempio:
 5 -165 ... dummy data ... 
 ```
 
-I dati importati non dovranno essere processati immediatamente, ma si dovrà seguire la sequente logica:
+I dati importati non dovranno essere processati immediatamente, ma si dovrà seguire la seguente logica:
 
 - il processing dei dati deve avvenire in blocchi di massimo `15` messaggi ogni `10` secondi
 - si devono processare i dati in ordine di priorità: prima le priorità alte, in seguito le priorità basse. Ad esempio, se è presente almeno un dato con priorità `3`, questo dovrà essere processato prima di passare ai dati con priorità `2` o `1`
