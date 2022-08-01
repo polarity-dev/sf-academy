@@ -1,3 +1,19 @@
+##task.json
+
+
+{
+    "version": "2.0.0",
+    "tasks" :[ 
+        {
+            "label":"restart backend",
+            "type" :"shell" ,
+            "command":"docker compose restart backend",
+            "presentation" :{
+                "revel":"never"
+             }
+         }
+    ]
+ }
 
 
 
