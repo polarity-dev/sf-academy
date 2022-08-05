@@ -1,6 +1,6 @@
 # test-soluzioni-futura
 
-per far partire il progetto molto semplicemente eseguite il git clone ed eseguire il comando
+per far partire il progetto molto semplicemente eseguite il git clone dello stesso, creare il file .env prendendo come riferimento il file [env.example](https://github.com/rickytrevor/test-soluzioni-futura/blob/master/.env.example)  ed eseguire il comando
 
 
 ```

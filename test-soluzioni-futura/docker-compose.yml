@@ -6,19 +6,19 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "test"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
-      MYSQL_ROOT_HOST: "db"
-      MYSQL_ROOT_PORT: "3306"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
+      MYSQL_ROOT_PORT: ${MYSQL_ROOT_PORT}
     ports:
       - "3306:3306"
   backend:
     build: ./backend
     environment:
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3000:3000"
     restart: always
@@ -28,14 +28,14 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: "db"
-      PMA_PORT: "3306"
-      PMA_USER: "test"
-      PMA_PASSWORD: "test"
-      PMA_DATABASE: "test"
-      PMA_ROOT_PASSWORD: "root"
-      PMA_ROOT_HOST: "db"
-      PMA_ROOT_PORT: "3306"
+      PMA_HOST: ${MYSQL_ROOT_HOST}
+      PMA_PORT: ${MYSQL_ROOT_PORT}
+      PMA_USER:  ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+      PMA_DATABASE: ${MYSQL_DATABASE}
+      PMA_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      PMA_ROOT_HOST: ${MYSQL_ROOT_HOST}
+      PMA_ROOT_PORT: ${MYSQL_ROOT_PORT}
     depends_on:
       - db
     volumes:
