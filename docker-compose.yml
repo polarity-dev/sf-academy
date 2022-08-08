@@ -1,0 +1,43 @@
+version: '3.8'
+networks:
+  intdev:
+
+services:
+  api:
+    container_name: api
+    restart: always
+    build: .
+    ports:
+      - ${PORT}:8081
+    depends_on:
+      - db
+    volumes:
+    - .:/usr/src/app
+    networks:
+      intdev:
+        aliases:
+          - api.intdev
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+  db:
+    container_name: postgres
+    image: postgres
+    ports:
+      - '5433:5432'
+    volumes:
+      -  /private1/var/lib/postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+    networks:
+      intdev:
+        aliases:
+          - db.intdev   
+
+volumes: 
+ data: {}
