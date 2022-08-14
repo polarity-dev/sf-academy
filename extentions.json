@@ -1,0 +1,9 @@
+{ 
+    "reccomndations ":
+    [
+        "dbaemur.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "gruntfuggly.triggertaskonsave",
+        "prisma.prisma"
+    ]
+}

@@ -1,0 +1,29 @@
+version: "2"
+
+
+
+
+services:
+  backend:
+  build: . 
+  dependes_on :
+    - postgres 
+  ports:
+    - 3000:3000
+    - 9229:9229 #dubugger port
+  volumes:
+   _ .:/usr/src/app
+   _ /usr/src/app/node_modules
+  command: yarn start:docker
+  environment:
+    DATABASE_URL : postgres://postgres@postgres/webapp_dev
+    PORT: 3000
+
+  postgress:
+    image: postgres:14-alpine
+    ports:
+      -5432:5432
+    enviroment:
+      POSTGRES_DB: webapp_dev
+      POSTGRES_most_auth_method: trust
+

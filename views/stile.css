@@ -1,0 +1,165 @@
+body{
+    
+    background-image:url(../images/app.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+    margin : 0;
+    color : white ;
+    text-shadow: #2b8a68;
+}
+
+
+header{ 
+    height: 80px;
+    background:#2b8a68 ;
+    color:  white;
+    text-align: center;
+    display: flex;
+    font-family: cursive;
+    
+}
+
+
+title{ 
+    position: relative;
+    left: 20px;
+    font-family: cursive;
+
+    
+}
+
+  
+
+
+
+.form { 
+    margin :0 auto;
+    width:fit-content ;
+    margin-top: 50px;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+
+.input *{ 
+    display :block;
+
+
+} 
+
+.input{ 
+    margin-top: 15px;
+    position :relative ;
+} 
+
+
+input[type="text"]{ 
+    width: 400px;
+    height:60px ;
+    background-color: white;
+    border:none ;
+    outline: none;
+    font-size :17px;
+    padding: 0 10px ;
+    
+
+ } 
+ 
+ .buttons { 
+    display: flex;
+    flex-direction: column;
+
+
+ }
+
+ .btn{ 
+    text-decoration: none;
+    padding :20px 50px;
+    font-size: 1.25rem;
+    position: relative;
+    
+
+
+ }
+
+
+
+ .btn-1{ 
+    
+    color: white;
+    border-radius: 30px;
+    transition: transform 0.3s ease  ;
+
+
+ }
+
+
+ .btn-1::after ,.btn-1::before{
+     content: "";
+     position: absolute;
+     opacity :0.3 ;
+     border-radius: inherit;
+     width: 100%;
+     height: 100%;
+     left :0;
+     bottom :0;
+     z-index: -1;
+     transition: trasform 0.3s ease;
+     
+
+
+
+ }
+ .btn-1:hover { 
+    transform: translate(-12px,-12px);
+
+
+
+ }
+
+ .btn-1:hover ::after { 
+    transform: translate(6px,6px);
+
+ }
+
+
+ .btn-1:hover ::before { 
+    transform: translate(12px,12px);
+
+ }
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
