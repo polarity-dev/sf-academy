@@ -1,0 +1,35 @@
+version: '3'
+services:
+  public:
+    image: "public:1"
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - FRONTPORT=3001
+      - WORKERPORT=4001
+      - DBIP=88.888.888.88
+      - DBUSER=username
+      - DBPASSWD=password
+      - DB=dbname
+
+
+  worker:
+    image: "worker:1"
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - PUBLICPORT=5001
+      - DBIP=88.888.888.88
+      - DBUSER=username
+      - DBPASSWD=password
+      - DB=dbname
+
+  front:
+    image: "front:1"
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+
