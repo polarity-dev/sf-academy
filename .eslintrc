@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "@soluzioni-futura/eslint-config-soluzioni-futura"
+  ]
+}

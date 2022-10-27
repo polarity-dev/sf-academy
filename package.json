@@ -1,0 +1,31 @@
+{
+  "name": "intern-developer",
+  "version": "1.0.0",
+  "description": "test for sf-academy",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Drinkwhat/sf-academy.git"
+  },
+  "author": "Luca Bevilacqua (Drinkwhat)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Drinkwhat/sf-academy/issues"
+  },
+  "homepage": "https://github.com/Drinkwhat/sf-academy#readme",
+  "dependencies": {
+    "debug": "^4.3.4",
+    "lorem-ipsum": "^2.0.8",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@soluzioni-futura/eslint-config-soluzioni-futura": "^2.2.0",
+    "@types/debug": "^4.1.7",
+    "@types/node": "^18.11.7",
+    "eslint": "^8.26.0",
+    "nodemon": "^2.0.20"
+  }
+}
