@@ -1,0 +1,41 @@
+html {
+    height:100%
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: blue;
+    background-image: linear-gradient(to bottom right, blue, lightblue)
+  }
+
+#grid {
+    display: inline-grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    height: 100%
+}
+
+.elem {
+    font-size: 1cm;
+    margin: 5px;
+    padding: 5px;
+    color: black;
+    background-color: white;
+    filter: drop-shadow(10px 10px 10px #000);
+    border-radius: 5px;
+    border: 2.5px solid #ffffffee;
+    width: auto;
+}
+
+#button {
+    cursor: pointer;
+    transition-duration: 0.5s;
+}
+
+#button:hover
+{
+    color: white;
+    background-color: black;
+}

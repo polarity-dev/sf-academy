@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Prova SF" />
+    <base href="/">
+    <link rel="stylesheet" href="style.css">
+    <title>Prova SF</title>
+  </head>
+  <body>
+    <div id="grid">
+      <form action="/importDataFromFile" method="POST" enctype="multipart/form-data">
+        <input class="elem" id="button" type="file" id="myFile" name="filename">
+        <input class="elem" id="button" type="submit" value="Submit New File">
+      </form>
+      <form action="/data" method="GET">
+        <input class="elem" type="text" id="from" name="from" placeholder="From?">
+        <input class="elem" type="text" id="limit" name="limit" placeholder="Limit?">
+        <input class="elem" id="button" type="submit" value="Processed Data">
+      </form>
+      <form action="/pendingData" method="GET">
+        <input class="elem" id="button" type="submit" value="Pending Data">
+      </form>
+    </div>
+  </body>
+</html>
