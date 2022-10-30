@@ -6,7 +6,15 @@ type Row = {
 
 type Rows = { [key: number]: Row }
 
+type ProcessedRow = {
+  id: number
+  int_k: number
+  str_d: string
+}
+
+type ProcessedRows = [ProcessedRow]
+
 export {
-  Row,
-  Rows
+  Rows,
+  ProcessedRows
 }

@@ -1,0 +1,6 @@
+dist
+.gitignore
+node_modules
+package-lock.json
+.eslintrc
+fakerData.txt
