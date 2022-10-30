@@ -30,7 +30,6 @@ const splitter = async function(destination = "../../fakerData.txt"): Promise<Ro
     }
   }
   debug("finished splitter")
-  debug("%O", rows)
   return rows
 }
 
