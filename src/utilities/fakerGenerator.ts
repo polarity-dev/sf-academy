@@ -3,6 +3,7 @@ import { LoremIpsum } from "Lorem-ipsum"
 import path from "path"
 import Debug from "debug"
 
+
 const debug = Debug("faker")
 Debug.enable("*")
 
@@ -34,8 +35,6 @@ const fakerGenerator = async function(destination = "../../fakerData.txt"): Prom
     }
   })
 }
-
-void fakerGenerator()
 
 export {
   fakerGenerator

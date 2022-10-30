@@ -14,7 +14,7 @@ const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT!),
+  port: Number(process.env.DB_PORT!),
   connectionTimeoutMillis: 1000,
   idleTimeoutMillis: 1000
 })
@@ -43,19 +43,15 @@ const insertIntoPendingData = async function(priority: number, int_k: number, st
 
 const selectFromProcessedData =  async function(input: { timestamp?: Date, limit?: number}): Promise<ProcessedRows | string> {
   if (!input.timestamp && !input.limit) {
-    debug("caso 1")
     const res = await pool.query("SELECT id, int_k, str_d, timestamp FROM processed_data ORDER BY timestamp ASC, id ASC")
     return res.rows as ProcessedRows
   } else if (input.timestamp && !input.limit) {
-    debug("caso 2")
     const res = await pool.query("SELECT id, int_k, str_d, timestamp FROM processed_data WHERE timestamp >=  $1 ORDER BY timestamp ASC, id ASC", [input.timestamp])
     return res.rows as ProcessedRows
   } else if (!input.timestamp && input.limit) {
-    debug("caso 3")
     const res = await pool.query("SELECT id, int_k, str_d, timestamp FROM processed_data ORDER BY timestamp ASC, id ASC LIMIT $1", [input.limit])
     return res.rows as ProcessedRows
   } else if (input.timestamp && input.limit) {
-    debug("caso 4")
     const res = await pool.query("SELECT id, int_k, str_d, timestamp FROM processed_data WHERE timestamp >= $1 ORDER BY timestamp ASC, id ASC LIMIT $2", [input.timestamp, input.limit])
     return res.rows as ProcessedRows
   } return "error in selectFromProcessedData"
@@ -63,7 +59,7 @@ const selectFromProcessedData =  async function(input: { timestamp?: Date, limit
 
 const insertIntoProcessedData = async function(int_k: number, str_d: string, timestamp: Date): Promise<void> {
   await pool.query("INSERT INTO processed_data (int_k, str_d, timestamp) VALUES ($1, $2, $3) RETURNING id, int_k, str_d", [int_k, str_d, timestamp])
-  debug("insertIntoProcesedData finished")
+  debug("insertIntoProcessedData finished")
 }
 
 export {

@@ -34,8 +34,6 @@ const splitter = async function(destination = "../../fakerData.txt"): Promise<Ro
   return rows
 }
 
-void splitter()
-
 export {
   splitter
 }
