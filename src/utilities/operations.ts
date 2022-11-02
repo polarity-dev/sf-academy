@@ -10,12 +10,15 @@ function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const processData = async function(ctx: string): Promise<void> {
+const dataFilter = async function(ctx: string): Promise<void> {
   const rawData = await splitter(ctx)
   for (let i = rawData[1].firstNumber; i <= rawData[1].secondNumber; i++) {
     const timestamp = new Date()
     void insertIntoPendingData(rawData[i].firstNumber, rawData[i].secondNumber, rawData[i].dummyData!, timestamp)
   }
+}
+
+const processData = async function(): Promise<void> {
   const condition = true
   while (condition) {
     const data = await partialSelectFromPendingData()
@@ -32,5 +35,6 @@ const processData = async function(ctx: string): Promise<void> {
 }
 
 export {
-  processData
+  processData,
+  dataFilter
 }

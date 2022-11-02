@@ -1,5 +1,5 @@
-import { writeFile } from "fs"
-import { LoremIpsum } from "Lorem-ipsum"
+import { writeFileSync } from "fs"
+import { LoremIpsum } from "lorem-ipsum"
 import path from "path"
 import Debug from "debug"
 
@@ -17,7 +17,7 @@ function getDummyData(): string {
   return lorem.generateWords(getRandomNumber(10, 1)).split(" ").join("_")
 }
 
-const fakerGenerator = async function(destination = "../../fakerData.txt"): Promise<void> {
+const fakerGenerator = function(): void {
   const maxElements = getRandomNumber(50, 1)
   const firstNumber = getRandomNumber(maxElements)
   const secondNumber = getRandomNumber(maxElements + 1, firstNumber + 1)
@@ -26,14 +26,12 @@ const fakerGenerator = async function(destination = "../../fakerData.txt"): Prom
   for (let i = 0; i < maxElements; i++) {
     ctx += [getRandomNumber(6, 1), getRandomNumber(1000, -1000), getDummyData()].join(" ") + "\n"
   }
-
-  writeFile(path.join(__dirname, destination), ctx, function(err) {
-    if (err) {
-      debug("%O", err)
-    } else {
-      debug("written faker")
-    }
-  })
+  try {
+    writeFileSync(path.join(__dirname, "../../faker.txt"), ctx)
+    debug("faker written")
+  } catch (err) {
+    debug(err)
+  }
 }
 
 export {

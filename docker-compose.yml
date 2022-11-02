@@ -1,7 +1,15 @@
 version: '3.8'
 services:
+  api:
+      container_name: sf-academy-Luca-Bevilacqua
+      restart: always
+      build: .
+      depends_on:
+        - db
+      ports:
+        - "${PORT}:${PORT}"
 
-  postgres:
+  db:
     container_name: ${DB_HOST}
     image: postgres:14.1-alpine
     restart: always

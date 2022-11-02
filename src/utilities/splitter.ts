@@ -1,15 +1,11 @@
 import { Rows } from "./index"
 import Debug from "debug"
-import { readFile } from "fs/promises"
-import path from "path"
 
 
 const debug = Debug("splitter")
 Debug.enable("*")
 
-const splitter = async function(destination = "../../fakerData.txt"): Promise<Rows> {
-  debug("started splitter")
-  const rawData = await readFile(path.join(__dirname, destination), { encoding: "utf8" })
+const splitter = async function(rawData: string): Promise<Rows> {
   const rows: Rows = {}
   const data = rawData.slice(0, -1).split("\n")
   for (let i = 0; i < data.length; i++) {
@@ -29,7 +25,6 @@ const splitter = async function(destination = "../../fakerData.txt"): Promise<Ro
       debug("Error in the for and if loop in the splitter function")
     }
   }
-  debug("finished splitter")
   return rows
 }
 
