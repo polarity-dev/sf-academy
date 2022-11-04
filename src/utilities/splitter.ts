@@ -1,4 +1,4 @@
-import { Rows } from "./index"
+import { Rows } from "."
 import Debug from "debug"
 
 

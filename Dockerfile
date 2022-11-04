@@ -3,6 +3,6 @@ WORKDIR /usr/src/app
 COPY  package.json ./
 COPY . .
 EXPOSE ${PORT}
-RUN npm install
+RUN npm install --omit=dev
 RUN npm run build
 CMD npm start 

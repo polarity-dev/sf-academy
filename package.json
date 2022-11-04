@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/Drinkwhat/sf-academy#readme",
   "dependencies": {
-    "concurrently": "7.5.0",
     "debug": "4.3.4",
     "dotenv": "16.0.3",
     "express": "4.18.2",

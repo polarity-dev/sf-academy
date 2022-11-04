@@ -19,7 +19,7 @@ function getDummyData(): string {
 
 const fakerGenerator = function(): void {
   const maxElements = getRandomNumber(50, 1)
-  const firstNumber = getRandomNumber(maxElements)
+  const firstNumber = getRandomNumber(maxElements, 1)
   const secondNumber = getRandomNumber(maxElements + 1, firstNumber + 1)
   let ctx = [firstNumber, secondNumber].join(" ") + "\n"
 
