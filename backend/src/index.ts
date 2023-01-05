@@ -1,7 +1,5 @@
 import express, {Request, Response} from "express"
 
-import { genRandomIntegerInclusive } from './utils/numberGenerator'
-
 const app = express()
 
 app.use(express.json())
@@ -11,9 +9,7 @@ app.get("/pendingData", (req: Request, res: Response) => {
 })
 
 app.get("/data", (req: Request, res: Response) => {
-  let random: number = genRandomIntegerInclusive(0, 10);
-  return res.send(random.toString())
-  //return res.send("Hello world!")
+  return res.send("Hello world!!!")
 })
 
 
