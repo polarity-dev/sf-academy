@@ -6,8 +6,6 @@ import cron from "node-cron";
 const port = process.env.PORT || 3000;
 const app = express()
 
-let fileCounter = 0;
-
 let files: any = [];
 
 let dataToProcess: DataWrapper[] = [];
@@ -78,7 +76,7 @@ const sortByPriority = (data: DataWrapper[]): DataWrapper[] => {
 
 
 app.get("/pendingData", (req: Request, res: Response) => {
-  return res.send("Hello world!")
+  return res.send(dataToProcess)
 })
 
 app.get("/data", (req: Request, res: Response) => {
@@ -100,19 +98,25 @@ app.post("/importDataFromFile", (req, res) => {
 
   let buf: Buffer = files[0].data
 
-  let processedData = convertBufferToPKDArray(buf)
+  let cleanedData = convertBufferToPKDArray(buf)
 
-  console.log(processedData)
+  //let sortedData = sortByPriority(processedData) 
+  //TODO: put the sorting in the scheduled part
 
-  let sortedData = sortByPriority(processedData)
-
-  console.log(sortedData)
+  dataToProcess = dataToProcess.concat(cleanedData)
 
   return res.sendStatus(200)
 })
 
 cron.schedule('9 * * * * *', () => {
-  console.log("10 sec passati") // cron go from 0 to 59 so i put 9
+  console.log("10 sec passati") // WARN: cron go from 0 to 59 so i put 9
+
+  // penso che metterò il sorting per priorità qui cosi non viene chimato ogni singola vlta che arrivano dati ma solo quando deve inviare i dati al db
+  // TODO:
+  //  - istanziare un db (prob mariadb)
+  //  - inviare massimo 15 messaggi
+  //  - inserire un time stamp unico per tutti i dati inviati in una certa batch(penso di inviare la data di inizio del processo di salvataggio per averla uguale su tutti)
+  //
 
   // userò questaa parte per gli scheduling jobs che devono essere eseguiti
 })
