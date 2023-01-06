@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import fileUploud from "express-fileupload";
 import path from "path";
+import cron from "node-cron";
 
 
 const port = process.env.PORT || 3000;
@@ -27,6 +28,32 @@ class DataWrapper {
   P: number;
   K: number;
   D: string;
+}
+
+const convertBufferToPKDArray = (buffer: Buffer) => {
+  let text: string = buffer.toString('utf-8')
+
+  let arrayOfLines: string[] = text.split("\n")
+
+  let firstLine: string[] = arrayOfLines[0].split(" ")
+
+  let A: number = Number(firstLine[0])
+  let B: number = Number(firstLine[1])
+
+  console.log(A)
+  console.log(B)
+
+  let processedData: DataWrapper[] = []
+
+
+  for (let index = 0; index < arrayOfLines.length; index++) {
+    if (index === A || index === B || index > A && index < B) {
+      processedData.push(preprocessString(arrayOfLines[index]))
+    }
+  }
+
+  return processedData;
+
 }
 
 const preprocessString = (rawData: string): DataWrapper => {
@@ -61,46 +88,31 @@ app.get("/data", (req: Request, res: Response) => {
 
 
 app.post("/importDataFromFile", (req, res) => {
-  //@ts-ignore
   if (!req.files) {
     return res.status(400).send("No files were uploaded.");
   }
 
-  //@ts-ignore
   const file = req.files.data;
 
   files.push(file);
 
   let buf: Buffer = files[0].data
 
-  let text: string = buf.toString('utf-8')
+  let processedData = convertBufferToPKDArray(buf)
 
-  let arrayOfLines: string[] = text.split("\n")
+  console.log(processedData)
 
-  let firstLine: string[] = arrayOfLines[0].split(" ")
-
-  let A: number = Number(firstLine[0])
-  let B: number = Number(firstLine[1])
-
-  console.log(A)
-  console.log(B)
-
-
-  for (let index = 0; index < arrayOfLines.length; index++) {
-    if (index === A || index === B || index > A && index < B) {
-      dataToProcess.push(preprocessString(arrayOfLines[index]))
-    }
-  }
-
-  arrayOfLines = []
-
-  console.log(dataToProcess)
-
-  let sortedData = sortByPriority(dataToProcess)
+  let sortedData = sortByPriority(processedData)
 
   console.log(sortedData)
 
   return res.sendStatus(200)
+})
+
+cron.schedule('9 * * * * *', () => {
+  console.log("10 sec passati") // cron go from 0 to 59 so i put 9
+
+  // userò questaa parte per gli scheduling jobs che devono essere eseguiti
 })
 
 
