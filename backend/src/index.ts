@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
+//@ts-ignore
 import fileUploud from "express-fileupload";
+//@ts-ignore
 import cron from "node-cron";
 
 
@@ -85,10 +87,12 @@ app.get("/data", (req: Request, res: Response) => {
 
 
 app.post("/importDataFromFile", (req, res) => {
+  //@ts-ignore
   if (!req.files) {
     return res.status(400).send("No files were uploaded.");
   }
 
+  //@ts-ignore
   const file = req.files.data;
 
   //TODO: 
