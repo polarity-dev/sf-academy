@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import fileUploud from "express-fileupload";
-import path from "path";
 import cron from "node-cron";
 
 
@@ -93,6 +92,9 @@ app.post("/importDataFromFile", (req, res) => {
   }
 
   const file = req.files.data;
+
+  //TODO: 
+  //  - aggiungere un check sul tipo di file(da accettare solo file *.txt)
 
   files.push(file);
 
