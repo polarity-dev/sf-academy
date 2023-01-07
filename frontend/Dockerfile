@@ -1,15 +1,17 @@
 FROM node:lts-alpine
 
-WORKDIR /backend
+WORKDIR /frontend
 
 COPY package.json .
 
 RUN npm install
 
+RUN npm -g install serve
+
 COPY . .
 
-EXPOSE 4000
+EXPOSE 3000
 
 RUN npm run build
 
-CMD ["node", "dist/index.js"]
+CMD ["serve", "dist"]

@@ -5,7 +5,7 @@ import fileUploud from "express-fileupload";
 import cron from "node-cron";
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const app = express()
 
 let files: any = [];
@@ -38,9 +38,6 @@ const convertBufferToPKDArray = (buffer: Buffer) => {
 
   let A: number = Number(firstLine[0])
   let B: number = Number(firstLine[1])
-
-  console.log(A)
-  console.log(B)
 
   let processedData: DataWrapper[] = []
 
@@ -87,6 +84,7 @@ app.get("/data", (req: Request, res: Response) => {
 
 
 app.post("/importDataFromFile", (req, res) => {
+
   //@ts-ignore
   if (!req.files) {
     return res.status(400).send("No files were uploaded.");
