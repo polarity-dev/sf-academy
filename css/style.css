@@ -1,0 +1,47 @@
+* {
+    margin: 0;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    box-sizing: border-box;
+}
+
+.sidebar {
+    position: absolute;
+    left: 0;
+
+    width: 15%;
+    height: 100%;
+    padding: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    background-color: rgb(30, 30, 30);
+}
+
+.sidebar div {
+    height: 5%;
+    width: 80%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: rgb(242, 87, 91);
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.25rem;
+
+    outline: 0px solid red;
+}
+
+.form {
+    position: absolute;
+    right: 0;
+
+    width: 85%;
+    height: 100%;
+    padding: 20px;
+
+    background-color: white;
+}
