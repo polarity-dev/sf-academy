@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 
-
-
-
 const App = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [pendingData, setPendingData] = useState([])
+  const [data, setData] = useState([])
 
 
   const sumbmit = async (e) => {
@@ -30,12 +29,28 @@ const App = () => {
 
   }
 
-  const getPendingData = () => {
-
+  const getPendingData = async () => {
+    clearData()
+    await fetch('http://localhost:4000/pendingData', {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then(response => setPendingData(response))
   }
 
-  const getData = () => {
+  const getData = async () => {
+    clearData()
+    await fetch('http://localhost:4000/data', {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then(response => setData(response))
+  }
 
+
+  const clearData = () => {
+    setData([])
+    setPendingData([])
   }
 
   return (
@@ -46,8 +61,21 @@ const App = () => {
       </form>
 
 
-    <button type="button" onClick={getPendingData}>Pending data</button>
-    <button type="button" onClick={getData}>Data</button>
+      <button type="button" onClick={getPendingData}>Pending data</button>
+      <button type="button" onClick={getData}>Data</button>
+      <button type="button" onClick={clearData}>Clear page</button>
+
+      <ul>
+        {data.map((item, index) => {
+          return <li> key={index}{item}</li>
+        })}
+      </ul>
+      <ul>
+        {pendingData.map((item, index) => {
+          return <li key={index}>{item.D}</li>
+        })}
+      </ul>
+
     </div>
   )
 }

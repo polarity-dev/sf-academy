@@ -4,6 +4,8 @@ import fileUploud from "express-fileupload";
 //@ts-ignore
 import cron from "node-cron";
 
+import pool from "./mariadb"
+
 
 const port = process.env.PORT || 4000;
 const app = express()
@@ -75,11 +77,15 @@ const sortByPriority = (data: DataWrapper[]): DataWrapper[] => {
 
 
 app.get("/pendingData", (req: Request, res: Response) => {
-  return res.send(dataToProcess)
+  return res.send(dataToProcess).sendStatus(200);
 })
 
 app.get("/data", (req: Request, res: Response) => {
-  return res.send("ciao")
+  
+  console.log(req)
+
+  return res.sendStatus(200);
+
 })
 
 
@@ -110,8 +116,8 @@ app.post("/importDataFromFile", (req, res) => {
   return res.sendStatus(200)
 })
 
-cron.schedule('9 * * * * *', () => {
-  console.log("10 sec passati") // WARN: cron go from 0 to 59 so i put 9
+cron.schedule('*/10 * * * * *', () => {
+  console.log("10 sec passati")
 
   // penso che metterò il sorting per priorità qui cosi non viene chimato ogni singola vlta che arrivano dati ma solo quando deve inviare i dati al db
   // TODO:
@@ -121,6 +127,82 @@ cron.schedule('9 * * * * *', () => {
   //
 
   // userò questaa parte per gli scheduling jobs che devono essere eseguiti
+
+  // pool.getConnection()
+  //   .then(conn => {
+  //
+  //     return conn.query("SHOW DATABASES;")
+  //
+  //   })
+  //   .then(res => {
+  //     console.log(res)
+  //   })
+  //
+  // pool.getConnection()
+  //   .then(conn => {
+  //     return conn.query("CREATE TABLE if not exists sf_saved_data (K INT, D INT, TS TIMESTAMP);")
+  //   })
+  //   .then(res => {
+  //     console.log(res)
+  //   })
+  //
+  // pool.getConnection()
+  //   .then(conn => {
+  //
+  //     return conn.query("SELECT * FROM database.sf_saved_data;")
+  //
+  //   })
+  //   .then(res => {
+  //     console.log(res)
+
+  // console.log(new Date().toLocaleString("it", {timeZone: "Europe/Rome"}))
+
+  let timestamp = new Date()
+
+  let processed = sortByPriority(dataToProcess)
+
+  let toSave = processed.slice(0, 15)
+
+
+  pool.getConnection()
+    .then(conn => {
+      let response = conn.query("CREATE TABLE if not exists sf_saved_data (K INT, D CHAR(255), TS TIMESTAMP);")
+      conn.end();
+      return response;
+    })
+    .then(res => {
+      console.log(res)
+    })
+
+  for (let index = 0; index < toSave.length; index++) {
+
+    pool.getConnection()
+      .then(async conn => {
+        const res = await conn.query("INSERT INTO sf_saved_data VALUES (?, ?, ?);",
+          [
+            toSave[index].K,
+            toSave[index].D,
+            timestamp,
+          ]
+        );
+        console.log(res);
+        conn.end();
+      })
+  }
+
+
+
+  console.log(toSave.length)
+
+  console.log(dataToProcess.length)
+
+  let remainingDataToSave = processed.slice(toSave.length)
+
+  console.log(remainingDataToSave)
+
+
+  dataToProcess = remainingDataToSave
+
 })
 
 

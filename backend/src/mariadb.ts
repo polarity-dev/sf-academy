@@ -1,11 +1,13 @@
 
 import mariadb from "mariadb";
 
-const pool = mariadb.createPool({
-  host: 'localhost:3306',
+const pool: mariadb.Pool = mariadb.createPool({
+  host: 'localhost',
   user: 'root',
   password: 'password',
-  database: 'foo'
+  database: 'database'
 })
 
 export default pool;
+
+
