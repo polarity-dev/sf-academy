@@ -1,49 +1,46 @@
 version: '3.8'
 services:
-  mariadb:
-    image: mariadb
-    container_name: sf-mariadb
-    ports:
-      - 3306:3306
-    environment:
-        MYSQL_ROOT_PASSWORD: password
-
-    volumes:
-      - ./mysql:/var/lib/mysql
-
-
- 
-  express:
-    build: ./backend
-    container_name: sf-express
-    depends_on:
-      - mariadb
-    ports:
-      - 4000:4000
-
-    environment:
-        MYSQL_HOST_IP: mariadb
-
-
-    
   react:
     build: ./frontend
     container_name: sf-react
     depends_on:
       - express
-      - mariadb
+      - mysqldb
     ports:
       - 3000:3000
+    restart: on-failure 
 
+    links:
+      - mysqldb
+
+ 
+
+  express:
+    build: ./backend
+    container_name: sf-express
+    depends_on:
+      - mysqldb
+    ports:
+      - 4000:4000
+
+    restart: on-failure
+
+  mysqldb:
+    build: ./mysql 
+    container_name: sf-mysql
+    ports:
+      - 3306:3306
 
     environment:
-        EXPRESS_HOST_IP: express
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: database
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+    restart: on-failure 
 
-
+    volumes:
+      - ./db:/var/lib/mysql
 
 
 volumes:
-  mariadb-data:
-    driver: local
-
-
+  db:

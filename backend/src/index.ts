@@ -3,20 +3,21 @@ import express, { Request, Response } from "express";
 import fileUploud from "express-fileupload";
 //@ts-ignore
 import cron from "node-cron";
+import { insertData, getSavedData } from "./db";
 
-import pool from "./mariadb"
 
 
-const port = process.env.PORT || 4000;
+const port = 4000;
 const app = express()
+
+app.use(express.json())
+app.use(fileUploud())
 
 let files: any = [];
 
 let dataToProcess: DataWrapper[] = [];
 
-app.use(express.json())
 
-app.use(fileUploud())
 
 class DataWrapper {
   constructor(P: number, K: number, D: string) {
@@ -30,6 +31,18 @@ class DataWrapper {
   K: number;
   D: string;
 }
+
+class SavedData {
+  constructor(K: number, D: string) {
+    this.K = K;
+    this.D = D;
+  }
+  K: number;
+  D: string;
+
+}
+
+
 
 const convertBufferToPKDArray = (buffer: Buffer) => {
   let text: string = buffer.toString('utf-8')
@@ -77,19 +90,49 @@ const sortByPriority = (data: DataWrapper[]): DataWrapper[] => {
 
 
 app.get("/pendingData", (req: Request, res: Response) => {
-  return res.send(dataToProcess).sendStatus(200);
+  if (dataToProcess.length > 0) {
+    return res.send(dataToProcess).status(200);
+  }
+  else {
+
+    return res.status(200);
+  }
 })
 
-app.get("/data", (req: Request, res: Response) => {
-  
-  console.log(req)
+app.get("/data", async (req: Request, res: Response) => {
 
-  return res.sendStatus(200);
+
+  let limit: number = Number(req.query.limit);
+  let from: string = String(req.query.from); // UNIX timestamp format
+  let data: SavedData[] = []
+
+
+  try {
+    let rows = await getSavedData(from, limit);
+
+
+    for (let index = 0; index < rows.length; index++) {
+      let saved: SavedData = rows[index]
+      data.push(saved)
+
+    }
+
+    if (data.length > 0) {
+      return res.send(data)
+    }
+    else {
+      return res.status(200)
+    }
+  }
+  catch (err) {
+    console.log(err)
+  }
 
 })
 
 
-app.post("/importDataFromFile", (req, res) => {
+app.post("/importDataFromFile", async (req, res: Response) => {
+
 
   //@ts-ignore
   if (!req.files) {
@@ -99,109 +142,53 @@ app.post("/importDataFromFile", (req, res) => {
   //@ts-ignore
   const file = req.files.data;
 
-  //TODO: 
-  //  - aggiungere un check sul tipo di file(da accettare solo file *.txt)
-
   files.push(file);
 
   let buf: Buffer = files[0].data
 
   let cleanedData = convertBufferToPKDArray(buf)
 
-  //let sortedData = sortByPriority(processedData) 
-  //TODO: put the sorting in the scheduled part
-
   dataToProcess = dataToProcess.concat(cleanedData)
 
   return res.sendStatus(200)
 })
 
-cron.schedule('*/10 * * * * *', () => {
-  console.log("10 sec passati")
+cron.schedule('*/10 * * * * *', async () => {
+  console.log("10 sec")
 
-  // penso che metterò il sorting per priorità qui cosi non viene chimato ogni singola vlta che arrivano dati ma solo quando deve inviare i dati al db
-  // TODO:
-  //  - istanziare un db (prob mariadb)
-  //  - inviare massimo 15 messaggi
-  //  - inserire un time stamp unico per tutti i dati inviati in una certa batch(penso di inviare la data di inizio del processo di salvataggio per averla uguale su tutti)
-  //
-
-  // userò questaa parte per gli scheduling jobs che devono essere eseguiti
-
-  // pool.getConnection()
-  //   .then(conn => {
-  //
-  //     return conn.query("SHOW DATABASES;")
-  //
-  //   })
-  //   .then(res => {
-  //     console.log(res)
-  //   })
-  //
-  // pool.getConnection()
-  //   .then(conn => {
-  //     return conn.query("CREATE TABLE if not exists sf_saved_data (K INT, D INT, TS TIMESTAMP);")
-  //   })
-  //   .then(res => {
-  //     console.log(res)
-  //   })
-  //
-  // pool.getConnection()
-  //   .then(conn => {
-  //
-  //     return conn.query("SELECT * FROM database.sf_saved_data;")
-  //
-  //   })
-  //   .then(res => {
-  //     console.log(res)
-
-  // console.log(new Date().toLocaleString("it", {timeZone: "Europe/Rome"}))
-
-  let timestamp = new Date()
-
-  let processed = sortByPriority(dataToProcess)
-
-  let toSave = processed.slice(0, 15)
+  if (dataToProcess.length > 0) {
 
 
-  pool.getConnection()
-    .then(conn => {
-      let response = conn.query("CREATE TABLE if not exists sf_saved_data (K INT, D CHAR(255), TS TIMESTAMP);")
-      conn.end();
-      return response;
-    })
-    .then(res => {
-      console.log(res)
-    })
 
-  for (let index = 0; index < toSave.length; index++) {
+    let timestamp = new Date().getTime()
 
-    pool.getConnection()
-      .then(async conn => {
-        const res = await conn.query("INSERT INTO sf_saved_data VALUES (?, ?, ?);",
-          [
+    let processed = sortByPriority(dataToProcess)
+
+    let toSave = processed.slice(0, 15)
+
+    if (dataToProcess.length > 0) {
+      try {
+        for (let index = 0; index < toSave.length; index++) {
+          let response = await insertData(
             toSave[index].K,
             toSave[index].D,
-            timestamp,
-          ]
-        );
-        console.log(res);
-        conn.end();
-      })
+            timestamp
+          )
+          console.log(response)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      let remainingDataToSave = processed.slice(toSave.length)
+      dataToProcess = remainingDataToSave
+
+    }
+
+
   }
-
-
-
-  console.log(toSave.length)
-
-  console.log(dataToProcess.length)
-
-  let remainingDataToSave = processed.slice(toSave.length)
-
-  console.log(remainingDataToSave)
-
-
-  dataToProcess = remainingDataToSave
+  else {
+    console.log("giro skipapto")
+  }
 
 })
 
