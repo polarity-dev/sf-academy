@@ -26,7 +26,7 @@ app.get("/", (request: any, response: any) => {
 	sendPage(response, "text/html", 200, "pages/index.html");
 });
 
-// GET request per ilCSS del file principale
+// GET request per il CSS del file principale
 app.get("style.css", (request: any, response: any) => {
 	sendPage(response, "text/css", 200, "css/style.css");
 });
@@ -150,6 +150,7 @@ app.get("/data", (request: any, response: any) => {
 app.listen(port, () => {
 	console.log(`Server listening on port ${port}`)
 });
+
 
 
 let myInterval: any = setInterval(() => {

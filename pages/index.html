@@ -7,21 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <title>Intern Developer</title>
 </head>
 
 <body>
-    <div class="sidebar">
+    <div class="navbar">
         <div>Intern Developer</div>
     </div>
 
     <div class="form">
-        <form method="post" enctype="multipart/form-data" action="/importDataFromFile">
-            <input type="file" id="fileInput" name="fileInput" value="Upload"><br><br>
-            <input type="submit" value="Submit File" id="submitBut">
-        </form>
+        <div>
+            <form method="post" enctype="multipart/form-data" action="/importDataFromFile">
+                <input type="file" id="fileInput" name="fileInput" value="Upload"><br><br>
+                <input type="submit" value="Submit File" id="submitBut">
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>-Dennis Supryn</p>
     </div>
 </body>
 
