@@ -1,0 +1,53 @@
+{
+  "name": "intern-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "scripts": {
+    "watch:build": "webpack -w",
+    "watch:server": "nodemon dist/server.js",
+    "dev": "docker-compose up -d db && npm-run-all --parallel watch:*",
+    "start": "node dist/server.js",
+    "postinstall": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mui/lab": "^5.0.0-alpha.118",
+    "@mui/material": "^5.11.7",
+    "@mui/styled-engine-sc": "^5.11.0",
+    "@mui/x-date-pickers": "^5.0.17",
+    "@types/express": "^4.17.13",
+    "@types/material-ui": "^0.21.12",
+    "@types/multer": "^1.4.7",
+    "@types/react": "^17.0.22",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-dropzone": "^5.1.0",
+    "@types/react-router-dom": "^5.3.3",
+    "async": "^3.2.4",
+    "bootstrap": "^5.1.1",
+    "css-loader": "^6.3.0",
+    "dayjs": "^1.11.7",
+    "express": "^4.17.1",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-dropzone": "^14.2.3",
+    "react-router-dom": "^6.8.0",
+    "sass": "^1.41.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.2.1",
+    "styled-components": "^5.3.6",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.9.3",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5"
+  }
+}

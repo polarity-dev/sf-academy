@@ -1,0 +1,9 @@
+.DS_Store
+.vscode/
+
+node_modules
+
+dist/
+public/js/app.js
+uploads/
+tosend/
