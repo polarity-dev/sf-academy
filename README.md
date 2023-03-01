@@ -21,8 +21,8 @@ ogni utente può candidarsi a sostenere una delle seguenti prove suddivise per a
 ### Per candidarsi a sostenere una prova è necessario:  
 
 - creare una issue su questa repository che abbia come titolo il proprio nome e cognome specificando nel testo per quale prova ci si candida
-- creare un fork del repository `soluzionifutura/sf-academy` e aprire una pull request con la prova realizzata entro la deadline comunicata come risposta alla candidatura da [**giowe**](https://github.com/giowe) o [**nicofuccella**](https://github.com/nicofuccella)
-- al termine della prova richiedere la review di [**giowe**](https://github.com/giowe) e [**nicofuccella**](https://github.com/nicofuccella)
+- creare un fork del repository `soluzionifutura/sf-academy` e aprire una pull request con la prova realizzata entro la deadline comunicata come risposta alla candidatura da [**giowe**](https://github.com/giowe) o [**allemonta**](https://github.com/allemonta)
+- al termine della prova richiedere la review di [**giowe**](https://github.com/giowe) e [**allemonta**](https://github.com/allemonta)
 - attendere responso
 
 ### Comunicazioni  
