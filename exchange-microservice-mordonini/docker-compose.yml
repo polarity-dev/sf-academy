@@ -1,0 +1,160 @@
+version: "3.9"
+services:
+  exchange:
+    volumes:
+      - ./packages/exchange:/app
+      - ./node_modules:/app/node_modules
+    working_dir: /app/package
+    entrypoint: yarn
+    command: dev
+    environment:
+      - PORT=${EXCHANGE_PORT}
+      - NODE_ENV=${NODE_ENV}
+    image: node:latest
+    expose:
+      - ${EXCHANGE_PORT}
+    container_name: service-exchange
+    networks:
+      - service-network
+      - default
+  
+  db:
+    image: postgres:alpine3.17
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    expose: 
+      - ${DB_PORT}
+    volumes:
+      - ./packages/database/database-data:/var/lib/postgresql/data
+      - ./packages/database/init:/docker-entrypoint-initdb.d
+    container_name: postgres-db
+    networks:
+      - db-network
+      - default
+
+  users:
+    depends_on:
+    - db
+    - exchange
+    volumes:
+      - ./packages/users:/app
+      - ./node_modules:/app/node_modules
+    working_dir: /app/package
+    entrypoint: yarn
+    command: dev
+    restart: always
+    environment:
+      - PORT=${USERS_PORT}
+      - DB_HOST=${DB_HOST_FROM_OUTSIDE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - ROOT_CERT_FILE=/run/secrets/grpc-ca-cert
+      - SERVER_KEY_FILE=/run/secrets/grpc-server-key
+      - SERVER_CERT_FILE=/run/secrets/grpc-server-cert
+      - KEY_FILE=/run/secrets/jwt-key
+      - PUBKEY_FILE=/run/secrets/jwt-pub-key
+      - NODE_ENV=${NODE_ENV}
+    image: node:latest
+    ports:
+      - ${USERS_PORT}:${USERS_PORT}
+    secrets:
+      - grpc-ca-cert
+      - grpc-server-cert
+      - grpc-server-key
+      - jwt-key
+      - jwt-pub-key
+    links:
+      - "db:database"
+    container_name: service-users
+    networks:
+      - service-network
+      - db-network
+      - default
+
+  api:
+    depends_on: 
+      - users
+    volumes:
+      - ./packages/api:/app
+      - ./node_modules:/app/node_modules
+    image: node:latest
+    working_dir: /app/package
+    entrypoint: yarn
+    command: start:dev
+    secrets:
+      - grpc-ca-cert
+      - grpc-client-cert
+      - grpc-client-key
+    environment:
+      - PORT=${API_PORT}
+      - ROOT_CERT_FILE=/run/secrets/grpc-ca-cert
+      - CLIENT_KEY_FILE=/run/secrets/grpc-client-key
+      - CLIENT_CERT_FILE=/run/secrets/grpc-client-cert
+      - USERS_GRPC_SERVER_HOST=users
+      - USERS_GRPC_SERVER_PORT=${USERS_PORT}
+      - NODE_ENV=${NODE_ENV}
+    ports:
+      - ${API_PORT}:${API_PORT}
+    networks:
+      - service-network
+      - default
+    container_name: service-api
+
+  frontend:
+    depends_on: 
+      - api
+    volumes:
+      - ./packages/frontend:/app/package
+      - ./node_modules:/node_modules
+    image: node:latest
+    working_dir: /app/package
+    entrypoint: yarn
+    command: start
+    environment:
+      - PORT=${FRONTEND_PORT}
+      - NODE_ENV=${NODE_ENV}
+    ports:
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+    networks:
+      - service-network
+      - default
+    container_name: service-frontend
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8082:8080
+    networks:
+      - service-network
+      - db-network
+      - default
+
+secrets:
+  jwt-key:
+    file: secrets/keys/sign/jwt/pkcs8.key
+  jwt-pub-key:
+    file: secrets/keys/sign/jwt/publickey.crt
+  grpc-ca-cert:
+    file: secrets/keys/sign/grpc_credentials/ca-cert.pem
+  grpc-server-key:
+    file: secrets/keys/sign/grpc_credentials/server-key.pem
+  grpc-server-cert:
+    file: secrets/keys/sign/grpc_credentials/server-cert.pem
+  grpc-client-key:
+    file: secrets/keys/sign/grpc_credentials/client-key.pem
+  grpc-client-cert:
+    file: secrets/keys/sign/grpc_credentials/client-cert.pem
+
+networks:
+  service-network:
+    internal: true
+  db-network:
+    internal: true
+  default:
+    driver: bridge

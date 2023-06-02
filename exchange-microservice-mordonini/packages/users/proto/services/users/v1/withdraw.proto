@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package services.users.v1;
+
+import "com/interfaces/users/v1/wallet.proto";
+
+message WithdrawCurrencyRequest {
+    string token = 1;
+    string iban = 2;
+    string currency = 3;
+    float amount = 4;
+}
+
+message WithdrawCurrencyResponse {
+    repeated com.interfaces.users.v1.ProtoWallet wallets = 1;
+}

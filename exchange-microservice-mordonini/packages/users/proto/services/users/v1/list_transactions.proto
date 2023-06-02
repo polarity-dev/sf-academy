@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package services.users.v1;
+
+import "com/interfaces/users/v1/transaction.proto";
+
+message ListTransactionsRequest {
+    string token   = 1;
+    string iban    = 2;
+    optional string before_then  = 3;
+    optional string after_then  = 4;
+    // repeated fields are optional by default
+    repeated string bought_currency_name = 5;
+    repeated string sold_currency_name = 6;
+    
+}
+
+message ListTransactionsResponse {
+    repeated com.interfaces.users.v1.ProtoTransaction transactions = 1;
+}
+

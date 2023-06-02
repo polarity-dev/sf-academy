@@ -1,0 +1,10 @@
+{
+    "root": "/",
+    "login": "/auth/login",
+    "signup": "/auth/signup",
+    "logout": "/logout",
+    "auth": "/auth",
+    "userPanel": "/user",
+    "bankAccount": "/user/bankAccount",
+    "bankAccountIban": "/user/bankAccount/:iban"
+}

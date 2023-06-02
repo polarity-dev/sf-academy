@@ -1,0 +1,11 @@
+// proto/services/hello/v1/exchange_service.proto
+syntax = "proto3";
+
+package services.exchange.v1;
+
+// ExchangeRequest & ExchangeResponse
+import "services/exchange/v1/exchange.proto";
+
+service ExchangeService {
+    rpc Exchange(services.exchange.v1.ExchangeRequest) returns (services.exchange.v1.ExchangeResponse) {}
+}

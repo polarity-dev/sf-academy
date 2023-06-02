@@ -1,0 +1,37 @@
+# /proto/buf.gen.yaml
+version: v1
+plugins:
+  - name: grpc
+    out: ../dist/proto
+    opt: 
+      - grpc_js
+    path: ../node_modules/.bin/grpc_tools_node_protoc_plugin
+    
+  - name: ts
+    out: ../src/proto
+    opt: 
+      - grpc_js
+    path: ../node_modules/.bin/protoc-gen-ts
+  
+#  - plugin: buf.build/protocolbuffers/js
+  - plugin: js
+    out:  ../dist/proto
+    opt: import_style=commonjs,binary
+
+# Generate for users service
+  - name: grpc
+    out: ../../users/dist/proto
+    opt: 
+      - grpc_js
+    path: ../node_modules/.bin/grpc_tools_node_protoc_plugin
+    
+  - name: ts
+    out: ../../users/src/proto
+    opt: 
+      - grpc_js
+    path: ../node_modules/.bin/protoc-gen-ts
+  
+#  - plugin: buf.build/protocolbuffers/js
+  - plugin: js
+    out:  ../../users/dist/proto
+    opt: import_style=commonjs,binary

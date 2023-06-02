@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.interfaces.users.v1;
+
+message ProtoBankAccount {
+    uint64 id            = 1;
+    string iban          = 2;
+    string creation_date = 3;
+    uint64 user_id       = 4;
+}

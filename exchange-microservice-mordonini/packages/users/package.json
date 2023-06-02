@@ -1,0 +1,44 @@
+{
+  "name": "users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "pg-schema": "yarn sequelize-auto -d $DB_NAME -h $DB_HOST_FROM_OUTSIDE -p $DB_PORT -x $DB_PASSWORD -u $DB_USER -e postgres -l ts -o src/output-models",
+    "build:proto": "cd proto/ && buf generate",
+    "build:ts": "yarn tsc",
+    "build": "rm -rf src/proto dist/ && yarn build:proto && yarn build:ts",
+    "dev": "nodemon ./dist/server.js",
+    "start": "node ./dist/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@bufbuild/buf": "^1.15.0",
+    "@jest/globals": "^29.5.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/pg": "^8.6.6",
+    "grpc-tools": "^1.12.4",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "nodemon": "^2.0.22",
+    "sequelize-auto": "^0.8.8",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^1.2.0",
+    "@grpc/grpc-js": "^1.8.12",
+    "bcrypt": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "google-protobuf": "^3.21.2",
+    "jose": "^4.14.3",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "protocat": "^0.6.5-beta.1",
+    "sequelize": "^6.29.3",
+    "winston": "^3.8.2"
+  }
+}

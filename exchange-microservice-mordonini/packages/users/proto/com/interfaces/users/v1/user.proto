@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.interfaces.users.v1;
+
+import "com/interfaces/users/v1/bank_account.proto";
+
+message ProtoUser {
+    uint64 id       = 1;
+    string email    = 2;
+    string name     = 3;
+    string surname  = 4;
+    string password = 5;
+    repeated com.interfaces.users.v1.ProtoBankAccount bank_accounts = 6;
+}

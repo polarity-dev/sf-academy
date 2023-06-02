@@ -1,0 +1,595 @@
+openapi: 3.0.3
+info:
+  title: Exchange Microservice
+  description: |-
+    This project has been made as an application for Soluzioni Futura.
+
+    Some useful links:
+    - [Download this file](http://localhost:9003/api-docs/download)
+  contact: 
+    email: albmord@gmail.com
+  license:
+    name: License (Apache)
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:9003/api/v1
+tags:
+  - name: auth
+    description: User authentication
+  - name: transactions
+    description: Buy/Deposit/Withdraw currencies
+paths:
+  /auth/signup:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - auth  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    post:
+      tags:
+        - auth
+      summary: Create user
+      description: Create user
+      operationId: signupUser
+      x-eov-operation-id: signupUser
+      x-eov-operation-handler: routes/signup
+      requestBody:
+        $ref: '#/components/requestBodies/Signup'
+      responses:
+        default:
+          $ref: '#/components/responses/UserAuthenticationResponse'
+  /auth/login:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - auth  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    post:
+      tags:
+        - auth
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      x-eov-operation-id: loginUser
+      x-eov-operation-handler: routes/login
+      requestBody:
+        $ref: '#/components/requestBodies/Login'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserAuthenticationResponse'
+        '404':
+          $ref: '#/components/responses/404ErrorResponse'
+  /transactions:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - transactions  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    get:
+      tags:
+        - transactions
+      summary: List transactions
+      description: List transactions. Authenticated user only. 
+      operationId: listTransactions
+      x-eov-operation-handler: routes/list_transactions
+      parameters:
+        - name: iban
+          in: query
+          description: IBAN
+          required: true
+          schema:
+            type: string
+        - name: beforeThen
+          in: query
+          required: false
+          description: A date-time value to filter transactions
+          schema:
+            $ref: '#/components/schemas/DateTime'
+        - name: afterThen
+          in: query
+          required: false
+          description: A date-time value to filter transactions
+          schema:
+            $ref: '#/components/schemas/DateTime'
+        - name: boughtCurrencies
+          in: query
+          required: false
+          description: list of currency name to filter transactions
+          schema:
+            $ref: '#/components/schemas/CurrencyArray'
+        - name: soldCurrencies
+          in: query
+          required: false
+          description: list of currency name to filter transactions
+          schema:
+            $ref: '#/components/schemas/CurrencyArray'
+      responses:
+        default:
+          $ref: '#/components/responses/TransactionResponse'
+      security:
+        - usersAuth: []
+  /transactions/buy:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - transactions  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    post:
+      tags:
+        - transactions
+      summary: Buy currency
+      description: Buy currency. Authenticated user only. 
+      operationId: buyTransactions
+      x-eov-operation-id: buyTransactions
+      x-eov-operation-handler: routes/buy
+      requestBody:
+        $ref: '#/components/requestBodies/Buy'
+      responses:
+        default:
+          $ref: '#/components/responses/WalletResponse'
+      security:
+        - usersAuth: []      
+  /transactions/deposit:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - transactions  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    post:
+      tags:
+        - transactions
+      summary: Deposit currency
+      description: Deposit currency. Authenticated user only. 
+      operationId: depositTransactions
+      x-eov-operation-id: depositTransactions
+      x-eov-operation-handler: routes/deposit
+      requestBody:
+        $ref: '#/components/requestBodies/Deposit'
+      responses:
+        default:
+          $ref: '#/components/responses/WalletResponse'
+      security:
+        - usersAuth: [] 
+  /transactions/withdraw:
+    options:  
+      x-eov-operation-id: handleCors
+      x-eov-operation-handler: routes/cors
+      summary: CORS support  
+      description: Enable CORS by returning correct headers  
+      tags:  
+        - transactions  
+      responses:  
+        '200':  
+          $ref: '#/components/responses/CORSResponse'
+    post:
+      tags:
+        - transactions
+      summary: Withdraw currency
+      description: Withdraw currency. Authenticated user only. 
+      operationId: withdrawTransactions
+      x-eov-operation-id: withdrawTransactions
+      x-eov-operation-handler: routes/withdraw
+      requestBody:
+        $ref: '#/components/requestBodies/Withdraw'
+      responses:
+        default:
+          $ref: '#/components/responses/WalletResponse'
+      security:
+        - usersAuth: [] 
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+    TransactionType:
+      type: string
+      example: DEPOSIT
+      enum:
+        - DEPOSIT
+        - WITHDRAW
+        - BUY
+    CurrencyType:
+      type: string
+      enum:
+        - USD
+        - JPY
+        - CZK
+        - DKK
+        - GBP
+        - HUF
+        - PLN
+        - RON
+        - SEK
+        - CHF
+        - ISK
+        - NOK
+        - TRY
+        - AUD
+        - BRL
+        - CAD
+        - CNY
+        - HKD
+        - IDR
+        - ILS
+        - INR
+        - KRW
+        - MXN
+        - MYR
+        - NZD
+        - PHP
+        - SGD
+        - THB
+        - ZAR
+        - EUR
+      example: EUR
+    Currency:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/CurrencyType'
+        amount:
+          type: number
+          format: float
+      xml:
+        name: currency
+    User:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          type: string
+          format: password
+        name:
+          type: string
+        surname:
+          type: string
+        bankAccountsList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankAccount'
+      xml:
+        name: user
+    Transaction:
+      type: object
+      required:
+        - bankAccount
+        - transactionType
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          $ref: '#/components/schemas/DateTime'
+        transactionType:
+          $ref: '#/components/schemas/TransactionType'
+        bankAccount:
+          $ref: '#/components/schemas/BankAccount'
+        buyingCurrency:
+          $ref: '#/components/schemas/Currency'
+        sellingCurrency:
+          $ref: '#/components/schemas/Currency'
+      xml:
+        name: transaction
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        currencyName:
+          $ref: '#/components/schemas/Currency'
+        currencyAmount:
+          type: number
+          format: float
+      xml:
+        name: wallet
+    BankAccount:
+      type: object
+      required:
+        - iban
+      properties:
+        id:
+          type: integer
+          format: int64
+        iban:
+          type: string
+        creationDate:
+          $ref: '#/components/schemas/DateTime'
+        userId: 
+          type: integer
+          format: int64
+      xml:
+        name: bankaccount
+    TransactionArray:
+      description: List of transaction object
+      type: array
+      items:
+        $ref: '#/components/schemas/Transaction'
+      xml:
+        name: transactionarray
+    CurrencyArray:
+      description: List of currency object
+      type: array
+      items:
+        $ref: '#/components/schemas/Currency'
+      xml:
+        name: currencyarray
+    WalletArray:
+      description: List of Wallet objects
+      type: array
+      items:
+        $ref: '#/components/schemas/Wallet'
+      xml:
+        name: walletarray
+    Buy:
+      type: object
+      description: object representing a buy request
+      required:
+        - iban
+        - buyingCurrency
+        - sellingCurrency
+      properties:
+        iban:
+          type: string
+        buyingCurrency:
+          required:
+            - name
+            - amount
+          $ref: '#/components/schemas/Currency'
+        sellingCurrency:
+          required:
+            - name
+          $ref: '#/components/schemas/Currency'
+      xml:
+        name: buy
+    Deposit:
+      type: object
+      description: object representing a deposit request
+      required:
+        - iban
+        - currency
+      properties:
+        iban:
+          type: string
+        currency:
+          $ref: '#/components/schemas/Currency'
+    Withdraw:
+      type: object
+      description: object representing a withdraw request
+      required:
+        - iban
+        - currency
+      properties:
+        iban:
+          type: string
+        currency:
+          $ref: '#/components/schemas/Currency'
+    DateTime:
+      type: string
+      description: ISO-8601 full-time format
+      nullable: true
+      format: date-time
+      example: "2012-10-06T04:13:00+00:00"
+    UserAuthentication:
+      type: object
+      description: response containing authentication and user object
+      required:
+        - token
+        - user
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+      xml:
+        name: user-authentication
+    Signup:
+      type: object
+      description: Signup object
+      required:
+        - iban
+        - email
+        - password
+      properties:
+        name: 
+          type: string
+        password:
+          type: string
+        surname: 
+          type: string
+        email:
+          $ref: '#/components/schemas/email'
+        iban:
+          type: string
+      xml: 
+        name: signup
+    Login:
+      type: object
+      description: Login object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          type: string
+      xml:
+        name: login
+    email:
+      type: string
+      format: email
+      pattern: ^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?
+      example: matteo.rossi@gmail.com
+  requestBodies:
+    Withdraw:
+      description: Withdraw Request object 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Withdraw'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Withdraw'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Withdraw'
+    Deposit:
+      description: Deposit Request object 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Deposit'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Deposit'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Deposit'
+    Buy:
+      description: Buy Request object 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Buy'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Buy'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Buy'
+    Signup:
+      description: Signup request object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Signup'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Signup'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Signup'
+    Login:
+      description: Login request object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Login'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Login'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Login'
+    Transaction:
+      description: Transaction request object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transaction'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Transaction'
+        application/x-www-form-urlencoded:
+          schema:
+            $ref: '#/components/schemas/Transaction'
+  securitySchemes:
+    usersAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    200SuccessfulResponse:
+      description: Successful response
+    400ErrorResponse:
+      description: Bad request
+    401ErrorResponse:
+      description: Unauthorized
+    403ErrorResponse:
+      description: Forbidden
+    404ErrorResponse:
+      description: Not found
+    405ErrorResponse:
+      description: Method Not Allowed
+    406ErrorResponse:
+      description: Not Acceptable
+    415ErrorResponse:
+      description: Unsupported Media Type
+    429ErrorResponse:
+      description: Too Many Requests
+    500ErrorResponse:
+      description: Internal Server Error
+    CORSResponse:
+      description: Default response for CORS method  
+      headers:  
+        Access-Control-Allow-Origin:  
+          schema:  
+            type: string  
+        Access-Control-Allow-Methods:  
+          schema:  
+            type: string  
+        Access-Control-Allow-Headers:  
+          schema:  
+            type: string  
+      content: { }  
+    UserAuthenticationResponse:
+      description: Successful authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserAuthentication'
+    WalletResponse:
+      description: Object retrieved after every buy/deposit/withdraw operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WalletArray'
+    TransactionResponse:
+      description: Object retrieved after listTransactions operations
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionArray'

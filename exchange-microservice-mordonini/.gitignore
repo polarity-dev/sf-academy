@@ -1,0 +1,23 @@
+# DS_Store
+.DS_Store
+
+# nodejs libraries
+node_modules/
+
+# proto compiled files
+**/src/proto/
+
+# nodejs compiled javascript
+dist/
+
+# Logs folder
+logs/
+
+# Log files
+*.log
+
+# Test folder
+test/
+
+# DB
+*/database/database-data/

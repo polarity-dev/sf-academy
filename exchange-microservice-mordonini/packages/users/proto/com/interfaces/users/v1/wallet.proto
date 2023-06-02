@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.interfaces.users.v1;
+
+message ProtoWallet {
+    uint64 id               = 1;
+    string currency_name  = 2;
+    float currency_amount   = 3;
+    uint64 bank_account_id  = 4;
+}

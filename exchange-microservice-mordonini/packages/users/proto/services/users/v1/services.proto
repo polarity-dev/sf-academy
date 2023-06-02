@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package services.users.v1;
+
+import "services/users/v1/login.proto";
+import "services/users/v1/signup.proto";
+import "services/users/v1/buy.proto";
+import "services/users/v1/deposit.proto";
+import "services/users/v1/withdraw.proto";
+import "services/users/v1/list_transactions.proto";
+
+service UsersService {
+    rpc Signup(services.users.v1.SignupRequest) 
+        returns (services.users.v1.SignupResponse) {}
+    rpc Login(services.users.v1.LoginRequest) 
+        returns (services.users.v1.LoginResponse) {}
+    rpc BuyCurrency(services.users.v1.BuyCurrencyRequest) 
+        returns (services.users.v1.BuyCurrencyResponse) {}
+    rpc DepositCurrency(services.users.v1.DepositCurrencyRequest) 
+        returns (services.users.v1.DepositCurrencyResponse) {}
+    rpc WithdrawCurrency(services.users.v1.WithdrawCurrencyRequest) 
+        returns (services.users.v1.WithdrawCurrencyResponse) {}
+    rpc ListTransactions(services.users.v1.ListTransactionsRequest) 
+        returns (services.users.v1.ListTransactionsResponse) {}
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package services.exchange.v1;
+
+message ExchangeRequest {
+    string from = 1;
+    string to = 2;
+    float value = 3;
+}
+
+message ExchangeResponse {
+    float result = 1;
+}

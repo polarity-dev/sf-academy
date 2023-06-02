@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "db",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "db-exchange-microservice",
+            "database": "docker",
+            "username": "docker",
+            "password": "docker"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.interfaces.users.v1;
+
+message ProtoTransaction{
+    uint64 id                                   = 1;
+    string transaction_type                     = 2;
+    string bank_account_iban                    = 3;
+    string date                                 = 4;
+    string buying_currency_symbol      = 5;
+    float buying_currency_amount       = 6;
+    string selling_currency_symbol     = 7;
+    float selling_currency_amount      = 8;
+}

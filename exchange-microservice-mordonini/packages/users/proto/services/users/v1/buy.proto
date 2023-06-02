@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package services.users.v1;
+import "com/interfaces/users/v1/wallet.proto";
+
+
+message BuyCurrencyRequest{
+    string token = 1;
+    string iban = 2;
+    string buying_currency = 3;
+    float buying_amount = 4;
+    string selling_currency = 5;
+}
+
+message BuyCurrencyResponse {
+    repeated com.interfaces.users.v1.ProtoWallet wallets = 1;
+}

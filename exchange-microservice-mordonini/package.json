@@ -1,0 +1,42 @@
+{
+  "name": "exchange-microservice",
+  "version": "1.0.0",
+  "description": "Project for Soluzioni Futura",
+  "directories": {
+    "users": "packages/users",
+    "exchange": "packages/exchange",
+    "api": "packages/api",
+    "db": "packages/db",
+    "frontend": "packages/frontend"
+  },
+  "scripts": {
+    "remove:build": "rm -rf packages/users/dist packages/users/src/proto packages/exchange/dist/ packages/exchange/src/proto packages/api/dist packages/api/src/proto packages/frontend/dist",
+    "build": "yarn install && yarn run remove:build && yarn run build:exchange && yarn run build:users && yarn build:api && yarn build:frontend && yarn keygen",
+    "build:users": "cd packages/users/ && yarn run build:proto && yarn run build:ts",
+    "build:exchange": "cd packages/exchange/ && yarn run build:proto && yarn run build:ts",
+    "build:api": "cd packages/api/ && yarn run build",
+    "build:frontend": "cd packages/frontend && yarn build",
+    "build:prod": "docker compose -f docker-compose-production.yml build",
+    "lint": "yarn eslint packages/**/src",
+    "keygen": "./tools/grpc_key_gen_edited.sh && ./tools/jwt_gen_key.sh",
+    "start": "docker compose up",
+    "start:prod": "docker compose -f docker-compose-production.yml up"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.38.0",
+    "typescript": "^5.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/mralby/exchange-microservice"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
