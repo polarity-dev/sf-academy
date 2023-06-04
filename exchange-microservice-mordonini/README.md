@@ -50,7 +50,7 @@ Questo comando installa tutti i package necessari al progetto e compila i file `
 
 (Opzionale) Dopo aver eseguito comando, è possibile effettuare la build delle immagini docker:
 ```bash
-yarn build:docker-images
+yarn build:prod
 ```
 Questo comando genera le immagini seguendo le configurazioni contenute in `docker-compose-production.yml`. Ogni microservizio avrà la sua immagine dedicata.
 ### Avvio
