@@ -6,6 +6,7 @@ import fs from 'fs'
 import YAML from 'yaml'
 import bodyParser from 'body-parser'
 import swaggerUi from 'swagger-ui-express'
+import cors from 'cors'
 
 const {
     PORT = 9003,
@@ -28,11 +29,8 @@ app.use(morgan(NODE_ENV))
 app.use('/api-docs/download', express.static(apiSpec))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiYamlFile))
 
-// Attach CORS Header on every request
-app.use((req: Request, res: Response, next: NextFunction) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    next()
-})
+// CORS middleware
+app.use(cors())
 
 // Install OpenApi Validator
 app.use(

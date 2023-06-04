@@ -21,16 +21,6 @@ tags:
     description: Buy/Deposit/Withdraw currencies
 paths:
   /auth/signup:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - auth  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     post:
       tags:
         - auth
@@ -45,16 +35,6 @@ paths:
         default:
           $ref: '#/components/responses/UserAuthenticationResponse'
   /auth/login:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - auth  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     post:
       tags:
         - auth
@@ -71,16 +51,6 @@ paths:
         '404':
           $ref: '#/components/responses/404ErrorResponse'
   /transactions:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - transactions  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     get:
       tags:
         - transactions
@@ -125,16 +95,6 @@ paths:
       security:
         - usersAuth: []
   /transactions/buy:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - transactions  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     post:
       tags:
         - transactions
@@ -151,16 +111,6 @@ paths:
       security:
         - usersAuth: []      
   /transactions/deposit:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - transactions  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     post:
       tags:
         - transactions
@@ -177,16 +127,6 @@ paths:
       security:
         - usersAuth: [] 
   /transactions/withdraw:
-    options:  
-      x-eov-operation-id: handleCors
-      x-eov-operation-handler: routes/cors
-      summary: CORS support  
-      description: Enable CORS by returning correct headers  
-      tags:  
-        - transactions  
-      responses:  
-        '200':  
-          $ref: '#/components/responses/CORSResponse'
     post:
       tags:
         - transactions
