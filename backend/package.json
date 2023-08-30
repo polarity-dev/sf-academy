@@ -1,12 +1,11 @@
 {
-  "name": "sf-academy",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "istruzioni, materiale di studio e prove per candidarsi ad SF Academy",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node dist/app.js",
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon -L app.ts",
     "build": "tsc -p ."
   },
   "keywords": [],

@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  backend:
+    container_name: backend
+    stdin_open: true
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    restart: unless-stopped

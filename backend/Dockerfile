@@ -1,15 +1,12 @@
-FROM node:16 as base
+FROM node:alpine
+WORKDIR /app
 
-WORKDIR /home/node/app
+COPY package*.json .
 
-COPY package*.json ./
-
-RUN npm i
+COPY tsconfig.json ./
 
 COPY . .
 
-FROM base as production
+RUN npm install
 
-ENV NODE_PATH=./build
-
-RUN npm run build
+CMD ["npm", "run", "dev"]

@@ -1,0 +1,14 @@
+{
+  "name": "sf-academy",
+  "description": "istruzioni, materiale di studio e prove per candidarsi ad SF Academy",
+  "version": "1.0.0",
+  "scripts": {
+    "docker:build": "docker-compose -p sf_academy build",
+    "docker:up": "docker-compose -p sf_academy up",
+    "docker:down": "docker-compose -p sf_academy down",
+    "docker:down:volumes": "docker-compose -p sf_academy down --volumes"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
