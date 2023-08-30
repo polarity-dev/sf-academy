@@ -1,5 +1,19 @@
 version: "3.9"
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: db_pass
+      POSTGRES_DB: academyDB
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   backend:
     container_name: backend
     stdin_open: true
@@ -9,3 +23,8 @@ services:
     ports:
       - '3000:3000'
     restart: unless-stopped
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:
