@@ -39,6 +39,8 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
+    volumes:
+      - ./backend:/app
 
 volumes:
   postgres-data:
