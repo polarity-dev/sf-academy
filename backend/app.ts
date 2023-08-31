@@ -38,9 +38,28 @@ app.post(
   }
 );
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+app.get("/pendingData", express.json(), (req: Request, res: Response) => {
+  res.send({ data: buffer.default.getAll() })
+  res.end()
+})
+
+app.get("/data", express.json(), async (req: Request, res: Response) => {
+  let from = req.query.from;
+  const limit = req.query.limit;
+  let result;
+
+  if (limit !== undefined && from !== undefined)
+    result = await db.query('SELECT * FROM Messages WHERE t >= $1 ORDER BY t DESC LIMIT $2', [from, limit]);
+  else if (limit !== undefined)
+    result = await db.query('SELECT * FROM Messages ORDER BY t DESC LIMIT $1', [limit]);
+  else if (from !== undefined)
+    result = await db.query('SELECT * FROM Messages WHERE t >= $1 ORDER BY t DESC', [from]);
+  else
+    result = await db.query('SELECT * FROM Messages ORDER BY t DESC');
+
+  res.send({ data: result.rows })
+  res.end()
+})
 
 // use db transaction to improve performance
 cron.schedule("*/10 * * * * *", async () => {
@@ -66,12 +85,16 @@ cron.schedule("*/10 * * * * *", async () => {
         await client.query(queryText, queryValues);
       }
     }
-    
+
     await client.query('COMMIT');
-  } catch(e) {
+  } catch (e) {
     await client.query('ROLLBACK');
     console.log(e);
   } finally {
     client.release();
   }
+});
+
+app.listen(port, () => {
+  return console.log(`Express is listening at http://localhost:${port}`);
 });

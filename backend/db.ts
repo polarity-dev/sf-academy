@@ -1,5 +1,5 @@
 import { Pool } from 'pg'
- 
+
 export const pool = new Pool({
   user: 'db_user',
   host: 'postgres',
@@ -8,6 +8,6 @@ export const pool = new Pool({
   port: 5432,
 })
 
-export const query = (text) => {
-  return pool.query(text)
+export const query = (text, params?) => {
+  return pool.query(text, params)
 }
