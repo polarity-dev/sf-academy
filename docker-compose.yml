@@ -27,6 +27,8 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     restart: unless-stopped
+    logging:
+      driver: none
 
   backend:
     container_name: backend
