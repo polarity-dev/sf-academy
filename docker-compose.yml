@@ -44,6 +44,17 @@ services:
     volumes:
       - ./backend:/app
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend:/app
+    restart: unless-stopped
+
 volumes:
   postgres-data:
   pgadmin-data:
