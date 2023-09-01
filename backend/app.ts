@@ -1,25 +1,32 @@
 import express, { Application, Request, Response } from "express";
 import cron from "node-cron";
+import cors from "cors";
+import multer from "multer";
 import * as buffer from "./singleton_buffer";
-import * as db from "./db"
+import * as db from "./db";
 
 const app: Application = express();
 const port = 3000;
 
-// app.use(express.json())
-
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.send("Ciao!");
-});
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
-// use express.text() to set the header to "text/plain"
+let storage = multer.memoryStorage();
+let upload = multer({ storage: storage });
+
+// use in-memory multer option so that we avoid storing
+// our data in a file, this speeds things up
 app.post(
   "/importDataFromFile",
-  express.text(),
+  upload.single("data"),
   (req: Request, res: Response) => {
-    const plainText: string = req.body;
+    const plainText: string = String(req.file.buffer);
     // we split each line when there's a carriage return
     const lines: string[] = plainText.split(/\r?\n/);
     const A: number = Number(lines[0].split(" ")[0]);
@@ -39,27 +46,22 @@ app.post(
 );
 
 app.get("/pendingData", express.json(), (req: Request, res: Response) => {
-  res.send({ data: buffer.default.getAll() })
-  res.end()
-})
+  res.send({ data: buffer.default.getAll() });
+  res.end();
+});
 
 app.get("/data", express.json(), async (req: Request, res: Response) => {
-  let from = req.query.from;
+  let from = new Date(req.query.from.toString());
   const limit = req.query.limit;
-  let result;
 
-  if (limit !== undefined && from !== undefined)
-    result = await db.query('SELECT * FROM Messages WHERE t >= $1 ORDER BY t DESC LIMIT $2', [from, limit]);
-  else if (limit !== undefined)
-    result = await db.query('SELECT * FROM Messages ORDER BY t DESC LIMIT $1', [limit]);
-  else if (from !== undefined)
-    result = await db.query('SELECT * FROM Messages WHERE t >= $1 ORDER BY t DESC', [from]);
-  else
-    result = await db.query('SELECT * FROM Messages ORDER BY t DESC');
+  const result = await db.query(
+    "SELECT * FROM Messages WHERE t > $1 ORDER BY t DESC LIMIT $2",
+    [from, limit]
+  );
 
-  res.send({ data: result.rows })
-  res.end()
-})
+  res.send({ data: result.rows });
+  res.end();
+});
 
 // use db transaction to improve performance
 cron.schedule("*/10 * * * * *", async () => {
@@ -67,10 +69,10 @@ cron.schedule("*/10 * * * * *", async () => {
   let i = 5; // we start from the highest priority
   let timestamp = new Date();
   let messageLine = undefined;
-  const client = await db.pool.connect()
+  const client = await db.pool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     while (N < 15 && i > 0) {
       N++;
@@ -79,16 +81,17 @@ cron.schedule("*/10 * * * * *", async () => {
       // undefined means that there are no messages left with that priority
       if (messageLine === undefined) i--;
       else {
-        const queryText: string = "INSERT INTO Messages (k, d, t) VALUES ($1, $2, $3)";
+        const queryText: string =
+          "INSERT INTO Messages (k, d, t) VALUES ($1, $2, $3)";
         const queryValues: any = [messageLine[0], messageLine[1], timestamp];
 
         await client.query(queryText, queryValues);
       }
     }
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
   } catch (e) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     console.log(e);
   } finally {
     client.release();
