@@ -10,8 +10,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node-cron": "^3.0.8"
-  }
+  "license": "ISC"
 }
