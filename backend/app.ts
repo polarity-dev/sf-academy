@@ -33,10 +33,16 @@ app.post(
     const B: number = Number(lines[0].split(" ")[1]);
 
     for (let i: number = A; i <= B; i++) {
-      const line: string[] = lines[i].split(" ");
-      const P: number = Number(line[0]);
-      const K: number = Number(line[1]);
-      const D: string = line[2];
+      const line: string = lines[i];
+      //isolate P
+      const P: number = Number(line.substring(0, line.indexOf(" ")));
+
+      const partialLine: string = line.substring(line.indexOf(" ") + 1); // contains everything except P
+
+      const K: number = Number(
+        partialLine.substring(0, partialLine.indexOf(" "))
+      );
+      const D: string = partialLine.substring(partialLine.indexOf(" ") + 1);
 
       buffer.default.push(P, [K, D]);
     }
