@@ -1,0 +1,27 @@
+11 17
+2 -160 imperdiet
+3 129 pharetra tellus nec
+1 -133 ipsum natoque
+2 24 dapibus
+2 78 libero
+2 167 morbi
+5 178 dictum elit feugiat
+3 130 lectus
+2 9 proin consectetur
+3 62 quis
+2 -117 suscipit nascetur morbi
+5 189 commodo proin velit
+4 -143 nisi
+5 71 leo arcu sem
+2 63 dolor egestas mi
+2 -176 fermentum pharetra
+4 48 faucibus ullamcorper convallis
+4 -88 aliqua
+2 -126 feugiat
+1 -143 aliquet eiusmod ac
+5 -154 eros erat proin
+4 200 iaculis
+3 -188 mattis
+3 -186 et
+5 169 magnis parturient porttitor
+4 20 donec amet
