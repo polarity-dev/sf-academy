@@ -1,8 +1,3 @@
-interface IQueue {
-  K: number,
-  D: string
-}
-
 class SingletonBuffer {
   private static instance: SingletonBuffer;
   private queues: any[][] = [];
@@ -15,8 +10,7 @@ class SingletonBuffer {
   }
 
   public static getInstance(): SingletonBuffer {
-    if (!SingletonBuffer.instance)
-      this.instance = new SingletonBuffer();
+    if (!SingletonBuffer.instance) this.instance = new SingletonBuffer();
 
     return this.instance;
   }
@@ -39,9 +33,9 @@ class SingletonBuffer {
     return all;
   }
 
-  public get(n: number): any[] {
+  public peek(n: number): any[] {
     return this.queues[n];
   }
 }
 
-export default SingletonBuffer.getInstance()
+export default SingletonBuffer.getInstance();
