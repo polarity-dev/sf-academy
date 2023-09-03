@@ -5,15 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/tailwind-datepicker-react/dist/**/*.js",
   ],
-  theme: {
-    extend: {},
-  },
+  darkMode: "class",
   plugins: [
-    require('flowbite/plugin')({
+    require("flowbite/plugin")({
       charts: true,
       forms: true,
-      tooltips: true
+      tooltips: true,
     }),
   ],
-}
-
+};
