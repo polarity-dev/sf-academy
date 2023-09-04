@@ -115,8 +115,8 @@ const App = () => {
                 <tbody>
                   {pendingData.map((dataObj) => (
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                      <td className="px-6 py-4">{dataObj.K}</td>
-                      <td className="px-6 py-4">{dataObj.D}</td>
+                      <td className="px-6 py-4">{dataObj.k}</td>
+                      <td className="px-6 py-4">{dataObj.d}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -11,7 +11,7 @@ if (fileExtension !== "txt")
 
 const N = Math.floor(Math.random() * (51 - 1) + 1); //The maximum is exclusive and the minimum is inclusive
 const B = Math.floor(Math.random() * (N + 1));
-const A = Math.floor(Math.random() * (B + 1));
+const A = Math.floor(Math.random() * B + 1);
 
 const stream = fs.createWriteStream(fileName);
 stream.once("open", (fd) => {

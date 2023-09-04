@@ -1,12 +1,4 @@
-interface IQueueItem {
-  k: number;
-  d: string;
-}
-
-interface INode<IQueueItem> {
-  p: number; //key
-  value: IQueueItem;
-}
+import { IQueueItem, INode } from "./types";
 
 class SingletonPriorityQueue {
   private static instance: SingletonPriorityQueue;
@@ -23,10 +15,13 @@ class SingletonPriorityQueue {
     return this.instance;
   }
 
+  // we append a new node at the bottom right of the tree
+  // Then we restore the right order by:
+  // - compare the key of new node with its parent
+  // - swap if new node's priority is bigger
+  // - repeat until parent priority is bigger or new node is on top of the tree
   public push(item: IQueueItem, p: number) {
-    console.log(p + " " + item.k + " " + item.d);
-    this._heap.push({ p: p, value: item });
-    console.log(this.toArray());
+    this._heap.push({ p, value: item });
 
     let i = this._heap.length - 1;
     while (i > 0) {
@@ -34,8 +29,8 @@ class SingletonPriorityQueue {
       if (this._heap[parent].p > this._heap[i].p) break;
       // Heapify
       const tmp = this._heap[i];
-      this._heap[i] = this._heap[p];
-      this._heap[p] = tmp;
+      this._heap[i] = this._heap[parent];
+      this._heap[parent] = tmp;
       i = parent;
     }
   }
@@ -72,7 +67,7 @@ class SingletonPriorityQueue {
   }
 
   public toArray() {
-    return [...this._heap];
+    return this._heap.map((item) => item.value);
   }
 
   public isEmpty() {
