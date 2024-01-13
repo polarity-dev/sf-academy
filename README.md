@@ -33,43 +33,19 @@ ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramit
 
 ### Web Development
 
-- [GIT](http://rogerdudler.github.io/git-guide/index.it.html)
 - [GIT guida tascabile](https://rogerdudler.github.io/git-guide/index.html)
-- [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol)
-- [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML)
-- [CSS](https://developer.mozilla.org/en-US/docs/Learn/CSS/Introduction_to_CSS)
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-- [Corso “javascripting”](https://nodeschool.io)
-- [NodeJS](https://nodejs.org/en/)
-- [Corso “learnyounode”](https://nodeschool.io)
-- [Benefits of a database](https://opentextbc.ca/dbdesign01/chapter/chapter-3-characteristics-and-benefits-of-a-database/)
-- [MySQL](https://www.w3schools.com/sql/default.asp)
-- [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)
-- [RPC/REST](https://blog.jscrambler.com/rpc-style-vs-rest-web-apis)
-- [GRPC](https://grpc.io/docs/)
-
-### Infrastruttura
-
-- [Getting started with AWS EC2](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/get-set-up-for-amazon-ec2.html)
-- [Ipv4 networking on AWS](https://docs.aws.amazon.com/vpc/latest/userguide/getting-started-ipv4.html)
-- [DNS on AWS Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html)
-- [LAMP stack on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-lamp-amazon-linux-2.html)
-- [Hosting Wordpress on AWS](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hosting-wordpress.html)
-- [Docker: Getting Started](https://docs.docker.com/get-started/)
-- [Terraform](https://www.terraform.io/)
-- [AWS ECS](https://aws.amazon.com/ecs/)
-
-### IoT
-- [MQTT](https://en.wikipedia.org/wiki/MQTT)
-- [AWS IoT Core](https://aws.amazon.com/iot-core/)
-
-### Blockchain
-
-- [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf)
-- [Ethereum whitepaper](http://blockchainlab.com/pdf/Ethereum_white_paper-a_next_generation_smart_contract_and_decentralized_application_platform-vitalik-buterin.pdf)
-- [Solidity](https://solidity.readthedocs.io/en/v0.4.24/index.html)
-- [Truffle suite](https://truffleframework.com/docs/truffle/overview) 
-- [Ethereum Geth JSON-RPC](https://github.com/ethereum/wiki/wiki/JSON-RPC)
-- [Infura](https://infura.io/)
-- [web3.js](https://web3js.readthedocs.io/en/1.0/index.html)
-- [web3.py](https://web3py.readthedocs.io/en/v3.16.5/) 
+- [NodeSchool](https://nodeschool.io/)
+  - [Corso “javascripting”](https://github.com/workshopper/javascripting)
+  - [Corso “learnyounode”](https://github.com/workshopper/learnyounode)
+- [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web)
+  - [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML)
+  - [CSS](https://developer.mozilla.org/en-US/docs/Learn/CSS)
+  - [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
+  - [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+- [Developer roadmap](https://roadmap.sh/)
+  - [NodeJS](https://roadmap.sh/nodejs)
+  - [Typescript](https://roadmap.sh/typescript)
+  - [Frontend](https://roadmap.sh/frontend)
+  - [Backend](https://roadmap.sh/backend)
+  - [PosgreSQL](https://roadmap.sh/postgresql-dba)
+  - [Docker](https://roadmap.sh/docker)
