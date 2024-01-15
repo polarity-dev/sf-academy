@@ -12,6 +12,8 @@ ogni utente può candidarsi a sostenere una delle seguenti prove suddivise per a
 
 - [intern-developer.md](./prove/intern-developer.md) <img src = "https://img.shields.io/static/v1?label=level&message=easy&color=green"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
 
+- [intern-developer-plus.md](./prove/intern-developer-plus.md) <img src = "https://img.shields.io/static/v1?label=level&message=medium&color=orange"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
+
 - [exchange-microservice.md](./prove/exchange-microservice.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=microservices&color=informational">
 
 - [crypto-exchange.md](./prove/crypto-exchange.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=blockchain&color=informational">
@@ -37,11 +39,6 @@ ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramit
 - [NodeSchool](https://nodeschool.io/)
   - [Corso “javascripting”](https://github.com/workshopper/javascripting)
   - [Corso “learnyounode”](https://github.com/workshopper/learnyounode)
-- [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web)
-  - [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML)
-  - [CSS](https://developer.mozilla.org/en-US/docs/Learn/CSS)
-  - [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/JavaScript)
-  - [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
 - [Developer roadmap](https://roadmap.sh/)
   - [NodeJS](https://roadmap.sh/nodejs)
   - [Typescript](https://roadmap.sh/typescript)
@@ -49,3 +46,4 @@ ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramit
   - [Backend](https://roadmap.sh/backend)
   - [PosgreSQL](https://roadmap.sh/postgresql-dba)
   - [Docker](https://roadmap.sh/docker)
+- [HTMX](https://htmx.org/)
