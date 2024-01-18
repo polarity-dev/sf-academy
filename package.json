@@ -1,0 +1,25 @@
+{
+  "name": "interndeveloperplus",
+  "version": "1.0.0",
+  "description": "Intern Developer Plus admission task - SF Academy",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon index.ts",
+    "dev": "nodemon --exec npx tsx index.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "chillFil",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.3",
+    "htmx.org": "^1.9.10",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "@types/express-fileupload": "^1.4.4",
+    "@types/pg": "^8.10.9",
+    "nodemon": "^3.0.2"
+  }
+}
