@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <title>Intern Developer Plus</title>
+</head>
+<body class="bg-gray-100 p-8">
+    <div>
+        <h1 class="text-2xl font-bold mb-4">File Upload</h1>
+        <form hx-post="/importDataFromFile" hx-encoding="multipart/form-data" hx-target="#uploadResponce">
+            <input type="file" name="file" accept=".txt" required>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Upload</button>
+        </form>
+        <p id="uploadResponce"></p>
+    </div>
+
+    <div class="mt-8">
+        <h1 class="text-2xl font-bold mb-4">Pending Data</h1>
+        <button hx-get="/pendingData" hx-target="#pendingResponce" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Refresh</button>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">PRIORITY</th>
+                    <th class="py-2 px-4 border-b">DATA</th>
+                </tr>
+            </thead>
+            <tbody id="pendingResponce">
+                <tr>
+                    <td></td>
+                    <td class="py-2 px-4 border-b text-center">Data retrived from the query will be shown here</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-8">
+        <h1 class="text-2xl font-bold mb-4">Database Query</h1>
+        <form hx-get="/data" hx-target="#queryResponce">
+            <label for="limit">Limit:</label>
+            <input type="number" name="limit" id="limit" class="mr-4" min="0">
+            
+            <label for="from">From:</label>
+            <input type="datetime-local" name="from" id="from" class="mr-4">
+
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Query</button>
+        </form>
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">ID</th>
+                    <th class="py-2 px-4 border-b">DATA</th>
+                    <th class="py-2 px-4 border-b">TIMESTAMP</th>
+                </tr>
+            </thead>
+            <tbody id="queryResponce">
+                <tr>
+                    <td></td>
+                    <td class="py-2 px-4 border-b text-center">Data retrived from the query will be shown here</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        htmx.on("htmx:beforeSwap", function(evt) {
+            if (evt.detail.xhr.status == 400) {
+                evt.detail.shouldSwap = true;
+                evt.detail.isError = false;
+            }
+        });
+        htmx.on("htmx:afterSwap", function(evt) {
+            if (evt.detail.target.id == "queryResponce") {
+                var data = JSON.parse(evt.detail.xhr.response);
+                var table = document.getElementById("queryResponce");
+                table.innerHTML = "";
+                for (var i = 0; i < data.length; i++) {
+                    var row = table.insertRow(i);
+                    var id = row.insertCell(0);
+                    var dataCell = row.insertCell(1);
+                    var timestamp = row.insertCell(2);
+                    id.innerHTML = data[i].id;
+                    id.className = "text-center";
+                    dataCell.innerHTML = data[i].data;
+                    dataCell.className = "text-center";
+                    timestamp.innerHTML = data[i].timestamp;
+                    timestamp.className = "text-center";
+                }
+            }
+            if (evt.detail.target.id == "pendingResponce") {
+                var data = JSON.parse(evt.detail.xhr.response);
+                var table = document.getElementById("pendingResponce");
+                table.innerHTML = "";
+                for (var i = 0; i < data.length; i++) {
+                    var row = table.insertRow(i);
+                    var priority = row.insertCell(0);
+                    var dataCell = row.insertCell(1);
+                    priority.innerHTML = data[i].priority;
+                    priority.className = "text-center";
+                    dataCell.innerHTML = data[i].data;
+                    dataCell.className = "text-center";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS data (
+    id SERIAL PRIMARY KEY,
+    data TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT NOW()
+)
