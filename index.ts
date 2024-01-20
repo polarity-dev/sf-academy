@@ -8,32 +8,28 @@ import dotenv from 'dotenv';
 dotenv.config()
 const db = new Pool({
     user: process.env.POSTGRES_USER,
-    host: 'localhost',
+    host: 'postgres',
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
     port: parseInt(process.env.POSTGRES_PORT!),
 });
 
-
 //App setup
 const app: any = express();
 app.use(fileUpload());
 app.use(express.static('public'));
+
+//App state
 interface Data {
     priority: number;
     data: string;
 }
-
-//App state
 let data: Data[] = [];
 let processing: boolean = false;
-const MAX_LINES_ALLOWED: number = 50;
 
 //Functions
 function parseTXT(file: any) {
     const lines: string[] = file.data.toString().split('\n');
-    if (lines.length > MAX_LINES_ALLOWED)
-        return false;
     for (let i = 0; i < lines.length; i++) {
         let priority: number = parseInt(lines[i].charAt(0));
         if (isNaN(priority))
@@ -70,6 +66,7 @@ async function importData() {
         return true;
     }
     catch (error) {
+        console.log(error);
         processing = false;
         return false;
     }
@@ -85,6 +82,7 @@ async function dbQuery(limit: number, from: number) {
         let result = await db.query(query);
         return result.rows;
     } catch (error) {
+        console.log(error);
         return [];
     }
 }
@@ -104,7 +102,7 @@ app.post('/importDataFromFile', (req: any, res: any) => {
     if (file.mimetype !== 'text/plain')
         return res.status(400).send('File is not a text file.');
     if (!parseTXT(file))
-        return res.status(400).send('File is too long.');
+        return res.status(400).send('File is formatted incorrectly.');
 
     if (!processing)
         if (!importData())
@@ -135,7 +133,7 @@ app.get('/data', async (req: any, res: any) => {
         return res.status(400).send('DB offline');
     return res.send(dbResponce);
 });
-app.listen(3000, () => {
-    console.log('Server listening on port 3000');
+app.listen(process.env.WEBAPP_PORT || 3000, () => {
+    console.log(`Server listening on port ${process.env.WEBAPP_PORT || 3000}`);
     return;
 });
