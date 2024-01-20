@@ -4,6 +4,5 @@ This is my attempt.
 
 ## Installing
 1. Clone the repository using GitHub CLI: ``` gh repo clone chillFil/sf-academy ```
-2. Create and start the DB with Docker: ```docker compose up -d```
-3. Install the required node modules: ```npm i```
-4. Start the web server: ```npm start```
+2. Then simply start the app with Docker: ```docker compose up -d```
+3. Connect to [localhost:3000](http://localhost:3000) and have fun!
