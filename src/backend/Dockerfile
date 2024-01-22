@@ -13,9 +13,6 @@ RUN npm install
 # Copy the rest of the application's code
 COPY . .
 
-# Build the application (if necessary)
-RUN npm run build
-
 # Make port 3000 available outside this container
 EXPOSE 3000
 
