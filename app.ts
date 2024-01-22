@@ -9,7 +9,7 @@ import readline from 'readline';
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const upload = multer({ dest: 'uploads/' }); // Multer configuration
 
@@ -23,27 +23,39 @@ const dbPool = new Pool({
   port: 5432, // default PostgreSQL port
 });
 
-app.get('/init-db', async (req, res) => {
+async function initializeDatabase() {
+  const client = await dbPool.connect();
   try {
-    const createTablesQuery = `
-        CREATE TABLE IF NOT EXISTS pending_data (
-            id SERIAL PRIMARY KEY,
-            priority INTEGER NOT NULL CHECK (priority >= 1 AND priority <= 5),
-            data TEXT NOT NULL,
-            created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        );
-        CREATE TABLE IF NOT EXISTS processed_data (
-            id SERIAL PRIMARY KEY,
-            data TEXT NOT NULL,
-            processed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-        );
+    // SQL query to create the 'pending_data' table if it does not exist
+    const createPendingDataTableQuery = `
+      CREATE TABLE IF NOT EXISTS pending_data (
+        id SERIAL PRIMARY KEY,
+        priority INTEGER NOT NULL CHECK (priority >= 1 AND priority <= 5),
+        data TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
     `;
-    await dbPool.query(createTablesQuery);
-    res.send('Database initialized successfully');
+    // SQL query to create the 'processed_data' table if it does not exist
+    const createProcessedDataTableQuery = `
+      CREATE TABLE IF NOT EXISTS processed_data (
+        id SERIAL PRIMARY KEY,
+        data TEXT NOT NULL,
+        processed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
+    await client.query(createPendingDataTableQuery);
+    await client.query(createProcessedDataTableQuery);
   } catch (error) {
-    console.error('Error initializing database:', error);
-    res.status(500).send('Failed to initialize database');
+    console.error('Failed to initialize the database:', error);
+    throw error;
+  } finally {
+    client.release();
   }
+}
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.post('/importDataFromFile', upload.single('datafile'), async (req, res) => {
@@ -168,10 +180,17 @@ const processImportQueue = async () => {
   }
 };
 
-// Start the polling service
-processImportQueue();
-
 const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+initializeDatabase()
+  .then(() => {
+    // Start the polling service
+    processImportQueue();
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error during server initialization:', error);
+    process.exit(1);
+  });

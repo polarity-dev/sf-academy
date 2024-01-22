@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build: ./src/backend  # Specify the directory, not the Dockerfile
+    build: .
     ports:
       - "3000:3000"
     environment:
