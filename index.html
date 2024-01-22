@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload File</title>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900 text-white p-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold mb-4">Upload File</h1>
+      <form
+        class="ml-6"
+        hx-post="/importDataFromFile"
+        hx-encoding="multipart/form-data"
+        hx-target="#dest"
+      >
+        <div class="mb-4">
+          <label class="block text-sm mb-2" for="file" id="dest"
+            >Choose a file</label
+          >
+          <input
+            type="file"
+            name="file"
+            id="file"
+            accept=".txt"
+            required
+            class="bg-gray-800 text-white p-2 rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded select-none"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <button
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mb-5 select-none"
+      hx-get="/pendingData"
+      hx-target="#showPendingData"
+    >
+      Show Pending Data
+    </button>
+    <button
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 mb-5 select-none ml-8"
+      hx-get="/data"
+      hx-target="#showData"
+    >
+      Show Data
+    </button>
+    <div class="flex mb-8">
+      <div class="w-1/2 bg-gray-800 p-4 text-center">
+        <h2 class="text-xl font-bold mb-2">Pending data</h2>
+        <table class="w-full table-fixed border border-gray-300">
+          <thead>
+            <tr>
+              <th class="border border-gray-300 text-center text-lg">
+                Priority
+              </th>
+              <th class="border border-gray-300 text-center text-lg">Data</th>
+            </tr>
+          </thead>
+          <tbody id="showPendingData"></tbody>
+        </table>
+      </div>
+      <div class="w-1/2 bg-gray-800 p-4 text-center">
+        <h2 class="text-xl font-bold mb-2">Data</h2>
+        <table class="w-full table-fixed border border-gray-300">
+          <thead>
+            <tr>
+              <th class="border border-gray-300 text-center text-lg">Id</th>
+              <th class="border border-gray-300 text-center text-lg">Data</th>
+              <th class="border border-gray-300 text-center text-lg">
+                Timestamp
+              </th>
+            </tr>
+          </thead>
+          <tbody id="showData"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <form hx-get="/data" hx-target="#showFilterData">
+        <div class="mb-4">
+          <label class="block text-sm mb-2" for="number">Limit:</label>
+          <input
+            type="number"
+            id="number"
+            name="limit"
+            class="bg-gray-800 text-white p-2 rounded"
+            min="1"
+            value="1"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm mb-2" for="date">Date:</label>
+          <input
+            type="datetime-local"
+            id="date"
+            name="from"
+            class="bg-gray-800 text-white p-2 rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded select-none"
+        >
+          Search
+        </button>
+      </form>
+    </div>
+
+    <div id="filteredData" class="mt-8 p-4 bg-gray-800 text-white">
+      <h1 class="text-xl font-bold mb-2">Filtered Data</h1>
+      <table class="w-full table-fixed border border-gray-300">
+        <thead>
+          <tr>
+            <th class="border border-gray-300 text-center text-lg">Priority</th>
+            <th class="border border-gray-300 text-center text-lg">Data</th>
+            <th class="border border-gray-300 text-center text-lg">
+              Timestamp
+            </th>
+          </tr>
+        </thead>
+        <tbody id="showFilterData"></tbody>
+      </table>
+    </div>
+
+    <script>
+      htmx.on("htmx:beforeSwap", function (evt) {
+        if (evt.detail.xhr.status == 400) {
+          evt.detail.isError = false;
+          evt.detail.shouldSwap = true;
+        }
+      });
+      htmx.on("htmx:afterSwap", function (evt) {
+        if (evt.detail.target.id == "showFilterData") {
+          let data = JSON.parse(evt.detail.xhr.response);
+          let table = document.getElementById("showFilterData");
+          table.innerHTML = "";
+          for (let i = 0; i < data.length; i++) {
+            console.log(data[i]);
+            let row = table.insertRow(i);
+            let priority = row.insertCell(0);
+            let dataCell = row.insertCell(1);
+            let timestamp = row.insertCell(2);
+            priority.innerHTML = data[i].id;
+            priority.className = "border border-gray-300 text-center";
+            dataCell.innerHTML = data[i].stringa;
+            dataCell.className = "border border-gray-300 text-center";
+            timestamp.innerHTML = data[i].timestamp;
+            timestamp.className = "border border-gray-300 text-center";
+          }
+        }
+      });
+      htmx.on("htmx:afterSwap", function (evt) {
+        if (evt.detail.target.id == "showData") {
+          let data = JSON.parse(evt.detail.xhr.response);
+          let table = document.getElementById("showData");
+          table.innerHTML = "";
+          for (let i = 0; i < data.length; i++) {
+            let row = table.insertRow(i);
+            let id = row.insertCell(0);
+            let dataCell = row.insertCell(1);
+            let timestamp = row.insertCell(2);
+            id.innerHTML = data[i].id;
+            id.className = "border border-gray-300 text-center";
+            dataCell.innerHTML = data[i].stringa;
+            dataCell.className = "border border-gray-300 text-center";
+            timestamp.innerHTML = data[i].timestamp;
+            timestamp.className = "border border-gray-300 text-center";
+          }
+        }
+      });
+      htmx.on("htmx:afterSwap", function (evt) {
+        if (evt.detail.target.id == "showPendingData") {
+          let data = JSON.parse(evt.detail.xhr.response);
+          let table = document.getElementById("showPendingData");
+          table.innerHTML = "";
+          for (let i = 0; i < data.length; i++) {
+            console.log(data[i].toString());
+            let row = table.insertRow(i);
+            let priority = row.insertCell(0);
+            let dataCell = row.insertCell(1);
+            priority.innerHTML = data[i].priority;
+            priority.className = "border border-gray-300 text-center";
+            dataCell.innerHTML = data[i].string;
+            dataCell.className = "border border-gray-300 text-center";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

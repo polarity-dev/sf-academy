@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  application:
+    build:
+      context: .
+      dockerfile: ./dockerfile
+    container_name: application
+    ports:
+      - ${WEBAPP_PORT}:${WEBAPP_PORT}
+    volumes:
+      - type: volume
+        source: node_modules
+        target: /usr/src/app/node_modules
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      TZ: ${POSTGRES_TIMEZONE}
+    volumes:
+      - type: bind
+        source: ./createTable.sql
+        target: /docker-entrypoint-initdb.d/createTable.sql
+
+volumes:
+  node_modules:
