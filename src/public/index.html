@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org"></script>
+</head>
+
+<body class="p-6">
+  <h1 class="text-3xl font-bold mb-4">Application Dashboard</h1>
+
+  <div>
+    <h2 class="text-2xl font-bold mb-2">Upload Data File</h2>
+    <form hx-post="/importDataFromFile" hx-enc-type="multipart/form-data" hx-target="#messages" hx-swap="outerHTML">
+      <input type="file" name="datafile" accept=".txt" required />
+      <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Upload</button>
+    </form>
+  </div>
+
+  <div id="messages"></div>
+
+  <div class="mt-8">
+    <h2 class="text-2xl font-bold mb-2">Pending Data</h2>
+    <button hx-get="/pendingData" hx-swap="outerHTML" hx-target="#pending-data"
+      class="px-4 py-2 bg-green-500 text-white rounded">Refresh Pending Data</button>
+    <div id="pending-data" class="mt-4"></div>
+  </div>
+
+  <div class="mt-8">
+    <h2 class="text-2xl font-bold mb-2">Processed Data</h2>
+    <form class="mb-4">
+      <input type="text" name="from" placeholder="From Timestamp" class="border p-2 rounded">
+      <input type="number" name="limit" placeholder="Limit" class="border p-2 rounded">
+      <button type="submit" hx-get="/data" hx-include="[name='from'],[name='limit']" hx-swap="outerHTML"
+        hx-target="#processed-data" class="px-4 py-2 bg-blue-500 text-white rounded">Filter Processed Data</button>
+    </form>
+    <div id="processed-data" class="mt-4"></div>
+  </div>
+
+  <script>
+    // HTMX Global Configuration
+    htmx.config.timeout = 5000; // Timeout for AJAX requests
+  </script>
+</body>
+
+</html>
