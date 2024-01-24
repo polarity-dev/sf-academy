@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      target: final
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.2-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mattia_123
+      POSTGRES_DB: intern_developer_plus
+    ports:
+      - 5432:5432
+    volumes:
+      - type: bind
+        source: ./create.sql
+        target: /docker-entrypoint-initdb.d/create.sql

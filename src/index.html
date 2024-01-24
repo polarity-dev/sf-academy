@@ -1,0 +1,119 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body hx-ext="true">
+    <div class="fixed top-0 left-0 w-screen flex justify-center items-center bg-slate-300 text-center h-32 ">
+        <h1 class="text-4xl font-bold">INTERN DEVELOPER PLUS</h1>
+    </div>
+
+    <div class="flex justify-center w-full mt-40"></div>
+        <div class="float-left w-3/12">
+            <div class="items-center ml-4 mr-4 flex justify-center items-center"></div>
+                <h1 class="text-2xl font-bold text-center mb-4">Import Data From File</h1>
+                <form hx-post="/importDataFromFile" enctype="multipart/form-data" class="flex flex-col items-center" hx-trigger="submit">
+                    <input type="file" name="file" class="py-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <button type="submit" class="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100">Upload</button>
+                </form>
+            </div>
+            
+            
+        </div>
+        <div class="float-right w-9/12 mt-10 ">
+            <div id='menu' class="mx-auto w-6/12 ">
+                <div class="float-left" onclick="getAllDatas()">
+                    <div class="flex justify-center items-center">
+                        <span class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 cursor-pointer pl-16 pr-16">datas</span>
+                    </div>
+                </div>
+                <div class="float-right" onclick="getPendingDatas()">
+                    <div class="flex justify-center items-center">
+                        <span class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 cursor-pointer pl-8 pr-8">pendingDatas</span>
+                    </div>
+                </div>
+            </div>
+            <div id="allDatas" class="mt-10 ml-4 mr-4 ">      
+                <h1 class="text-2xl font-bold text-center mb-4">Get All Data</h1>
+                <form hx-get="/data" class="flex flex-col" hx-trigger="submit" hx-target="#datas">
+                    <input type="text" name="data" placeholder="From" class="py-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-4">
+                    <input type="number" name="number" placeholder="Limit" class="py-2 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <button type="submit" class="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100">Get All Data</button>
+                </form>
+                <div id="datas" class="mt-4 overflow-auto h-2/5"></div>
+            </div>
+            <div id="allPendingDatas" class="mt-10 ml-4 mr-4 hidden">
+                <h1 class="text-2xl font-bold text-center mb-4">Get Pending Data</h1>
+                <form hx-get="/pendingData" class="flex flex-col" hx-trigger="submit" hx-target="#pendingDatas">
+                    <button type="submit" class="mt-4 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100">Get Pending Data</button>
+                </form>
+                <div id="pendingDatas" class="mt-4 overflow-auto h-2/5"></div>
+            </div>
+        </div>
+    </div>
+        
+        
+        <script>
+            let datas;
+            htmx.on("htmx:afterSwap", function(evt) {
+               if(evt.target.id == "datas"){
+                    datas = evt.detail.xhr.response;
+                    datas = JSON.parse(datas);
+                    document.getElementById("datas").innerHTML = createTable(datas);
+               }
+               else if(evt.target.id == "pendingDatas"){
+                    datas = evt.detail.xhr.response;
+                    datas = JSON.parse(datas);
+                    document.getElementById("pendingDatas").innerHTML = createTable(datas);
+               }
+        });
+
+        function getAllDatas(){
+            document.getElementById("allDatas").classList.remove("hidden");
+            document.getElementById("allPendingDatas").classList.add("hidden");
+        }
+
+        function getPendingDatas(){
+            document.getElementById("allDatas").classList.add("hidden");
+            document.getElementById("allPendingDatas").classList.remove("hidden");
+        }
+
+        function createTable(datas){
+            let html = '';
+            if(datas.length == 0){
+                html = `<div class="flex justify-center">
+                            <h1 class="text-2xl font-bold text-center mb-4 text-[#ff0000]">No Data</h1>
+                        </div>`;
+            }
+            else{
+                html = `<div class="flex justify-center">
+                                <table class="border border-gray-300 rounded-lg shadow-sm p-4 mb-4 w-11/12">
+                                    <tr>
+                                        <th class="bg-blue-500 text-white px-4 py-2">priority</th>
+                                        <th class="bg-blue-500 text-white px-4 py-2">message</th>
+                                        <th class="bg-blue-500 text-white px-4 py-2">timestamp</th>
+                                    </tr>`;
+                   datas.forEach(data => {
+                    html += `
+                            <tr class="text-center">
+                                <td class="border px-4 py-2">${data.priority_data}</td>
+                                <td class="border px-4 py-2">${data.message_data}</td>
+                                <td class="border px-4 py-2">${data.timestamp_data}</td>
+                            </tr>
+                                `;
+                     });
+                        html += `</table></div>`;
+                    }
+                        return html;
+}
+
+        function generate(){
+            generated();
+        }
+        </script>
+       
+    </div>
+</body>
+</html>

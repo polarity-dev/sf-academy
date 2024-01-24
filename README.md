@@ -1,49 +1,44 @@
-# SF Academy  
+# Intern Developer Plus
 
-istruzioni, materiale di studio e prove per candidarsi ad SF Academy
+## Getting Started
 
-## Introduzione
+### Prerequisites
 
-SF Academy è un percorso di formazione e selezione per candidati intern o collaboratori di Soluzioni Futura
+Before you begin, ensure you have the following installed on your machine:
 
-### Percorsi
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-ogni utente può candidarsi a sostenere una delle seguenti prove suddivise per area di competenza e livello di difficoltà:
+### Installation
 
-- [intern-developer.md](./prove/intern-developer.md) <img src = "https://img.shields.io/static/v1?label=level&message=easy&color=green"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
+1. Clone the repository:
 
-- [intern-developer-plus.md](./prove/intern-developer-plus.md) <img src = "https://img.shields.io/static/v1?label=level&message=medium&color=orange"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
+   ```bash
+   git clone https://github.com/saccanimattia/sf-academy.git
 
-- [exchange-microservice.md](./prove/exchange-microservice.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=microservices&color=informational">
 
-- [crypto-exchange.md](./prove/crypto-exchange.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=blockchain&color=informational">
+2. Go to the folder:
 
-- [recensioni-film.md](./prove/recensioni-film.md) <img src = "https://img.shields.io/static/v1?label=level&message=medium&color=orange"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
+    cd sf-academy
+   
+3. Start the application
 
-### Per candidarsi a sostenere una prova è necessario:  
+   docker-compose up --build
 
-- creare una issue su questa repository che abbia come titolo il proprio nome e cognome specificando nel testo per quale prova ci si candida
-- creare un fork del repository `soluzionifutura/sf-academy` e aprire una pull request con la prova realizzata entro la deadline comunicata come risposta alla candidatura da [**allemonta**](https://github.com/allemonta)
-- al termine della prova richiedere la review di [**allemonta**](https://github.com/allemonta)
-- attendere responso
+4. use the application
 
-### Comunicazioni  
+   now yuo can find the application there : http://localhost:5000/
+   
+### Usage
 
-ogni comunicazione tra il candidato e i responsabili delle prove avverrà tramite issue su questa repository.
+1. /importDataFromFile
+This endpoint allows you to upload text files to the database for processing by the server. Each line in the file is expected to follow the format "P [number] [string]", where [number] is an integer between one and five, and [string] is a message. Lines that do not conform to this format will be disregarded.
 
-## Materiale di studio
+2. /data
+This endpoint allows you to retrieve data from the database. It supports two optional parameters:
 
-### Web Development
+from: Retrieve data from a specific date.
+limit: Limit the number of values returned by the database.
 
-- [GIT guida tascabile](https://rogerdudler.github.io/git-guide/index.html)
-- [NodeSchool](https://nodeschool.io/)
-  - [Corso “javascripting”](https://github.com/workshopper/javascripting)
-  - [Corso “learnyounode”](https://github.com/workshopper/learnyounode)
-- [Developer roadmap](https://roadmap.sh/)
-  - [NodeJS](https://roadmap.sh/nodejs)
-  - [Typescript](https://roadmap.sh/typescript)
-  - [Frontend](https://roadmap.sh/frontend)
-  - [Backend](https://roadmap.sh/backend)
-  - [PosgreSQL](https://roadmap.sh/postgresql-dba)
-  - [Docker](https://roadmap.sh/docker)
-- [HTMX](https://htmx.org/)
+3. /pendingData
+This endpoint returns data that has not yet been processed by the server.
