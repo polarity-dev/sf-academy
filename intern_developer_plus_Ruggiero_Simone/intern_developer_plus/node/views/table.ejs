@@ -1,0 +1,19 @@
+<div id="table-container" class="bg-white p-4 rounded-md shadow">
+    <table class="min-w-full">
+        <thead>
+            <tr>
+                <th class="py-2 text-center">Timestamp</th>
+                <th class="py-2 text-center">Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% jsonData.forEach(item => { %>
+                <tr>
+                    <td class="py-2 text-center"><%= item.timestamp %></td>
+                    <td class="py-2 text-center"><%= item.data %></td>
+                    <!-- Aggiungi altre colonne secondo i tuoi dati JSON -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,8 @@
+{
+    "name": "tirocinio",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "docker-compose -f ./intern_developer_plus/docker-compose.yml up --build --force-recreate"
+    }
+  }
+  
