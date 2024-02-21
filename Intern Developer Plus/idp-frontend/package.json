@@ -1,0 +1,18 @@
+{
+  "name": "idp-frontend",
+  "version": "1.0.0",
+  "description": "Frontend del progetto Intern Developer Plus. Tailwind builder",
+  "scripts": {
+    "build": "npx tailwindcss -i src/style/style_source.css -o src/style/style.css --minify"
+  },
+  "keywords": [
+    "tailwind",
+    "frontend",
+    "builder"
+  ],
+  "author": "Artur Gertman",
+  "license": "All rights reserved.",
+  "dependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}

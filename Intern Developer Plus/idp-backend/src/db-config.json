@@ -1,0 +1,7 @@
+{
+  "host": "idp-postgres",
+  "port": 5432,
+  "database": "idp",
+  "user": "idp",
+  "password": "idp"
+}

@@ -1,0 +1,9 @@
+# node
+node_modules/
+Intern Developer Plus/idp-backend/dist/
+
+# IDE files
+.idea/
+
+# Tailwind css
+style.css

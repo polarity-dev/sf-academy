@@ -1,0 +1,17 @@
+{
+  "name": "intern-developer-plus",
+  "version": "1.0.0",
+  "description": "Fullstack per processare e visualizzare dati in modo asincrono",
+  "main": "index.js",
+  "scripts": {
+    "start": "docker-compose up "
+  },
+  "keywords": [
+    "async",
+    "file",
+    "manager",
+    "fullstack"
+  ],
+  "author": "Artur Gertman",
+  "license": "All Rights Reserved."
+}

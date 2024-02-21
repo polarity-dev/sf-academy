@@ -1,0 +1,37 @@
+services:
+
+  idp-postgres:
+    image: "postgres:alpine"
+    # Running docker compose up creates the volume if it doesn't already exist. Otherwise, the existing volume is used and is recreated if it's manually deleted outside Compose.
+    container_name: idp-postgres
+    volumes:
+      - idp-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=idp
+      - POSTGRES_USER=idp
+      - POSTGRES_PASSWORD=idp
+    restart: unless-stopped
+
+  idp-backend:
+    # Build it from the local dockerfile
+    build: ./idp-backend
+    container_name: idp-backend
+    environment: 
+      - DB_SERVER=idp-postgres
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  idp-frontend:
+    build: ./idp-frontend
+    container_name: idp-frontend
+    ports: 
+      - "4060:80"
+    links:
+      - idp-backend
+    restart: unless-stopped
+
+volumes:
+  idp-data:
