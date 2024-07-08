@@ -1,0 +1,23 @@
+{
+  "name": "sf-academy",
+  "version": "1.0.0",
+  "description": "Intern developer plus test.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ale18V/sf-academy.git"
+  },
+  "author": "ale18V",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ale18V/sf-academy/issues"
+  },
+  "homepage": "https://github.com/ale18V/sf-academy#readme",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
