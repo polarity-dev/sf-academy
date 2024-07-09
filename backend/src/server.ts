@@ -3,15 +3,17 @@ import { Request, Response } from "express";
 import { env } from "process";
 import multer from "multer";
 import { tmpdir } from "os";
-
+import Worker from "./worker";
+import FileData from "./models/FileData";
 const app = express();
 const port = env.PORT ?? 8080;
 
 const upload = multer({ dest: tmpdir(), limits: { fileSize: 2 ** 20 } });
+const worker = new Worker();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.query({}));
-app.use();
+
 /*
     POST /importDataFromFile: permette di caricare un file da processare come indicato di seguito
     GET /pendingData: restituisce in formato JSON la lista dei dati non ancora processati
@@ -23,7 +25,30 @@ app.use();
 */
 
 app.post("/importDataFromFile", upload.single("upload"), (req, res) => {
-    res.sendStatus(200);
+    if (!req.file) res.sendStatus(400);
+    else {
+        const lineRegex = RegExp("^(\\d) (.*)\n$");
+        const parseFile = (data: string) => {
+            const rows: FileData[] = data.split('\n').map((line): FileData => {
+                const [match, priority, message] = line.trimEnd().match(lineRegex);
+                if (!priority || !message) throw Error("Malformed file");
+                return { priority, message };
+            });
+            return rows;
+        }
+
+        const data = req.file.buffer.toString('utf-8');
+        try {
+            const rows = parseFile(data);
+            worker.enqueueNewData(rows);
+            res.sendStatus(204);
+        }
+        catch (err: any) {
+            console.error("Failed to parse input file:", err);
+            res.sendStatus(400);
+        }
+
+    }
 });
 
 app.get("/pendingData", (req, res) => {
