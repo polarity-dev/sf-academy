@@ -5,6 +5,7 @@ import multer from "multer";
 import { tmpdir } from "os";
 import Worker from "./worker";
 import FileData from "./models/FileData";
+import db from "./db";
 const app = express();
 const port = env.PORT ?? 8080;
 
@@ -16,12 +17,6 @@ app.use(express.query({}));
 
 /*
     POST /importDataFromFile: permette di caricare un file da processare come indicato di seguito
-    GET /pendingData: restituisce in formato JSON la lista dei dati non ancora processati
-    GET /data: restituisce in formato JSON la lista dei dati già processati, ordinati secondo il timestamp di elaborazione. In query string potranno essere passati 2 parametri
-        from: se presente si dovranno restituire i dati elaborati da questo valore (inteso come timestamp) in poi
-        limit: se presente dovrà essere limitato a questo valore il numero di messaggi restituiti
-    
-    Il file da processare conterrà una o piú righe contenenti ognuna un numero P (con 1 <= P <= 5) che rappresenta la priorità, seguito da stringa D che rappresenta il dato.
 */
 
 app.post("/importDataFromFile", upload.single("upload"), (req, res) => {
@@ -51,8 +46,9 @@ app.post("/importDataFromFile", upload.single("upload"), (req, res) => {
     }
 });
 
+// GET /pendingData: restituisce in formato JSON la lista dei dati non ancora processati
 app.get("/pendingData", (req, res) => {
-    res.sendStatus(200);
+    res.json(worker.getQueue());
 });
 
 interface DataEndpointQueryParams {
@@ -60,8 +56,34 @@ interface DataEndpointQueryParams {
     limit?: number;
 }
 
+/*
+GET /data: restituisce in formato JSON la lista dei dati già processati, ordinati secondo il timestamp di elaborazione. In query string potranno essere passati 2 parametri
+    from: se presente si dovranno restituire i dati elaborati da questo valore (inteso come timestamp) in poi
+    limit: se presente dovrà essere limitato a questo valore il numero di messaggi restituiti
+*/
 app.get("/data", (req: Request<{}, {}, {}, DataEndpointQueryParams>, res) => {
-    res.sendStatus(200);
+    const params: any[] = [];
+    let { from, limit } = req.query;
+    let query = "SELECT * FROM DATA ";
+    if (from) {
+        query += "WHERE timestamp > $1 ";
+        params.push(from);
+    }
+    query += "ORDER BY timestamp DESC ";
+
+    if (limit) {
+        query += `LIMIT ${params.length + 1}`;
+        params.push(limit);
+    }
+
+    db.query(query, params, (error, result) => {
+        if (error) {
+            console.error("Error when trying to fetch processed data:", error);
+            res.sendStatus(500);
+        }
+        else res.json(result.rows);
+
+    });
 });
 
 app.listen(port, () => {
