@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/dist/style.css">
+    <title>Intern Developer Plus</title>
+</head>
+
+<body class="bg-gray-50">
+    <header>
+        <nav>
+            <div class="bg-black text-white p-4">
+                <h1 class="text-xl font-bold font-serif"><i>Intern Developer Plus</i></h1>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="mt-10">
+            <div class="m-auto sm:w-10/12 md:w-8/12 w-1/2 bg-white drop-shadow-xl p-5 flex flex-col gap-4">
+                <div class="flex justify-between content-center flex-wrap">
+                    <h2 class="text-gray-500"><i>Upload a file to be processed</i></h2>
+                    <div>
+                        <form enctype="application/x-www-form-urlencoded"
+                            action="http://localhost:8000/importDataFromFile" method="post">
+                            <label for="upload"
+                                class="py-1 px-2 bg-teal-500 rounded-md uppercase font-mono font-semibold text-lg text-white">
+                                Upload
+                                <input type="file" name="upload" id="upload" class="hidden">
+                            </label>
+                        </form>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="max-h-64 overflow-y-auto drop-shadow-sm">
+                    <hr class="sticky top-0 border-gray-400 border-separate">
+                    <table hx-get="http://localhost:8000/pendingData" hx-trigger="every 10s"
+                        hx-target="#data-table-body"
+                        class="min-w-full table bg-white border border-t-gray-300 border-gray-400 text-center"
+                        id="data-table">
+                        <thead class="bg-gray-300 sticky top-0">
+                            <tr class="border-b border-gray-400 sticky top-0 text-gray-500 ">
+
+                                <th class="py-3 px-4 border-b sticky top-0 font-mono border-gray-400" colspan="2">
+                                    Data to be yet processed
+                                </th>
+                        </thead>
+                        <tbody id="data-table-body">
+                            <tr class="border-b border-gray-400 text-gray-700">
+                                <td class="py-3"></td>
+                            </tr>
+                            <!-- Rows will be inserted dynamically here -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/src/js/htmx.min.js" async defer></script>
+    <script>
+        document.getElementById('data-table').addEventListener("htmx:beforeSwap", (ev) => {
+            /** @type {{priority: string, message: string}[]} */
+            const data = JSON.parse(ev.detail.serverResponse);
+
+            /** @type {HTMLElement}*/
+            const target = ev.detail.target;
+            console.log(data);
+            target.innerHTML = Array.isArray(data) && data.length ? '' : `
+                <tr class="border-b border-gray-400 text-gray-700">
+                    <td class="py-3"></td>
+                </tr>`;
+            data.forEach(({ priority, message }) => {
+                let row = document.createElement('tr');
+                row.classList.add('border-b', 'border-gray-400', 'text-gray-700');
+                let cell = document.createElement('td');
+                cell.classList.add(...("py-2 w-1/2 px-4 border-r border-gray-400".split(' ')));
+
+                let cellLeft = cell;
+                cellLeft.innerText = priority;
+
+                let cellRight = cell.cloneNode();
+                cellRight.innerText = message;
+
+                row.append(cellLeft, cellRight);
+                target.append(row);
+            });
+            ev.detail.shouldSwap = false;
+        })
+    </script>
+</body>
+
+</html>
