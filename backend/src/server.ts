@@ -7,6 +7,7 @@ import Worker from "./worker";
 import FileData from "./models/FileData";
 import db from "./db";
 import fs from "fs";
+import cors from "cors";
 
 const app = express();
 const port = env.API_PORT ?? 8080;
@@ -16,6 +17,7 @@ const worker = new Worker();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.query({}));
+app.use(cors())
 
 // POST /importDataFromFile: permette di caricare un file da processare come indicato di seguito
 app.post("/importDataFromFile", upload.single("upload"), (req, res) => {
