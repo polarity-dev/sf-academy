@@ -18,76 +18,133 @@
     </header>
     <main>
         <div class="mt-10">
-            <div class="m-auto sm:w-10/12 md:w-8/12 w-1/2 bg-white drop-shadow-xl p-5 flex flex-col gap-4">
-                <div class="flex justify-between content-center flex-wrap">
-                    <h2 class="text-gray-500"><i>Upload a file to be processed</i></h2>
+            <div class="m-auto sm:w-10/12 md:w-8/12 w-1/2 bg-white drop-shadow-xl py-5 grid grid-cols-2">
+                <div class="flex flex-col px-5 py-2 gap-4">
                     <div>
-                        <form enctype="application/x-www-form-urlencoded"
-                            action="http://localhost:8000/importDataFromFile" method="post">
-                            <label for="upload"
-                                class="py-1 px-2 bg-teal-500 rounded-md uppercase font-mono font-semibold text-lg text-white">
-                                Upload
-                                <input type="file" name="upload" id="upload" class="hidden">
-                            </label>
+                        <form hx-post="http://localhost:8000/importDataFromFile" hx-encoding="multipart/form-data">
+                            <label class="block mb-2 text-center text-sm font-medium text-gray-700" for="upload">Upload
+                                a file
+                                to process</label>
+                            <div class="flex gap-5">
+                                <input
+                                    class="text-sm shadow-sm flex-grow-0 text-gray-900 rounded-lg border border-gray-300 file:border-gray-300 cursor-pointer
+                                    file:bg-slate-900 file:text-white file:rounded-none file:cursor-pointer bg-gray-50 dark:text-gray-400 file:py-1 file:px-2 file:focus:outline-none file:border-0"
+                                    id="upload" name="upload" type="file">
+                                <input type="submit" value="Submit"
+                                    class="rounded-md flex-grow bg-slate-900 py-1 px-2 drop-shadow-sm text-white text-sm cursor-pointer">
+                            </div>
                         </form>
                     </div>
+                    <hr>
+                    <div class="shadow-md border border-gray-400">
+                        <h2
+                            class="py-2 px-4 bg-gray-300 text-center border-b border-gray-400 font-mono font-bold  text-gray-500">
+                            Data yet unprocessed
+                        </h2>
+                        <div class="h-64 overflow-y-auto">
+                            <table hx-get="http://localhost:8000/pendingData" hx-trigger="every 10s"
+                                hx-target="#data-table-body" class="w-full h-full table text-center" id="data-table">
+                                <tbody id="data-table-body">
+                                    <tr>
+                                        <td class="py-3"></td>
+                                    </tr>
+                                    <!-- Rows will be inserted dynamically here -->
+                                </tbody>
+                            </table>
+                        </div>
 
+                    </div>
                 </div>
-                <hr>
-                <div class="max-h-64 overflow-y-auto drop-shadow-sm">
-                    <hr class="sticky top-0 border-gray-400 border-separate">
-                    <table hx-get="http://localhost:8000/pendingData" hx-trigger="every 10s"
-                        hx-target="#data-table-body"
-                        class="min-w-full table bg-white border border-t-gray-300 border-gray-400 text-center"
-                        id="data-table">
-                        <thead class="bg-gray-300 sticky top-0">
-                            <tr class="border-b border-gray-400 sticky top-0 text-gray-500 ">
+                <div class="border-l border-gray-300 flex flex-col py-2 px-5 gap-4">
+                    <div>
+                        <form hx-get="http://localhost:8000/data" id="retrieve" hx-target="#processed-data-table">
+                            <label class="block mb-2 text-center text-sm font-medium text-gray-700"
+                                for="upload">Retrieve processed data</label>
+                            <div class="flex gap-5">
+                                <input class="text-sm shadow-sm flex-grow-0  rounded-lg border border-gray-300 cursor-pointer
+                                     text-slate-900 file:rounded-none file:cursor-pointer  py-1 px-2" id="upload"
+                                    name="from" type="datetime-local">
+                                <input type="number" name="limit" id=""
+                                    class="py-1 px-2 border text-sm text-center text-slate-900 border-gray-300">
+                                <input type="submit" value="Submit"
+                                    class="rounded-md flex-grow bg-slate-900 py-1 px-2 drop-shadow-sm text-white text-sm cursor-pointer">
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="shadow-md border border-gray-400">
+                        <h2
+                            class="py-2 px-4 bg-gray-300 text-center border-b border-gray-400 font-mono font-bold  text-gray-500">
+                            Processed Data
+                        </h2>
+                        <div class="h-64 overflow-y-auto">
+                            <table class="w-full h-full table text-center">
+                                <tbody id="processed-data-table">
+                                    <tr>
+                                        <td class="py-3"></td>
+                                    </tr>
+                                    <!-- Rows will be inserted dynamically here -->
+                                </tbody>
+                            </table>
+                        </div>
 
-                                <th class="py-3 px-4 border-b sticky top-0 font-mono border-gray-400" colspan="2">
-                                    Data to be yet processed
-                                </th>
-                        </thead>
-                        <tbody id="data-table-body">
-                            <tr class="border-b border-gray-400 text-gray-700">
-                                <td class="py-3"></td>
-                            </tr>
-                            <!-- Rows will be inserted dynamically here -->
-                        </tbody>
-                    </table>
+                    </div>
+
 
                 </div>
             </div>
-        </div>
     </main>
     <script src="/src/js/htmx.min.js" async defer></script>
     <script>
-        document.getElementById('data-table').addEventListener("htmx:beforeSwap", (ev) => {
-            /** @type {{priority: string, message: string}[]} */
-            const data = JSON.parse(ev.detail.serverResponse);
-
-            /** @type {HTMLElement}*/
-            const target = ev.detail.target;
-            console.log(data);
+        /** @type {(target: HTMLElement, data: object[], keys: string[]) => void} */
+        var updateTable = (target, data, keys) => {
             target.innerHTML = Array.isArray(data) && data.length ? '' : `
-                <tr class="border-b border-gray-400 text-gray-700">
+                <tr>
                     <td class="py-3"></td>
                 </tr>`;
-            data.forEach(({ priority, message }) => {
+            data.forEach((dataRow) => {
                 let row = document.createElement('tr');
                 row.classList.add('border-b', 'border-gray-400', 'text-gray-700');
                 let cell = document.createElement('td');
                 cell.classList.add(...("py-2 w-1/2 px-4 border-r border-gray-400".split(' ')));
 
                 let cellLeft = cell;
-                cellLeft.innerText = priority;
+                cellLeft.innerText = dataRow[keys[0]];
 
                 let cellRight = cell.cloneNode();
-                cellRight.innerText = message;
+                cellRight.innerText = dataRow[keys[1]];
 
                 row.append(cellLeft, cellRight);
                 target.append(row);
             });
-            ev.detail.shouldSwap = false;
+        };
+
+        document.getElementById('data-table').addEventListener("htmx:beforeSwap", (ev) => {
+            if (ev.detail.xhr.status === 200) {
+                /** @type {{priority: string, message: string}[]} */
+                const data = JSON.parse(ev.detail.serverResponse);
+
+                /** @type {HTMLElement}*/
+                const target = ev.detail.target;
+                updateTable(target, data, ["priority", "message"]);
+
+                ev.detail.shouldSwap = false;
+            }
+            else console.log("Something went wrong");
+
+        });
+
+        document.getElementById('processed-data-table').addEventListener("htmx:beforeSwap", (ev) => {
+            if (ev.detail.xhr.status === 200) {
+                /** @type {{timestamp: string, message: string}[]} */
+                const data = JSON.parse(ev.detail.serverResponse);
+
+                /** @type {HTMLElement}*/
+                const target = ev.detail.target;
+                updateTable(target, data, ["timestamp", "message"]);
+
+                ev.detail.shouldSwap = false;
+            }
         })
     </script>
 </body>
