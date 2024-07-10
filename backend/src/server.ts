@@ -6,33 +6,36 @@ import { tmpdir } from "os";
 import Worker from "./worker";
 import FileData from "./models/FileData";
 import db from "./db";
-const app = express();
-const port = env.PORT ?? 8080;
+import fs from "fs";
 
-const upload = multer({ dest: tmpdir(), limits: { fileSize: 2 ** 20 } });
+const app = express();
+const port = env.API_PORT ?? 8080;
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 ** 20 } });
 const worker = new Worker();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.query({}));
 
-/*
-    POST /importDataFromFile: permette di caricare un file da processare come indicato di seguito
-*/
-
+// POST /importDataFromFile: permette di caricare un file da processare come indicato di seguito
 app.post("/importDataFromFile", upload.single("upload"), (req, res) => {
     if (!req.file) res.sendStatus(400);
     else {
-        const lineRegex = RegExp("^(\\d) (.*)\n$");
+        const lineRegex = RegExp("^(\\d) (.*)$");
         const parseFile = (data: string) => {
             const rows: FileData[] = data.split('\n').map((line): FileData => {
-                const [match, priority, message] = line.trimEnd().match(lineRegex);
+                let matches = line.trimEnd().match(lineRegex);
+                if (!matches) throw Error("Malformed file 1");
+                const priority = matches[1];
+                const message = matches[2]
                 if (!priority || !message) throw Error("Malformed file");
-                return { priority, message };
+
+                return { priority: Number(priority), message };
             });
             return rows;
         }
 
-        const data = req.file.buffer.toString('utf-8');
+        const data = req.file.buffer.toString('utf-8').trimEnd();
         try {
             const rows = parseFile(data);
             worker.enqueueNewData(rows);
@@ -64,18 +67,22 @@ GET /data: restituisce in formato JSON la lista dei dati già processati, ordina
 app.get("/data", (req: Request<{}, {}, {}, DataEndpointQueryParams>, res) => {
     const params: any[] = [];
     let { from, limit } = req.query;
-    let query = "SELECT * FROM DATA ";
+    let query = "SELECT timestamp, message FROM DATA ";
     if (from) {
-        query += "WHERE timestamp > $1 ";
-        params.push(from);
+        try {
+            let fromParam = new Date(Number(from));
+            query += "WHERE timestamp >= $1 ";
+            params.push(fromParam);
+        } catch { console.error("Failed to parse from parameter:", from) }
     }
     query += "ORDER BY timestamp DESC ";
 
     if (limit) {
-        query += `LIMIT ${params.length + 1}`;
-        params.push(limit);
+        try {
+            query += `LIMIT $${params.length + 1}`;
+            params.push(limit);
+        } catch { console.error("Failed to parse limit parameter:", limit); }
     }
-
     db.query(query, params, (error, result) => {
         if (error) {
             console.error("Error when trying to fetch processed data:", error);

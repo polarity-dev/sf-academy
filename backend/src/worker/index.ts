@@ -5,13 +5,14 @@ import FileData from "../models/FileData";
 const comparePriority: IGetCompareValue<FileData> = (el) => el.priority;
 
 export default class Worker {
-    private pq = new MaxPriorityQueue(comparePriority);
+    private pq: MaxPriorityQueue<FileData>;
     private batch_limit = 15;
     private processing_interval_seconds = 10;
     private isProcessing = false;
 
     public constructor() {
-        setInterval(this.processData, this.processing_interval_seconds * 1000);
+        this.pq = new MaxPriorityQueue(comparePriority);
+        setInterval(() => this.processData(), this.processing_interval_seconds * 1000);
     }
 
     public enqueueNewData(fd: FileData[]) {
@@ -23,7 +24,7 @@ export default class Worker {
     private async processData() {
         if (this.pq.isEmpty() || this.isProcessing) return;
         this.isProcessing = true;
-        const timestamp = Date.now();
+        const timestamp = new Date(Date.now());
         try {
             let query: string = "INSERT INTO DATA(timestamp, message) VALUES \n";
             let queryBuilder: string[] = [];

@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc",
+    "predev": "npm run dev:down",
+    "dev": "docker compose -f docker-compose.yml -f docker-compose-dev.yml up --build",
+    "dev:down": "docker compose -f docker-compose.yml -f docker-compose-dev.yml down",
+    "start:dev": "nodemon src/server.ts",
+    "predocker": "npx concurrently \"npm run docker:down\" \"npm run build\"",
+    "docker": "docker compose up",
+    "docker:down": "docker compose down",
+    "start": "node dist/server.js"
   },
   "author": "ale18V",
   "license": "ISC",
@@ -13,6 +21,9 @@
     "@types/multer": "^1.4.11",
     "@types/node": "^20.14.10",
     "@types/pg": "^8.11.6",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "dependencies": {
