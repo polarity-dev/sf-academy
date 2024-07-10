@@ -1,0 +1,7 @@
+services:
+  api:
+    volumes:
+      - "../node_modules:/srv/app/node_modules"
+      - "./src:/srv/app/src:ro"
+      - "./package.json:/srv/app/package.json"
+    command: npm run start:dev

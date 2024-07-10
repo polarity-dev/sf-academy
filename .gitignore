@@ -1,5 +1,5 @@
 # compiled output
-/dist
+dist/
 /tmp
 /out-tsc
 
@@ -75,8 +75,6 @@ jspm_packages/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
 
 # next.js build output
 .next
