@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx vite build",
-    "dev": "npx vite"
+    "dev": "npx vite",
+    "docker:build": "npm run build && docker build . -t idp-frontend",
+    "prestart": "npm run docker:build",
+    "start": "docker run -p 8080:8080 --rm idp-frontend"
   },
   "author": "ale18V",
   "license": "ISC",
