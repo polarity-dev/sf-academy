@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { env } from "process";
+import { env, exit } from "process";
 
 const db = new Client({
     host: env['DB_HOST'],
@@ -8,7 +8,10 @@ const db = new Client({
 });
 
 db.connect((err) => {
-    if (err) console.log("Failed to connect to the database");
+    if (err) {
+        console.log("Failed to connect to the database");
+        exit(-1);
+    }
     else console.log("Connected to the database");
 });
 

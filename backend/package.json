@@ -9,7 +9,7 @@
     "dev:down": "docker compose -f docker-compose.yml -f docker-compose-dev.yml down",
     "start:dev": "nodemon src/server.ts",
     "predocker": "npx concurrently \"npm run docker:down\" \"npm run build\"",
-    "docker": "docker compose up",
+    "docker": "docker compose up --build",
     "docker:down": "docker compose down",
     "start": "node dist/server.js"
   },
