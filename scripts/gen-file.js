@@ -1,6 +1,5 @@
 const { argv } = require('process');
 const { LoremIpsum } = require('lorem-ipsum');
-const { randomInt } = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -10,7 +9,7 @@ const outFile = argv[3] ?? path.join(__dirname, "..", "data", "sample.txt");
 let buffer = "";
 
 loremipsum.generateWords(N).split(' ').forEach((word) => {
-    buffer += loremipsum.generator.generateRandomInteger(0, 5) + " " + word + "\n";
+    buffer += loremipsum.generator.generateRandomInteger(1, 5) + " " + word + "\n";
 });
 
 fs.writeFile(outFile, buffer, (err) => {
