@@ -57,8 +57,8 @@ app.get("/pendingData", (req, res) => {
 });
 
 interface DataEndpointQueryParams {
-    from?: number;
-    limit?: number;
+    from?: string;
+    limit?: string;
 }
 
 /*
@@ -72,7 +72,7 @@ app.get("/data", (req: Request<{}, {}, {}, DataEndpointQueryParams>, res) => {
     let query = "SELECT timestamp, message FROM DATA ";
     if (from) {
         try {
-            let fromParam = new Date(Number(from));
+            let fromParam = new Date(from);
             query += "WHERE timestamp >= $1 ";
             params.push(fromParam);
         } catch { console.error("Failed to parse from parameter:", from) }
