@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/dist/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Intern Developer Plus</title>
 </head>
 
@@ -94,58 +94,8 @@
                 </div>
             </div>
     </main>
-    <script src="/src/js/htmx.min.js" async defer></script>
-    <script>
-        /** @type {(target: HTMLElement, data: object[], keys: string[]) => void} */
-        var updateTable = (target, data, keys) => {
-            target.innerHTML = Array.isArray(data) && data.length ? '' : `
-                <tr>
-                    <td class="py-3"></td>
-                </tr>`;
-            data.forEach((dataRow) => {
-                let row = document.createElement('tr');
-                row.classList.add('border-b', 'border-gray-400', 'text-gray-700');
-                let cell = document.createElement('td');
-                cell.classList.add(...("py-2 w-1/2 px-4 border-r border-gray-400".split(' ')));
+    <script type="module" src="/js/index.ts">
 
-                let cellLeft = cell;
-                cellLeft.innerText = dataRow[keys[0]];
-
-                let cellRight = cell.cloneNode();
-                cellRight.innerText = dataRow[keys[1]];
-
-                row.append(cellLeft, cellRight);
-                target.append(row);
-            });
-        };
-
-        document.getElementById('data-table').addEventListener("htmx:beforeSwap", (ev) => {
-            if (ev.detail.xhr.status === 200) {
-                /** @type {{priority: string, message: string}[]} */
-                const data = JSON.parse(ev.detail.serverResponse);
-
-                /** @type {HTMLElement}*/
-                const target = ev.detail.target;
-                updateTable(target, data, ["priority", "message"]);
-
-                ev.detail.shouldSwap = false;
-            }
-            else console.log("Something went wrong");
-
-        });
-
-        document.getElementById('processed-data-table').addEventListener("htmx:beforeSwap", (ev) => {
-            if (ev.detail.xhr.status === 200) {
-                /** @type {{timestamp: string, message: string}[]} */
-                const data = JSON.parse(ev.detail.serverResponse);
-
-                /** @type {HTMLElement}*/
-                const target = ev.detail.target;
-                updateTable(target, data, ["timestamp", "message"]);
-
-                ev.detail.shouldSwap = false;
-            }
-        })
     </script>
 </body>
 
