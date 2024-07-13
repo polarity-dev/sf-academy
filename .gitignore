@@ -7,3 +7,7 @@ dist/
 public/js/app.js
 uploads/
 tosend/
+
+frontend/build/static
+
+*__pycache__*

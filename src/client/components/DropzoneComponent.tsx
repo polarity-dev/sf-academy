@@ -1,46 +1,42 @@
-import * as React from 'react';
-import { useDropzone } from 'react-dropzone';
+import * as React from "react";
+import { useDropzone } from "react-dropzone";
 
 function DropzoneComponent() {
+	const baseText =
+		"Fai qui drag'n'drop del file da caricare, oppure clicca per selezionarlo";
+	const [text, setText] = React.useState(baseText);
 
-    const baseText = "Fai qui drag'n'drop del file da caricare, oppure clicca per selezionarlo";
-    const [text, setText] = React.useState(baseText);
+	const onDrop = React.useCallback((acceptedFiles) => {
+		const formData = new FormData();
+		formData.append("file", acceptedFiles[0]);
 
-    const onDrop = React.useCallback(acceptedFiles => {
+		fetch("/importDataFromFile", {
+			method: "POST",
+			body: formData,
+		})
+			.then((response) => {})
+			.then((data) => {
+				setText("File caricato correttamente");
+			})
+			.then(() => {
+				setTimeout(() => {
+					setText(baseText);
+				}, 3000);
+			});
+	}, []);
 
-        const formData = new FormData();
-        formData.append("file", acceptedFiles[0]);
+	const { getRootProps, getInputProps } = useDropzone({
+		onDrop,
+	});
 
-        fetch("/importDataFromFile", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => { })
-            .then(data => {
-                setText("File caricato correttamente");
-            }).then(() => {
-                setTimeout(() => {
-                    setText(baseText);
-                }, 3000);
-            })
-
-    }, []);
-
-    const {
-        getRootProps,
-        getInputProps,
-    } = useDropzone({
-        onDrop,
-    });
-
-
-    return (
-        //si potrebbe aggiungere una gif con rotellina di caricamento
-        <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            <div>{text}</div>
-        </div>
-    )
+	return (
+		//si potrebbe aggiungere una gif con rotellina di caricamento
+		<div {...getRootProps()}>
+			<input {...getInputProps()} />
+			<div>{text}</div>
+		</div>
+	);
 }
 
 export default DropzoneComponent;
+
