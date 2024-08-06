@@ -12,8 +12,6 @@ ogni utente può candidarsi a sostenere una delle seguenti prove suddivise per a
 
 - [intern-developer.md](./prove/intern-developer.md) <img src = "https://img.shields.io/static/v1?label=level&message=easy&color=green"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
 
-- [intern-developer-plus.md](./prove/intern-developer-plus.md) <img src = "https://img.shields.io/static/v1?label=level&message=medium&color=orange"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational">
-
 - [exchange-microservice.md](./prove/exchange-microservice.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=microservices&color=informational">
 
 - [crypto-exchange.md](./prove/crypto-exchange.md) <img src = "https://img.shields.io/static/v1?label=level&message=hard&color=red"> <img src = "https://img.shields.io/static/v1?label=&message=web-development&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=infrastructure&color=informational"> <img src = "https://img.shields.io/static/v1?label=&message=blockchain&color=informational">

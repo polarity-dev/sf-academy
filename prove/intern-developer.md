@@ -1,56 +1,62 @@
 # Intern Developer
 
+## Descrizione del Progetto
+
+Il progetto prevede la realizzazione di un sistema monolitico per la compravendita di criptovalute, utilizzando dati di mercato simulati. Il sistema dovrà gestire un singolo utente con un saldo iniziale di 100.000 euro.
+
+## Dashboard Web
+
+Sviluppare un'interfaccia web che consenta di:
+
+- Visualizzare la lista delle criptovalute disponibili con il relativo prezzo di mercato in euro.
+- Effettuare operazioni di acquisto e vendita di criptovalute.
+- Consultare la cronologia delle transazioni effettuate.
+
+Il frontend dovrà essere realizzato utilizzando HTMX e TailwindCSS.
+
 ## Backend
 
-Realizzare un web server in NodeJs e Typescript che esponga la seguente lista di endpoint:
+Implementare un web server in Node.js e TypeScript utilizzando il modulo [Fastify](https://fastify.dev/). Il server dovrà esporre sia gli endpoint HTML per il frontend sia i seguenti endpoint JSON:
 
-- `POST /importDataFromFile`: permette di caricare un file da processare come indicato di seguito
-- `GET /pendingData`: restituisce in formato JSON la lista dei dati non ancora processati
-- `GET /data`: restituisce in formato JSON la lista dei dati già processati, ordinati secondo il timestamp di elaborazione. In query string potranno essere passati 2 parametri
-  - `from`: se presente si dovranno restituire i dati elaborati da questo valore (inteso come timestamp) in poi
-  - `limit`: se presente dovrà essere limitato a questo valore il numero di messaggi restituiti
+- `GET /api/crypto`: Restituisce la lista delle criptovalute disponibili con il relativo prezzo di mercato in euro.
+- `GET /api/transactions`: Restituisce la cronologia delle transazioni di compravendita effettuate.
+- `POST /api/transactions`: Esegue l'acquisto o la vendita di una criptovaluta specificata nella richiesta con la quantità indicata.
 
-Il file da processare avrà il seguente formato:
+Le transazioni dovranno essere salvate in un database relazionale PostgreSQL. Gli endpoint JSON saranno destinati esclusivamente all'uso da parte di applicazioni terze, mentre la dashboard web utilizzerà solo endpoint HTML, in conformità con la filosofia di HTMX.
 
-- La prima riga contiene due numeri `A` e `B`
-- Successive `N` righe contenenti ognuna un numero `P` (con `1 <= P <= 5`) che rappresenta la priorità, un secondo valore `K` seguito da stringa `D`. Dovranno essere considerate solo le righe comprese tra gli indici 1-based indicati da `A` e `B`
+## Gestione del Prezzo di Mercato
 
-esempio:
+Il prezzo di mercato delle criptovalute dovrà essere aggiornato ogni minuto e memorizzato in un database PostgreSQL. Il nuovo prezzo sarà calcolato a partire dal prezzo precedente, con una variazione casuale inferiore al 5% rispetto al prezzo precedente.
 
-```txt
-3 5
-1 128 ... dummy data ... 
-4 65 ... dummy data ... 
-3 0 prima riga utile
-5 -165 seconda riga
-3 0 terza riga
-5 -165 ... dummy data ... 
+Il prezzo iniziale di ogni criptovaluta dovrà essere casuale, compreso tra 1 e 10.000 euro.
+
+## Aggiornamenti in Tempo Reale
+
+Ad ogni variazione del prezzo di mercato, il frontend dovrà aggiornare in tempo reale i prezzi visualizzati. Utilizzare la tecnologia [Server-Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events) con il modulo [@soluzioni-futura/sse-manager](https://www.npmjs.com/package/@soluzioni-futura/sse-manager) per implementare questa funzionalità.
+
+## Task facoltativa
+
+- Ogni richiesta di transazione dovrà essere inserita in una coda anche se non valida (mancanza di credito, ecc.). La coda dovrà essere salvata nel database PostgreSQL.
+- La coda dovrà essere gestita in modo asincrono per completare le transazioni in sequenza. In particolare ogni 20 secondi, dovranno essere processate 5 transazioni dalla coda.
+- Ogni transazione dovrà essere salvata nel database con il relativo stato (pending, completed, failed).
+- Una transazione potrà fallire in caso di mancanza di criptovaluta durante la vendita o di credito di euro durante l'acquisto.
+- Lo stato delle transazioni dovrà essere visualizzato in tempo reale nella dashboard web.
+
+## Script di Utility
+
+Creare uno script di utility per effettuare transazioni tramite linea di comando, accettando come argomento la sigla di una criptovaluta, l'azione (buy/sell) e la quantità. Lo script dovrà eseguire l'acquisto o la vendita della criptovaluta e salvare la transazione nel database.
+
+```bash
+node transaction.js <crypto> <action> [quantity (default 1)]
 ```
 
-I dati importati non dovranno essere processati immediatamente, ma si dovrà seguire la seguente logica:
-
-- il processing dei dati deve avvenire in blocchi di massimo `15` messaggi ogni `10` secondi
-- si devono processare i dati in ordine di priorità: prima le priorità alte, in seguito le priorità basse. Ad esempio, se è presente almeno un dato con priorità `3`, questo dovrà essere processato prima di passare ai dati con priorità `2` o `1`
-- se viene effettuato un import prima che il precedente sia concluso, si dovranno accorpare i nuovi dati all'interno dei precedenti
-- l'elaborazione di un messaggio consiste nel salvare i valori `K` e `D` su un DB relazionale, associando il timestamp di elaborazione (che dovrà essere lo stesso per tutti i messaggi dello stesso blocco)
-
-## Frontend
-
-Realizzare un semplice pannello web che permetta di:
-
-- Caricare file da far processare al backend
-- Recuperare i dati processati, con la possibilità di impostare i filtri sopra citati
-
-## Script utility
-
-Dovrà essere realizzato uno script di utility che, quando lanciato, generi un file random (con `1 <= N <= 50` e `0 <= A < B <= N`) che segua la struttura del file riportato in precedenza.
+Utilizzare il modulo [commander](https://www.npmjs.com/package/commander) per la gestione degli argomenti.
 
 ## Infrastruttura
 
-Utilizzare docker-compose per orchestrare la soluzione di sviluppo locale che dovrà contenere:
+Utilizzare Docker Compose per orchestrare l'ambiente di sviluppo locale, includendo:
 
-- Backend
-- Frontend
-- Database relazionale
+- L'applicazione monolitica.
+- Il database relazionale PostgreSQL.
 
-Tutto quello che non è specificato nella consegna è intenzionalmente lasciato alla libera interpretazione del candidato.
+Tutto ciò che non è specificato nella consegna è lasciato alla libera interpretazione del candidato.
