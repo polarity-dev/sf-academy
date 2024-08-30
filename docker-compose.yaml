@@ -8,7 +8,6 @@ services:
         condition: service_healthy
   db:
     image: postgres:15
-    # restart: always
     container_name: mydb
     environment:
       POSTGRES_DB: mydatabase
