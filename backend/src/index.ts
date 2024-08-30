@@ -4,21 +4,43 @@ import { handleNewConnection } from "./sse/connectionHandler";
 import { broadcastData } from "./sse/dataBroadcaster";
 import { delay } from "./utils/delayManager";
 import path from "path";
-import { readFileSync } from "fs";
+import fs, { readFileSync } from "fs";
+import { Client } from "pg";
 
 async function setup() {
+
     const { ADDRESS = 'localhost', PORT = '3000' } = process.env;
+
+    const client = new Client({
+        user: 'myuser',
+        host: 'db',
+        database: 'mydatabase',
+        password: 'mypassword',
+        port: 5432
+    });
+
+    try {
+   
+        await client.connect();
+
+        console.log((await client.query(`select * from cryptos;`)).rows);     
+    } catch (err) {
+        console.log(err);
+    }
+
 
     const server = Fastify({logger: true});
     
     const SSEManager = await initializeSSEManager();
 
+    // serves html file
     server.get("/", function (request,reply) {
         const htmlPath = path.join(__dirname,"../public/index.html");
         const htmlContent = readFileSync(htmlPath,"utf-8");
         reply.type("text/html").send(htmlContent);
     });
 
+    // test
     server.get("/api/test", async function (request,reply) {
         
         const signal = await handleNewConnection(SSEManager,request,reply,"api/test");
@@ -45,7 +67,6 @@ async function setup() {
             server.log.error(err);
             process.exit(1);
         }
-        console.log("listening");
     });
 }
 
