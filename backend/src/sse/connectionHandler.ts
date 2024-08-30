@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { SSEManager } from '@soluzioni-futura/sse-manager';
 
+// Handles new SSE Streams
 export async function handleNewConnection(SSEManager: SSEManager, request: FastifyRequest, reply: FastifyReply, room: string) {
     const SSEStream = await SSEManager.createSSEStream(reply);
 
