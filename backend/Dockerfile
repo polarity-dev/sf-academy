@@ -5,7 +5,7 @@ WORKDIR /backend
 
 COPY . /backend/
 
-RUN npm install typescript fastify @fastify/postgres pg @types/node --save-dev
+RUN npm install typescript fastify @fastify/postgres pg @types/node @soluzioni-futura/sse-manager --save-dev
 RUN npx tsc --init
 RUN npx tsc
 
