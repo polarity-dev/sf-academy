@@ -1,0 +1,1 @@
+insert into budget values (100000);
