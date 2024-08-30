@@ -14,6 +14,20 @@
 
 <body>
 
-    <p hx-ext="sse" sse-connect="/api/test" sse-swap="message"></p>
+    <table id="cryptoTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Owned</th>
+            </tr>
+        </thead>
+        <tbody hx-ext="sse" sse-connect="/api/get_cryptos" sse-swap="message">
+            <!-- Table rows will be dynamically populated here -->
+        </tbody>
+    </table>
 
 </body>
+
+</html>
