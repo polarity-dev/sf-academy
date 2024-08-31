@@ -11,12 +11,11 @@ import { checkTransaction } from "../utils/transactionsChecker";
 import { handleTransaction } from "../utils/transactionsHandler";
 import crypto from "../models/cryptoModel";
 
-export async function initTransactionController(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
+export async function initTransactionEndpoints(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
     // html endpoint to get transactions list
     server.get("/api/get_transactions",async (request,reply) => {
         await handleNewConnection(SSEManager,request,reply,"api/get_transactions");
-        const transactions:Array<transaction> = await dbQuery(db,"select * from transactions order by date;");
-        broadcastData(SSEManager,"api/get_transactions",getTransactionHtml(transactions));
+        broadcastData(SSEManager,"api/get_transactions",await getTransactionHtml(db));
     });
     // json endpoint to get transactions list
     server.get("/api/transactions", async () => {
@@ -31,8 +30,9 @@ export async function initTransactionController(SSEManager: SSEManager,server: F
         if (typeof response == "string") {
             reply.send(response);
         } else {
-            reply.send(await handleTransaction(SSEManager,db,response,symbol,(action == "buy" ? quantity : - quantity)));
+            const crypto:crypto = response;
+            reply.send(await handleTransaction(SSEManager,db,crypto,(action == "buy" ? quantity : - quantity)));
         }
-        
+
     });
 }   

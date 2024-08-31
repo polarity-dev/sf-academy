@@ -18,8 +18,7 @@ export async function initCryptoEndpoints(SSEManager: SSEManager, server: Fastif
 
         while (!signal.aborted) {
             try {
-                const cryptos:Array<crypto> = await dbQuery(db,"select * from cryptos");
-                broadcastData(SSEManager,"api/get_cryptos",getCryptoHtml(cryptos));
+                broadcastData(SSEManager,"api/get_cryptos",await getCryptoHtml(db));
                 await delay(Number(DELAY_PRICE_MODIFICATION_MS));
             } catch (error) {
                 if (signal.aborted) {
@@ -32,6 +31,7 @@ export async function initCryptoEndpoints(SSEManager: SSEManager, server: Fastif
     });
     // json crypto get endpoint
     server.get("/api/crypto", async () => {
-        return JSON.stringify(await dbQuery(db,"select * from cryptos;"));
+        const cryptos:Array<crypto> = await dbQuery(db,"select * from cryptos order by id;");
+        return JSON.stringify(cryptos);
     });
 };
