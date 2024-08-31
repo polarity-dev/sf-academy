@@ -8,6 +8,7 @@ import { modifyPrices } from "./utils/cryptoPriceModifier";
 import { env } from "process";
 import { initTransactionController } from "./controllers/transactionController";
 import formbody from "@fastify/formbody";
+import { processTransactions } from "./utils/transactionsProcessor";
 
 async function setup() {
 
@@ -31,6 +32,7 @@ async function setup() {
     await initTransactionController(SSEManager,server,db);
 
     modifyPrices(db);
+    processTransactions(SSEManager,db);
 
     server.listen({ host: ADDRESS, port: Number(PORT) }, (err,address) => {
         if (err) {
