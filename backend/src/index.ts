@@ -4,10 +4,13 @@ import path from "path";
 import { readFileSync } from "fs";
 import { initCryptoEndpoints } from "./controllers/cryptoController";
 import db from "./database/dbInit";
+import { modifyPrices } from "./utils/cryptoPriceModifier";
+import { env } from "process";
 
 async function setup() {
 
-    const { ADDRESS = 'localhost', PORT = '3000' } = process.env;
+    const ADDRESS = env.ADDRESS ?? "localhost";
+    const PORT = env.PORT ?? "3000";
 
     const server = Fastify({logger: true});
     
@@ -22,7 +25,9 @@ async function setup() {
     
     await initCryptoEndpoints(SSEManager,server,db);
 
-    server.listen({ host: ADDRESS, port: parseInt(PORT, 10) }, (err,address) => {
+    modifyPrices(db);
+
+    server.listen({ host: ADDRESS, port: Number(PORT) }, (err,address) => {
         if (err) {
             server.log.error(err);
             process.exit(1);

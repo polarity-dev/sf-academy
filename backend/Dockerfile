@@ -11,7 +11,8 @@ RUN npx tsc
 
 EXPOSE 3000
 
-ENV ADDRESS=0.0.0.0 PORT=3000
+ENV ADDRESS=0.0.0.0 PORT=3000 
+ENV DELAY_PRICE_MODIFICATION_MS=1000
 
 # Run the application
 CMD ["node", "src/index.js"]
