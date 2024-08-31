@@ -7,6 +7,9 @@ import { getTransactionHtml } from "../utils/objectToHTMLHandler";
 import transaction from "../models/transactionModel";
 import { dbQuery } from "../database/dbQuery";
 import transactionSchema from "../models/transactionJSONSchema";
+import { checkTransaction } from "../utils/transactionsChecker";
+import { handleTransaction } from "../utils/transactionsHandler";
+import crypto from "../models/cryptoModel";
 
 export async function initTransactionController(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
     // html endpoint to get transactions list
@@ -23,8 +26,13 @@ export async function initTransactionController(SSEManager: SSEManager,server: F
     // json endpoint for making transactions
     server.post("/api/transactions", { schema: { body: transactionSchema } }, async (request,reply) => { 
 
-        const { action, symbol, quantity = 1 } = request.body as { action: string, symbol: string, quantity: number };
-        console.log(action,symbol,quantity);
+        const { symbol, action, quantity = 1 } = request.body as { symbol: string, action: string, quantity: number };
+        const response = await checkTransaction(db,symbol,action,quantity);
+        if (typeof response == "string") {
+            reply.send(response);
+        } else {
+            reply.send(await handleTransaction(SSEManager,db,response,symbol,(action == "buy" ? quantity : - quantity)));
+        }
         
     });
 }   

@@ -6,6 +6,8 @@ import { initCryptoEndpoints } from "./controllers/cryptoController";
 import db from "./database/dbInit";
 import { modifyPrices } from "./utils/cryptoPriceModifier";
 import { env } from "process";
+import { initTransactionController } from "./controllers/transactionController";
+import formbody from "@fastify/formbody";
 
 async function setup() {
 
@@ -13,6 +15,8 @@ async function setup() {
     const PORT = env.PORT ?? "3000";
 
     const server = Fastify({logger: true});
+
+    server.register(formbody);
     
     const SSEManager = await initializeSSEManager();
 
@@ -24,6 +28,7 @@ async function setup() {
     });
     
     await initCryptoEndpoints(SSEManager,server,db);
+    await initTransactionController(SSEManager,server,db);
 
     modifyPrices(db);
 
