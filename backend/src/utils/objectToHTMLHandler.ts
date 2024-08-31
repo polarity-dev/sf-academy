@@ -2,6 +2,7 @@ import { Client } from "pg";
 import { dbQuery } from "../database/dbQuery";
 import crypto from "../models/cryptoModel";
 import transaction from "../models/transactionModel";
+
 function tdMaker(value: string,cssClass: string = "") {
     return `<td ${cssClass}>${value}</td>`;
 }
@@ -31,4 +32,8 @@ export async function getTransactionHtml(db: Client) {
         htmlRes += "</tr>";
     }
     return htmlRes;
+}
+export async function getBudgetHtml(db: Client) {
+    const response = await dbQuery(db,"select * from budget;");
+    return response[0].budget.toString();
 }

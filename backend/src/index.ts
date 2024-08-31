@@ -6,9 +6,10 @@ import { initCryptoEndpoints } from "./controllers/cryptoController";
 import db from "./database/dbInit";
 import { modifyPrices } from "./utils/cryptoPriceModifier";
 import { env } from "process";
-import { initTransactionController } from "./controllers/transactionController";
+import { initTransactionEndpoints } from "./controllers/transactionController";
 import formbody from "@fastify/formbody";
 import { processTransactions } from "./utils/transactionsProcessor";
+import { initBudgetEndpoint } from "./controllers/budgetController";
 
 async function setup() {
 
@@ -29,8 +30,9 @@ async function setup() {
     });
     
     await initCryptoEndpoints(SSEManager,server,db);
-    await initTransactionController(SSEManager,server,db);
-
+    await initTransactionEndpoints(SSEManager,server,db);
+    await initBudgetEndpoint(SSEManager,server,db);
+    
     modifyPrices(db);
     processTransactions(SSEManager,db);
 

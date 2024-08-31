@@ -4,7 +4,7 @@ import { env } from "process";
 import transaction from "../models/transactionModel";
 import { broadcastData } from "../sse/dataBroadcaster";
 import { SSEManager } from "@soluzioni-futura/sse-manager";
-import { getCryptoHtml, getTransactionHtml } from "./objectToHTMLHandler";
+import { getBudgetHtml, getCryptoHtml, getTransactionHtml } from "./objectToHTMLHandler";
 import { delay } from "./delayManager";
 
 export async function processBatchTransactions(SSEManager: SSEManager,db: Client) {
@@ -40,10 +40,11 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
     await dbQuery(db,`update budget set budget = $1;`,[budget]);
     broadcastData(SSEManager,"api/get_cryptos",await getCryptoHtml(db));
     broadcastData(SSEManager,"api/get_transactions",await getTransactionHtml(db));
+    broadcastData(SSEManager,"api/budget",await getBudgetHtml(db));
 }
 
 export async function processTransactions(SSEManager:SSEManager,db: Client) {
-    const DELAY_QUEUE_PROCESSING_MS = env.DELAY_QUEUE_PROCESSING_MS ?? 1000 * 5;
+    const DELAY_QUEUE_PROCESSING_MS = env.DELAY_QUEUE_PROCESSING_MS ?? 20000;
     while(true) {
         await processBatchTransactions(SSEManager,db);
         await delay(Number(DELAY_QUEUE_PROCESSING_MS));
