@@ -28,6 +28,21 @@
         </tbody>
     </table>
 
+    <table id="transactionTable">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Quantity</th>
+                <th>Transaction Price</th>
+                <th>Time and Date</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody hx-ext="sse" sse-connect="/api/get_transactions" sse-swap="message">
+            <!-- Table rows will be dynamically populated here -->
+        </tbody>
+    </table>
+
 </body>
 
 </html>
