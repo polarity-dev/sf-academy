@@ -4,9 +4,9 @@ import { SSEManager } from "@soluzioni-futura/sse-manager";
 import { delay } from "../utils/delayManager";
 import { Client } from "pg";
 import { dbQuery } from "../database/dbQuery";
-import crypto from "../models/crypto";
+import crypto from "../models/cryptoModel";
 import { broadcastData } from "../sse/dataBroadcaster";
-import { getCryptoHtml } from "../utils/getHtml";
+import { getCryptoHtml } from "../utils/objectToHTMLHandler";
 import { env } from "process";
 
 const DELAY_PRICE_MODIFICATION_MS = env.DELAY_PRICE_MODIFICATION_MS ?? 1000;
@@ -18,7 +18,7 @@ export async function initCryptoEndpoints(SSEManager: SSEManager, server: Fastif
 
         while (!signal.aborted) {
             try {
-                const cryptos:Array<crypto> = (await dbQuery(db,"select * from cryptos"));
+                const cryptos:Array<crypto> = await dbQuery(db,"select * from cryptos");
                 broadcastData(SSEManager,"api/get_cryptos",getCryptoHtml(cryptos));
                 await delay(Number(DELAY_PRICE_MODIFICATION_MS));
             } catch (error) {
@@ -29,5 +29,9 @@ export async function initCryptoEndpoints(SSEManager: SSEManager, server: Fastif
                 }
             } 
         }
+    });
+    // json crypto get endpoint
+    server.get("/api/crypto", async () => {
+        return JSON.stringify(await dbQuery(db,"select * from cryptos;"));
     });
 };
