@@ -3,11 +3,13 @@ FROM node:16
 
 WORKDIR /backend
 
-COPY . /backend/
+COPY package*.json ./
 
-RUN npm install typescript @types/node fastify @fastify/formbody pg @types/pg @soluzioni-futura/sse-manager --save-dev
-RUN npx tsc --init
-RUN npx tsc
+RUN npm install --save-dev
+
+COPY . . 
+
+RUN npm run build
 
 EXPOSE 3000
 
@@ -16,4 +18,4 @@ ENV DELAY_PRICE_MODIFICATION_MS=1000 DELAY_QUEUE_PROCESSING_MS=20000
 ENV PROCESS_BATCH_SIZE=5
 
 # Run the application
-CMD ["node", "src/index.js"]
+CMD ["npm", "start"]
