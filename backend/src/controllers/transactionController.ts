@@ -6,10 +6,7 @@ import { broadcastData } from "../sse/dataBroadcaster";
 import { getTransactionHtml } from "../utils/objectToHTMLHandler";
 import transaction from "../models/transactionModel";
 import { dbQuery } from "../database/dbQuery";
-import transactionSchema from "../models/transactionJSONSchema";
 import { checkTransaction } from "../utils/transactionsChecker";
-import { handleTransaction } from "../utils/transactionsHandler";
-import crypto from "../models/cryptoModel";
 
 export async function initTransactionEndpoints(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
     // html endpoint to get transactions list
@@ -22,17 +19,13 @@ export async function initTransactionEndpoints(SSEManager: SSEManager,server: Fa
         const transactions:Array<transaction> = await dbQuery(db,"select * from transactions order by date;");
         return JSON.stringify(transactions);
     });
+
+    server.post("/api/make_transaction", async (request,reply) => {
+        await checkTransaction(request,reply,SSEManager,db);
+    });
+
     // json endpoint for making transactions
-    server.post("/api/transactions", { schema: { body: transactionSchema } }, async (request,reply) => { 
-
-        const { symbol, action, quantity = 1 } = request.body as { symbol: string, action: string, quantity: number };
-        const response = await checkTransaction(db,symbol,action,quantity);
-        if (typeof response == "string") {
-            reply.send(response);
-        } else {
-            const crypto:crypto = response;
-            reply.send(await handleTransaction(SSEManager,db,crypto,(action == "buy" ? quantity : - quantity)));
-        }
-
+    server.post("/api/transactions", async (request,reply) => { 
+        await checkTransaction(request,reply,SSEManager,db);
     });
 }   
