@@ -8,7 +8,7 @@ import { modifyPrices } from "./utils/cryptoPriceModifier";
 import { env } from "process";
 import { initTransactionEndpoints } from "./controllers/transactionController";
 import formbody from "@fastify/formbody";
-import { processTransactions } from "./utils/transactionsProcessor";
+import { processTransactions } from "./utils/transaction_processing/transactionsProcessor";
 import { initBudgetEndpoint } from "./controllers/budgetController";
 
 async function setup() {

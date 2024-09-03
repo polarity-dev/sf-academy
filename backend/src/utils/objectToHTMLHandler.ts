@@ -51,7 +51,7 @@ export async function getBudgetHtml(db: Client) {
     
     if (response.success && response.data) {
         const budget:number = response.data[0].budget;
-        return { success: true, budget: budget.toString() };
+        return { success: true, data: budget.toFixed(2).toString() };
     } else {
         return { success: false };
     }

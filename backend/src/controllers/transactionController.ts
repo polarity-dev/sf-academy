@@ -4,9 +4,9 @@ import { SSEManager } from "@soluzioni-futura/sse-manager";
 import { Client } from "pg";
 import { broadcastData } from "../sse/dataBroadcaster";
 import { getTransactionHtml } from "../utils/objectToHTMLHandler";
-import { checkTransaction } from "../utils/transactionsChecker";
+import { checkTransaction } from "../utils/transaction_processing/transactionsChecker";
 import { getTable } from "../database/dbQueries";
-import { handleTransaction } from "../utils/transactionsHandler";
+import { handleTransaction } from "../utils/transaction_processing/transactionsHandler";
 
 export async function initTransactionEndpoints(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
     // html endpoint to get transactions list

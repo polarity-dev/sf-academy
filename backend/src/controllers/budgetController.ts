@@ -9,8 +9,8 @@ export async function initBudgetEndpoint(SSEManager: SSEManager,server: FastifyI
     server.get("/api/budget", async (request,reply) => {
         await handleNewConnection(SSEManager,request,reply,"api/budget");
         const response = await getBudgetHtml(db);
-        if (response.success && response.budget) {
-            broadcastData(SSEManager,"api/budget",response.budget);
+        if (response.success && response.data) {
+            broadcastData(SSEManager,"api/budget",response.data);
         }
     });
 }
