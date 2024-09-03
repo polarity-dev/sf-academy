@@ -1,20 +1,15 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyRequest } from "fastify";
 import transactionValidator from "../models/transactionJSONSchema";
 import { Client } from "pg";
 import crypto from "../models/cryptoModel";
-import { SSEManager } from "@soluzioni-futura/sse-manager";
-import { handleTransaction } from "./transactionsHandler";
+import { dbQuery } from "../database/dbQueries";
 
-// should design this better: 
-// something like
-// you query whether the request is good. if it is, return the crypto and the quantity so that you can call insert
-// otherwise, you stop
-export async function checkTransaction(request: FastifyRequest,reply: FastifyReply,SSEManager: SSEManager,db: Client) {
+export async function checkTransaction(request: FastifyRequest,db: Client) {
     if (!transactionValidator(request.body)) { // used to check whether the body has the required fields
-        if (transactionValidator.errors != null && transactionValidator.errors != undefined) {
-            reply.send(transactionValidator.errors[0].message);
+        if (transactionValidator.errors != undefined && transactionValidator.errors[0].message != undefined) {
+            return { success: false, error: transactionValidator.errors[0].message };
         } else {
-            console.log("Error: Error detected in input format but no error message showed up: ", request.body);
+            return { success: false, error: "Error detected in input format but no error message showed up" };
         }
     } else {
         let { symbol, action, quantity = "1" } = request.body as { symbol: string, action: string, quantity: string };
@@ -25,21 +20,21 @@ export async function checkTransaction(request: FastifyRequest,reply: FastifyRep
             quantity = "1"; // default value
         }
         if (action != "buy" && action != "sell") {
-            reply.send("Insert a valid action (buy or sell)");
+            return { success: false, error: "Insert a valid action (buy or sell)" };
         } else if (isNaN(+quantity) || +quantity <= 0) {
-            reply.send("Insert a positive numeric value");
+            return { success: false, error: "Insert a positive numeric value" };
         } else {
-            try {
-                const response = (await db.query("select * from cryptos where symbol = $1;",[symbol])).rows;
-                if (response.length == 0) {
-                    reply.send(`The crypto ${symbol} does not exist :(`);
+            const response = await dbQuery(db,"select * from cryptos where symbol = $1;",[symbol]);
+            if (response.success && response.data) {
+                const data = response.data;
+                if (data.length == 0) {
+                    return { success: false, error: `The crypto ${symbol} does not exist :(` };
                 } else {
-                    const crypto:crypto = response[0];
-                    reply.send(await handleTransaction(SSEManager,db,crypto,(action == "buy" ? Number(quantity) : - Number(quantity))));
+                    const crypto:crypto = data[0];
+                    return { success: true, crypto: crypto, quantity: (action == "buy" ? Number(quantity) : - Number(quantity)) };
                 }
-            } catch (error) {
-                console.error(`There was an error while searching for the crypto ${symbol}: `, error);
-                process.exit(1);
+            } else {
+                return { success: false, error: `There was a database error while searching for the crypto ${symbol}` };
             }
         }
     }
