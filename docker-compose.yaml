@@ -6,6 +6,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      ADDRESS: ${ADDRESS}
+      PORT: ${PORT} 
+      DELAY_PRICE_MODIFICATION_MS: ${DELAY_PRICE_MODIFICATION_MS} 
+      DELAY_QUEUE_PROCESSING_MS: ${DELAY_QUEUE_PROCESSING_MS} 
+      PROCESS_BATCH_SIZE: ${PROCESS_BATCH_SIZE}
   db:
     image: postgres:15
     container_name: mydb
