@@ -1,17 +1,25 @@
 import { Client } from "pg";
-import { dbQuery } from "../database/dbQuery";
 import { env } from "process";
 import transaction from "../models/transactionModel";
 import { broadcastData } from "../sse/dataBroadcaster";
 import { SSEManager } from "@soluzioni-futura/sse-manager";
 import { getBudgetHtml, getCryptoHtml, getTransactionHtml } from "./objectToHTMLHandler";
 import { delay } from "./delayManager";
+import { dbQuery } from "../database/dbQueries";
 
 export async function processBatchTransactions(SSEManager: SSEManager,db: Client) {
     const PROCESS_BATCH_SIZE = env.PROCESS_BATCH_SIZE ?? 5;
-    const transactions:Array<transaction> = await dbQuery(db,`select * from transactions where state = 'pending' order by date limit $1;`,[Number(PROCESS_BATCH_SIZE)]);
+    let response = await dbQuery(db,`select * from transactions where state = 'pending' order by date limit $1;`,[Number(PROCESS_BATCH_SIZE)]);
+    if (response.success == false || !response.data) {
+        return;
+    }
+    const transactions:Array<transaction> = response.data;
     if (transactions.length == 0) { return; }
-    var budget = (await dbQuery(db,`select * from budget;`))[0].budget;
+    response = (await dbQuery(db,`select * from budget;`));
+    if (response.success == false || !response.data) {
+        return;
+    }
+    var budget = response.data[0].budget;
     for (const transaction of transactions) {
         const price = transaction.price;
         var quantity = transaction.quantity;
@@ -27,7 +35,11 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
             }
         } else { 
             quantity = -quantity;
-            const previous_owned = (await dbQuery(db,"select * from cryptos where symbol = $1;",[symbol]))[0].owned;
+            response = (await dbQuery(db,"select * from cryptos where symbol = $1;",[symbol]));
+            if (response.success == false || !response.data) {
+                return;
+            }
+            const previous_owned = response.data[0].owned;
             if (previous_owned >= quantity) {
                 budget += price * quantity;
                 await dbQuery(db,`update cryptos set owned = owned + $1 where symbol = $2;`,[-quantity,symbol]);
@@ -38,9 +50,15 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
         }
     }
     await dbQuery(db,`update budget set budget = $1;`,[budget]);
-    broadcastData(SSEManager,"api/get_cryptos",await getCryptoHtml(db));
-    broadcastData(SSEManager,"api/get_transactions",await getTransactionHtml(db));
-    broadcastData(SSEManager,"api/budget",await getBudgetHtml(db));
+    const crypto_response = await getCryptoHtml(db);
+    if (crypto_response.success && crypto_response.data) {
+        broadcastData(SSEManager,"api/get_cryptos",crypto_response.data);
+    }
+    const transaction_response = await getTransactionHtml(db);
+    if (transaction_response.success && transaction_response.data) {
+        broadcastData(SSEManager,"api/get_transactions",transaction_response.data);
+    }
+    broadcastData(SSEManager,"api/budget",budget.toString());
 }
 
 export async function processTransactions(SSEManager:SSEManager,db: Client) {
