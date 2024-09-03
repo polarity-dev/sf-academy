@@ -13,13 +13,13 @@ import { initBudgetEndpoint } from "./controllers/budgetController";
 
 async function setup() {
 
-    const ADDRESS = env.ADDRESS ?? "localhost";
+    const ADDRESS = env.ADDRESS ?? "0.0.0.0";
     const PORT = env.PORT ?? "3000";
 
     const server = Fastify({logger: true});
 
     server.register(formbody);
-    
+
     const SSEManager = await initializeSSEManager();
 
     // serves html file
@@ -38,7 +38,7 @@ async function setup() {
 
     server.listen({ host: ADDRESS, port: Number(PORT) }, (err,address) => {
         if (err) {
-            server.log.error(err);
+            console.error(err);
             process.exit(1);
         }
     });
