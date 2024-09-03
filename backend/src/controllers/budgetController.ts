@@ -8,6 +8,9 @@ import { getBudgetHtml } from "../utils/objectToHTMLHandler";
 export async function initBudgetEndpoint(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
     server.get("/api/budget", async (request,reply) => {
         await handleNewConnection(SSEManager,request,reply,"api/budget");
-        broadcastData(SSEManager,"api/budget",await getBudgetHtml(db));
+        const response = await getBudgetHtml(db);
+        if (response.success && response.budget) {
+            broadcastData(SSEManager,"api/budget",response.budget);
+        }
     });
 }
