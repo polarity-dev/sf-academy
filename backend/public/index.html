@@ -17,12 +17,12 @@
     <p id="apiBudget" hx-ext="sse" sse-connect="/api/budget" sse-swap="message"></p>
 
     <form hx-post="/api/make_transaction" hx-target="#search-results">
-        <label for="Crypto">Crypto:</label><br>
-        <input type="text" id="Crypto" name="Crypto" placeholder="e.g., BTC"><br>
-        <label for="Action">Action (buy or sell):</label><br>
-        <input type="text" id="Action" name="Action"><br>
-        <label for="Quantity">Quantity:</label><br>
-        <input type="number" step="0.000001" min="0" id="Quantity" name="Quantity" value=1><br><br>
+        <label for="symbol">Crypto symbol:</label><br>
+        <input type="text" id="symbol" name="symbol" placeholder="e.g., BTC"><br>
+        <label for="action">Action (buy or sell):</label><br>
+        <input type="text" id="action" name="action"><br>
+        <label for="quantity">Quantity:</label><br>
+        <input type="number" step="0.01" min="0.01" id="quantity" name="quantity" value=1><br><br>
         <input type="submit" value="Submit">
     </form> 
 
