@@ -8,6 +8,8 @@
     "@soluzioni-futura/sse-manager": "^1.5.1",
     "@types/node": "^22.5.2",
     "@types/pg": "^8.11.8",
+    "axios": "^1.7.7",
+    "commander": "^12.1.0",
     "fastify": "^4.28.1",
     "joi": "^17.13.3",
     "pg": "^8.12.0",

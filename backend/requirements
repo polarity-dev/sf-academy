@@ -1,1 +1,1 @@
-typescript ts-node @types/node joi fastify @fastify/formbody pg @types/pg @soluzioni-futura/sse-manager
+typescript ts-node @types/node joi fastify @fastify/formbody pg @types/pg @soluzioni-futura/sse-manager axios commander
