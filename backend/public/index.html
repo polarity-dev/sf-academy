@@ -10,52 +10,77 @@
     <script src="https://unpkg.com/htmx.org@1.9.4"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/sse.js"></script>
 
+    <!-- Tailwind CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
 
-    <p id="apiBudget" hx-ext="sse" sse-connect="/api/budget" sse-swap="message"></p>
+    <!-- Dashboard Header -->
+    <header class="bg-indigo-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-3xl font-bold">Crypto Trading Dashboard</h1>
+        </div>
+    </header> 
 
-    <form hx-post="/api/make_transaction" hx-target="#search-results">
-        <label for="symbol">Crypto symbol:</label><br>
-        <input type="text" id="symbol" name="symbol" placeholder="e.g., BTC"><br>
-        <label for="action">Action (buy or sell):</label><br>
-        <input type="text" id="action" name="action"><br>
-        <label for="quantity">Quantity:</label><br>
-        <input type="number" step="0.01" min="0.01" id="quantity" name="quantity" value=1><br><br>
-        <input type="submit" value="Submit">
-    </form> 
+    <!-- Main Content Area -->
+    <div class="container w-full md:w-4/5 xl:w-3/5 mx-auto px-4 py-8">
+        <!-- Budget Section -->
+        <h1 class="text-indigo-700 text-2xl font-bold mb-4">Budget</h1>
+        <div class="bg-white p-4 rounded shadow mb-8">
+            <p id="apiBudget" hx-ext="sse" sse-connect="/api/budget" sse-swap="message"></p>
+        </div>
 
-    <div id="search-results"></div>
+        <!-- Cryptocurrencies Section -->
+        <h1 class="text-indigo-700 text-2xl font-bold mt-8 mb-4">Cryptocurrencies</h1>
+        <div id="cryptoDiv" class="p-8 mt-6 rounded-lg shadow-lg bg-white">
+            <table id="cryptoTable" class="w-full table-auto">
+                <thead>
+                    <tr class="bg-indigo-100">
+                        <th class="px-4 py-2 text-center">Name</th>
+                        <th class="px-4 py-2 text-center">Symbol</th>
+                        <th class="px-4 py-2 text-center">Price</th>
+                        <th class="px-4 py-2 text-center">Owned</th>
+                    </tr>
+                </thead>
+                <tbody hx-ext="sse" sse-connect="/api/get_cryptos" sse-swap="message">
+                    <!-- Table rows will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
 
-    <table id="cryptoTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Symbol</th>
-                <th>Price</th>
-                <th>Owned</th>
-            </tr>
-        </thead>
-        <tbody hx-ext="sse" sse-connect="/api/get_cryptos" sse-swap="message">
-            <!-- Table rows will be dynamically populated here -->
-        </tbody>
-    </table>
+        <!-- Transactions Section -->
+        <h1 class="text-indigo-700 text-2xl font-bold mt-8 mb-4">Transactions</h1>
+        <div id="transactionDiv" class="p-8 mt-6 rounded-lg shadow-lg bg-white">
+            <table id="transactionTable" class="w-full table-auto">
+                <thead>
+                    <tr class="bg-indigo-100">
+                        <th class="px-4 py-2 text-center">Symbol</th>
+                        <th class="px-4 py-2 text-center">Quantity</th>
+                        <th class="px-4 py-2 text-center">Transaction Price</th>
+                        <th class="px-4 py-2 text-center">Time and Date</th>
+                        <th class="px-4 py-2 text-center">Message</th>
+                    </tr>
+                </thead>
+                <tbody hx-ext="sse" sse-connect="/api/get_transactions" sse-swap="message">
+                    <!-- Table rows will be dynamically populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <table id="transactionTable">
-        <thead>
-            <tr>
-                <th>Symbol</th>
-                <th>Quantity</th>
-                <th>Transaction Price</th>
-                <th>Time and Date</th>
-                <th>Message</th>
-            </tr>
-        </thead>
-        <tbody hx-ext="sse" sse-connect="/api/get_transactions" sse-swap="message">
-            <!-- Table rows will be dynamically populated here -->
-        </tbody>
-    </table>
+    <!-- Input Field for Commands -->
+    <div class="fixed top-20 right-4 px-4">
+        <div class="container mx-auto">
+            <form hx-post="/api/make_transaction" hx-target="#search-results">
+                <input class="form-input mt-1 block px-4 py-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" type="text" id="symbol" name="symbol" placeholder="Crypto Symbol">
+                <input class="form-input mt-1 block px-4 py-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" type="text" id="action" name="action" placeholder="Action (buy or sell)">
+                <input class="form-input mt-1 block px-4 py-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" type="number" step="0.01" min="0.01" id="quantity" name="quantity" placeholder="Quantity (default = 1)">
+                <input class="form-input mt-1 block px-4 py-2 rounded-md border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" type="submit" value="Submit">
+            </form> 
+            <div id="search-results" class="mt-2 bg-white shadow-lg rounded p-4"></div>
+        </div>
+    </div>
 
 </body>
 
