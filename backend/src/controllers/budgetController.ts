@@ -5,7 +5,9 @@ import { Client } from "pg";
 import { broadcastData } from "../sse/dataBroadcaster";
 import { getBudgetHtml } from "../utils/objectToHTMLHandler";
 
+
 export async function initBudgetEndpoint(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
+    // html endpoint per la connessione SSE che fornisce il budget
     server.get("/api/budget", async (request,reply) => {
         await handleNewConnection(SSEManager,request,reply,"api/budget");
         const response = await getBudgetHtml(db);

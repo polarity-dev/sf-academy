@@ -9,7 +9,7 @@ import { getTable } from "../database/dbQueries";
 import { handleTransaction } from "../utils/transaction_processing/transactionsHandler";
 
 export async function initTransactionEndpoints(SSEManager: SSEManager,server: FastifyInstance, db: Client) {
-    // html endpoint to get transactions list
+    // endpoint html per la connessione SSE che fornisce la lista delle transazioni
     server.get("/api/get_transactions",async (request,reply) => {
         await handleNewConnection(SSEManager,request,reply,"api/get_transactions");
         const response = await getTransactionHtml(db);
@@ -17,7 +17,7 @@ export async function initTransactionEndpoints(SSEManager: SSEManager,server: Fa
             broadcastData(SSEManager,"api/get_transactions",response.data);
         }
     });
-    // html endpoint to make a transaction 
+    // endpoint html per compiere una transazione
     server.post("/api/make_transaction", async (request,reply) => {
         const check_response = await checkTransaction(request,db);
         if (check_response.success && check_response.crypto && check_response.quantity) {
@@ -28,8 +28,7 @@ export async function initTransactionEndpoints(SSEManager: SSEManager,server: Fa
             reply.send(check_response.error);
         }
     });
-    
-    // json endpoint to get transactions list
+    // endpoint json per ottenere la lista di transazioni
     server.get("/api/transactions", async (request,reply) => {
         const response = await getTable(db,"transactions","date");
         if (response.success && response.data) {
@@ -38,14 +37,12 @@ export async function initTransactionEndpoints(SSEManager: SSEManager,server: Fa
             reply.send("Internal server error.");
         }
     });
-
-    // json endpoint to make a transaction
+    // endpoint json per fare una transazione
     server.post("/api/transactions", async (request,reply) => { 
         const check_response = await checkTransaction(request,db);
         if (check_response.success && check_response.crypto && check_response.quantity) {
             const handle_response = await handleTransaction(SSEManager,db,check_response.crypto,check_response.quantity);
             reply.send(handle_response);
-            // do something if this does not work
         } else {
             reply.send(check_response.error);
         }

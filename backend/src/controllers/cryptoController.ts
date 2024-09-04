@@ -9,11 +9,13 @@ import { env } from "process";
 import { getTable } from "../database/dbQueries";
 
 export async function initCryptoEndpoints(SSEManager: SSEManager, server: FastifyInstance, db: Client) {
-    // html endpoint for the cryptos in the dashboard
+    // html endpoint per la connessione SSE che fornisce le criptovalute
     server.get("/api/get_cryptos", async (request,reply) => {
+        // fornisce periodicamente le criptovalute, con un periodo uguale al periodo di modifica. In questo modo, ad ogni cambio di prezzo vengono mostrati
+        // i prezzi aggiornati. 
         const DELAY_PRICE_MODIFICATION_MS = env.DELAY_PRICE_MODIFICATION_MS ?? "1000";
         const signal = await handleNewConnection(SSEManager,request,reply,"api/get_cryptos");
-        while (!signal.aborted) {
+        while (!signal.aborted) { // Interrompe il flusso di informazioni se la connessione viene chiusa (e.g. quando l'utente chiude la dashboard)
             try {
                 const response = await getCryptoHtml(db);
                 if (response.success && response.data) {
@@ -29,7 +31,7 @@ export async function initCryptoEndpoints(SSEManager: SSEManager, server: Fastif
             } 
         }
     });
-    // json crypto get endpoint
+    // json endpoint che fornisce le criptovalute
     server.get("/api/crypto", async () => {
         const response = await getTable(db,"cryptos","id");
         if (response.success && response.data) {

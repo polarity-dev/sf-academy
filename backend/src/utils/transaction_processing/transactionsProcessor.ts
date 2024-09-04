@@ -7,8 +7,9 @@ import { getBudgetHtml, getCryptoHtml, getTransactionHtml } from "../objectToHTM
 import { delay } from "../delayManager";
 import { dbQuery } from "../../database/dbQueries";
 
+// processa un batch di query
 export async function processBatchTransactions(SSEManager: SSEManager,db: Client) {
-    const PROCESS_BATCH_SIZE = env.PROCESS_BATCH_SIZE ?? 5;
+    const PROCESS_BATCH_SIZE = env.PROCESS_BATCH_SIZE ?? "5";
     let response = await dbQuery(db,`select * from transactions where state = 'pending' order by date limit $1;`,[Number(PROCESS_BATCH_SIZE)]);
     if (response.success == false || !response.data) {
         return;
@@ -19,6 +20,7 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
     if (response.success == false || !response.data) {
         return;
     }
+    // logica della transazione (se ha abbastanza credito per comprare / se possiede abbastanza criptovalute da vendere)
     var budget = response.data[0].budget;
     for (const transaction of transactions) {
         const price = transaction.price;
@@ -64,6 +66,7 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
     }
 }
 
+// periodicamente chiama il batch processing
 export async function processTransactions(SSEManager:SSEManager,db: Client) {
     const DELAY_QUEUE_PROCESSING_MS = env.DELAY_QUEUE_PROCESSING_MS ?? 20000;
     while(true) {

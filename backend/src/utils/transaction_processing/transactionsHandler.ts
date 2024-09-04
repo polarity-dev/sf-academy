@@ -5,6 +5,7 @@ import { getTransactionHtml } from "../objectToHTMLHandler";
 import crypto from "../../models/cryptoModel";
 import { dbQuery } from "../../database/dbQueries";
 
+// aggiunge la transazione alla coda, con stato "pending", poi fornisce la lista di transazioni aggiornate.
 export async function handleTransaction(SSEManager: SSEManager, db: Client, crypto: crypto, quantity: number) {
     const insert_response = await dbQuery(db,"insert into transactions (symbol,quantity,price) values ($1,$2,$3);",[crypto.symbol,quantity,crypto.price]);
     if (insert_response.success == false) {
