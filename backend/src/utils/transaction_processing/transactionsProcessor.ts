@@ -68,7 +68,7 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
 
 // periodicamente chiama il batch processing
 export async function processTransactions(SSEManager:SSEManager,db: Client) {
-    const DELAY_QUEUE_PROCESSING_MS = env.DELAY_QUEUE_PROCESSING_MS ?? 20000;
+    const DELAY_QUEUE_PROCESSING_MS = env.DELAY_QUEUE_PROCESSING_MS ?? "20000";
     while(true) {
         await processBatchTransactions(SSEManager,db);
         await delay(Number(DELAY_QUEUE_PROCESSING_MS));
