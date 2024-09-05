@@ -39,7 +39,7 @@ export async function processBatchTransactions(SSEManager: SSEManager,db: Client
             quantity = -quantity;
             response = (await dbQuery(db,"select * from cryptos where symbol = $1;",[symbol]));
             if (response.success == false || !response.data) {
-                return;
+                break; // changed from "return" to "break" because if I returned there, the budget would not get updated
             }
             const previous_owned = response.data[0].owned;
             if (previous_owned >= quantity) {
