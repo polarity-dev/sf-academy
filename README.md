@@ -19,5 +19,5 @@ To make a transaction through the command line, run `curl -X POST -d "symbol=the
 
 ### Playing with the project
 
-If you want to modify the project default parameters, such as the starting budget or the delay between price modifications, you can do such by either modifying the .env file or the database/init.sql file. 
+If you want to modify the project default parameters, such as the starting budget or the delay between price modifications, you can do so by either modifying the .env file or the database/init.sql file. 
 After doing so, run `docker compose down` in order to drop the database and run `docker compose up --build` again in order to build the database with the updated data. 
