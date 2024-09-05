@@ -33,7 +33,7 @@ async function setup() {
     await initTransactionEndpoints(SSEManager,server,db);
     await initBudgetEndpoint(SSEManager,server,db);
     
-    modifyPrices(db);
+    modifyPrices(SSEManager,db);
     processTransactions(SSEManager,db);
 
     server.listen({ host: ADDRESS, port: Number(PORT) }, (err,address) => {
