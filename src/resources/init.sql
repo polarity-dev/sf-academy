@@ -2,7 +2,7 @@ CREATE TABLE Crypto (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price NUMERIC(15, 2) NOT NULL,
-    quantity NUMERIC(20, 8) NOT NULL
+    quantity NUMERIC(20, 2) NOT NULL
 );
 
 CREATE TABLE Users (

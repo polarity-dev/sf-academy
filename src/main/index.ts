@@ -5,6 +5,7 @@ import { DbManager } from './manager/dbManager'
 import  dotenv  from 'dotenv';
 import { Crypto } from './entity/crypto';
 import { HtmlManager } from './manager/htmlManager';
+import { CryptoManager } from './manager/cryptoManager';
 
 const server = fastify({ logger: true })
 
@@ -14,9 +15,11 @@ void (async () => {
     dotenv.config({path : "../resources/.env"})
 
     const htmlManager = new HtmlManager()
+    const cryptoManager = new CryptoManager()
 
     //init Crypto Data
     const dbManager = new DbManager()
+    dbManager.resetCrypto()
     const cryptoList = await dbManager.getCryptoList();
     if(!cryptoList.rowCount || cryptoList.rowCount <= 0){
         dbManager.initCrypto()
@@ -33,8 +36,9 @@ void (async () => {
     setInterval(async() => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
-        await sseManager.broadcast(room, { data: htmlManager.rowsToTable(cryptoList) })
-    }, 60000)
+        const updatedCrypto = cryptoManager.changeMarketValue(cryptoList)
+        await sseManager.broadcast(room, { data: htmlManager.rowsToTable(updatedCrypto) })
+    }, 10000)
 
 
     //HTML api

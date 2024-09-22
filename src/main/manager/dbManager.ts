@@ -1,4 +1,5 @@
 import { Client } from 'pg'
+import { Crypto } from '../entity/crypto';
 
 export class DbManager {
     private client : Client
@@ -38,6 +39,13 @@ export class DbManager {
 
     getTransactionQueue(){
 
+    }
+
+    async updateCrypto(crypto : Crypto){
+        const query = "UPDATE crypto SET name = $1, price = $2, quantity = $3 WHERE id = $4";
+        const values = [crypto.name, crypto.price, crypto.quantity, crypto.id]
+        await this.client.query(query, values)
+        
     }
 
     async initCrypto(){
