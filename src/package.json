@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node main/index.js"
+    "start": "node main/index.js --env-file=resources/.env"
   },
   "keywords": [],
   "author": "",
