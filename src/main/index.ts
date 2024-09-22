@@ -3,6 +3,8 @@ import fs from 'fs'
 import { createSSEManager, FastifyHttpAdapter } from '@soluzioni-futura/sse-manager'
 import { DbManager } from './manager/dbManager'
 import  dotenv  from 'dotenv';
+import { Crypto } from './entity/crypto';
+import { HtmlManager } from './manager/htmlManager';
 
 const server = fastify({ logger: true })
 
@@ -11,10 +13,11 @@ void (async () => {
 
     dotenv.config({path : "../resources/.env"})
 
+    const htmlManager = new HtmlManager()
+
     //init Crypto Data
     const dbManager = new DbManager()
-    let cryptoList = await dbManager.getCryptoList();
-    console.log(cryptoList.rowCount)
+    const cryptoList = await dbManager.getCryptoList();
     if(!cryptoList.rowCount || cryptoList.rowCount <= 0){
         dbManager.initCrypto()
     }
@@ -28,7 +31,9 @@ void (async () => {
     const room = "crypto-list"
 
     setInterval(async() => {
-        await sseManager.broadcast(room, { data: cryptoList.rows.toString() })
+        const result  = await dbManager.getCryptoList();
+        const cryptoList = result.rows.map( r => new Crypto(r))
+        await sseManager.broadcast(room, { data: htmlManager.rowsToTable(cryptoList) })
     }, 60000)
 
 
@@ -41,9 +46,10 @@ void (async () => {
 
     server.get("/crypto-list", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
-        cryptoList = await dbManager.getCryptoList();
+        const result  = await dbManager.getCryptoList();
+        const cryptoList = result.rows.map( r => new Crypto(r))
         console.log(cryptoList)
-        sseStream.broadcast({ data: cryptoList.rows.toString() })
+        sseStream.broadcast({ data: htmlManager.rowsToTable(cryptoList)})
         await sseStream.addToRoom(room)
         console.log("Successfully joined sseStream")
     })
