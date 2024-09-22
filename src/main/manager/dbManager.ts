@@ -23,7 +23,9 @@ export class DbManager {
     }
 
     getCryptoList(){
+        const query =  "SELECT * FROM crypto"
         
+        return this.client.query(query) 
     }
 
     buyCrypto(){
@@ -38,8 +40,27 @@ export class DbManager {
 
     }
 
-    initCrypto(){
+    async initCrypto(){
+        const n = process.env.CRYPTO_NUMBER || 5
+        const maxValue = Number(process.env.CRYPTO_MAX_BASE_VALUE || 10000)
+        const maxQta = Number(process.env.CRYPTO_MAX_BASE_QTA || 10000)
+        const minQta = Number(process.env.CRYPTO_MIN_BASE_QTA || 100)
+        let name = 'crypto'
+        const query = "INSERT INTO crypto (name, price, quantity) VALUES ($1, $2, $3)"
+
+        for(let i = 0; i < 5; i++){
+            const values = [name+i, Math.random() * maxValue,  Math.random() * (maxQta - minQta) + minQta]
+            console.log(values)
+            await this.client.query(query, values)
+        }
         
+    }
+
+    async resetCrypto(){
+
+        const query = "DELETE FROM crypto "
+        await this.client.query(query)
+
         
     }
 

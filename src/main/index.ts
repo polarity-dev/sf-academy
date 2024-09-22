@@ -1,11 +1,24 @@
 import fastify from 'fastify'
 import fs from 'fs'
 import { createSSEManager, FastifyHttpAdapter } from '@soluzioni-futura/sse-manager'
+import { DbManager } from './manager/dbManager'
+import  dotenv  from 'dotenv';
 
 const server = fastify({ logger: true })
 
 
 void (async () => {
+
+    dotenv.config({path : "../resources/.env"})
+
+    //init Crypto Data
+    const dbManager = new DbManager()
+    let cryptoList = await dbManager.getCryptoList();
+    console.log(cryptoList.rowCount)
+    if(!cryptoList.rowCount || cryptoList.rowCount <= 0){
+        dbManager.initCrypto()
+    }
+
 
     //SSE manager
     const sseManager = await createSSEManager({
@@ -15,8 +28,8 @@ void (async () => {
     const room = "crypto-list"
 
     setInterval(async() => {
-        await sseManager.broadcast(room, { data: "8  080" })
-    }, 10000)
+        await sseManager.broadcast(room, { data: cryptoList.rows.toString() })
+    }, 60000)
 
 
     //HTML api
@@ -28,7 +41,9 @@ void (async () => {
 
     server.get("/crypto-list", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
-        sseStream.broadcast({ data: "Joining you to test-room" })
+        cryptoList = await dbManager.getCryptoList();
+        console.log(cryptoList)
+        sseStream.broadcast({ data: cryptoList.rows.toString() })
         await sseStream.addToRoom(room)
         console.log("Successfully joined sseStream")
     })

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node main/index.js --env-file=resources/.env"
+    "start": "node main/index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@soluzioni-futura/sse-manager": "^1.5.1",
+    "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
     "pg": "^8.13.0"
   },
