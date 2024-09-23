@@ -4,8 +4,9 @@ import { createSSEManager, FastifyHttpAdapter } from '@soluzioni-futura/sse-mana
 import { DbManager } from './manager/dbManager'
 import  dotenv  from 'dotenv';
 import { Crypto } from './entity/crypto';
-import { HtmlManager } from './manager/htmlManager';
+import { HtmlManager } from './manager/htmlManager';    
 import { CryptoManager } from './manager/cryptoManager';
+import { User } from './entity/user';
 
 const server = fastify({ logger: true })
 
@@ -25,20 +26,32 @@ void (async () => {
         dbManager.initCrypto()
     }
 
+    //init user
+    let user = new User({
+        id : '1',
+        name : "paolo",
+        balance : process.env.STARTING_BALANCE || 100000
+    })
+
 
     //SSE manager
     const sseManager = await createSSEManager({
         httpAdapter: new FastifyHttpAdapter()
     })
 
-    const room = "crypto-list"
+    const cryptoRoom = "crypto-room"
+    const balanceRoom = "balance-room"
 
     setInterval(async() => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         const updatedCrypto = cryptoManager.changeMarketValue(cryptoList)
-        await sseManager.broadcast(room, { data: htmlManager.rowsToTable(updatedCrypto) })
+        await sseManager.broadcast(cryptoRoom, { data: htmlManager.rowsToTable(updatedCrypto) })
     }, 10000)
+
+    async function sendNewBalance(){
+        await sseManager.broadcast(balanceRoom, { data: user.balance.toString() })
+    }
 
 
     //HTML api
@@ -48,14 +61,26 @@ void (async () => {
         
     })
 
+
+    server.get('/ping', async (request, reply) => {
+        return 'pong'
+    })
+
     server.get("/crypto-list", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         console.log(cryptoList)
         sseStream.broadcast({ data: htmlManager.rowsToTable(cryptoList)})
-        await sseStream.addToRoom(room)
-        console.log("Successfully joined sseStream")
+        await sseStream.addToRoom(cryptoRoom)
+        console.log("Successfully joined cryptoRoom")
+    })
+
+    server.get("/balance", async(req, res) => {
+        const sseStream = await sseManager.createSSEStream(res)
+        sseStream.broadcast({ data: user.balance.toString() })
+        await sseStream.addToRoom(balanceRoom)
+        console.log("Successfully joined balanceRoom")
     })
 
     server.get("/queue", async(req, res) => {
@@ -65,6 +90,16 @@ void (async () => {
     server.get("/transactions", async(req, res) => {
         return "transactions"
     })
+
+    server.post("/sell", async(req, res) => {
+        return "transactions"
+    })
+
+
+    server.post("/buy", async(req, res) => {
+        return "transactions"
+    })
+
 
 
 
