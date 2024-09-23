@@ -19,8 +19,20 @@ export class DbManager {
         });
     }
 
-    getTransactionHistory(){
+    getTransactionHistory(userId : string){
+        const query =  "SELECT t.*, c.name as cryptoName FROM transactionQueue t"+
+        "inner join crypto c on c.id = t.cryptoId" +
+        "where userId = $1 and status = 'completed'"
         
+        return this.client.query(query, [userId])
+    }
+
+    getTransactionQueue(userId : string){
+        const query =  "SELECT t.*, c.name as cryptoName FROM transactionQueue t"+
+        "inner join crypto c on c.id = t.cryptoId" +
+        "where userId = $1 and status != 'completed'"
+        
+        return this.client.query(query, [userId])
     }
 
     getCryptoList(){
@@ -37,9 +49,7 @@ export class DbManager {
         
     }
 
-    getTransactionQueue(){
-
-    }
+    
 
     async updateCrypto(crypto : Crypto){
         const query = "UPDATE crypto SET name = $1, price = $2, quantity = $3 WHERE id = $4";

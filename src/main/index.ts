@@ -7,6 +7,7 @@ import { Crypto } from './entity/crypto';
 import { HtmlManager } from './manager/htmlManager';    
 import { CryptoManager } from './manager/cryptoManager';
 import { User } from './entity/user';
+import { Transaction } from './entity/transaction';
 
 const server = fastify({ logger: true })
 
@@ -46,7 +47,7 @@ void (async () => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         const updatedCrypto = cryptoManager.changeMarketValue(cryptoList)
-        await sseManager.broadcast(cryptoRoom, { data: htmlManager.rowsToTable(updatedCrypto) })
+        await sseManager.broadcast(cryptoRoom, { data: htmlManager.cryptoToTable(updatedCrypto) })
     }, 10000)
 
     async function sendNewBalance(){
@@ -71,7 +72,7 @@ void (async () => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         console.log(cryptoList)
-        sseStream.broadcast({ data: htmlManager.rowsToTable(cryptoList)})
+        sseStream.broadcast({ data: htmlManager.cryptoToTable(cryptoList)})
         await sseStream.addToRoom(cryptoRoom)
         console.log("Successfully joined cryptoRoom")
     })
@@ -84,11 +85,15 @@ void (async () => {
     })
 
     server.get("/queue", async(req, res) => {
-        return "queue"
+        const result  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = result.rows.map( r => new Transaction(r))
+        return htmlManager.transactionToTable(transactionList, true)
     })
 
     server.get("/transactions", async(req, res) => {
-        return "transactions"
+        const result  = await dbManager.getTransactionHistory(user.id);
+        const transactionList = result.rows.map( r => new Transaction(r))
+        return htmlManager.transactionToTable(transactionList, false)
     })
 
     server.post("/sell", async(req, res) => {
