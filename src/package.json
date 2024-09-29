@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build-start": "tsc -p tsconfig.json & node main/index.js",
     "build": "tsc -p tsconfig.json",
-    "start": "node main/index.js"
+    "start": "node main/index.js",
+    "nodemon-start": "nodemon --exec npm run build-start -e ts,json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/formbody": "^8.0.1",
     "@soluzioni-futura/sse-manager": "^1.5.1",
     "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
