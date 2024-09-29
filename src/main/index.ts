@@ -6,7 +6,7 @@ import { Crypto } from './entity/crypto';
 import { HtmlManager } from './ui/htmlManager';    
 import { CryptoManager } from './manager/cryptoManager';
 import { User } from './entity/user';
-import { Transaction } from './entity/transaction';
+import { Transaction, TransactionType } from './entity/transaction';
 
 
 const server = fastify({ logger: true })
@@ -48,7 +48,7 @@ void (async () => {
         const cryptoList = result.rows.map( r => new Crypto(r))
         const updatedCrypto = cryptoManager.changeMarketValue(cryptoList)
         await sendNewCryptoList(htmlManager.getCryptoTable(updatedCrypto))
-    }, 10000)
+    }, 1000000000)
 
     async function sendNewCryptoList(html : string){
         await sseManager.broadcast(cryptoRoom, { data: html })
@@ -63,7 +63,10 @@ void (async () => {
     server.get('/', async (request, reply) => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
-        reply.type('text/html').send(htmlManager.getMainpage(cryptoList))
+        const resultT  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        console.log(transactionList)
+        reply.type('text/html').send(htmlManager.getMainpage(cryptoList, user, transactionList))
     })
 
 
@@ -87,24 +90,21 @@ void (async () => {
         console.log("Successfully joined balanceRoom")
     })   
 
-    server.get("/queue", async(req, res) => {
-        
-    })
-
-    server.get("/transactions", async(req, res) => {
-    
-    })
-
     server.post("/sell", async(req, res) => {
-        return "transactions"
+        let data : {crypto : string, quantity : number} = req.body as {crypto : string, quantity : number}
+        let crypto = new Crypto(dbManager.getCrypto(data.crypto))
+        dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
+        return 'Vendi'
     })
 
     server.post("/buy",async(req, res) => {
-        console.log(req.body)
-        return "transactions"
+        let data = req.body as {crypto : string, quantity : number}
+        console.log(data.crypto)
+        let crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        console.log(crypto)
+        dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
+        return 'Compra'
     })
-
-
 
 
 

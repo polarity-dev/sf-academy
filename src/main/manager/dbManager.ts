@@ -1,5 +1,7 @@
 import { Client } from 'pg'
 import { Crypto } from '../entity/crypto';
+import { User } from '../entity/user';
+import { Status, TransactionType } from '../entity/transaction';
 
 export class DbManager {
     private client : Client
@@ -20,39 +22,43 @@ export class DbManager {
     }
 
     getTransactionHistory(userId : string){
-        const query =  "SELECT t.*, c.name as cryptoName FROM transactionQueue t"+
-        "inner join crypto c on c.id = t.cryptoId" +
-        "where userId = $1 and status = 'completed'"
+        const query =  `SELECT t.*, c.name as cryptoName FROM transactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status != 'pending'`
         
         return this.client.query(query, [userId])
     }
 
     getTransactionQueue(userId : string){
-        const query =  "SELECT t.*, c.name as cryptoName FROM transactionQueue t"+
-        "inner join crypto c on c.id = t.cryptoId" +
-        "where userId = $1 and status != 'completed'"
+        const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status = 'pending'`
         
         return this.client.query(query, [userId])
     }
 
     getCryptoList(){
-        const query =  "SELECT * FROM crypto"
+        const query =  `SELECT * FROM crypto`
         
         return this.client.query(query) 
     }
 
-    buyCrypto(){
-
+    getCrypto(id : string){
+        const query =  `SELECT * FROM crypto WHERE id = $1`
+        return this.client.query(query, [id]) 
     }
 
-    sellCrypto(){
-        
+    async putTransactionInQueue(user : User, crypto : Crypto, quantity : number, type : TransactionType){
+        const query =  `INSERT INTO TransactionQueue (userid, cryptoid, price, quantity, type, status)
+        VALUES ($1, $2, $3, $4, $5, $6)`
+        const values = [user.id, crypto.id, crypto.price, quantity, type, Status.pending]
+        await this.client.query(query, values)
     }
 
-    
+
 
     async updateCrypto(crypto : Crypto){
-        const query = "UPDATE crypto SET name = $1, price = $2, quantity = $3 WHERE id = $4";
+        const query = `UPDATE crypto SET name = $1, price = $2, quantity = $3 WHERE id = $4`;
         const values = [crypto.name, crypto.price, crypto.quantity, crypto.id]
         await this.client.query(query, values)
         
@@ -64,7 +70,7 @@ export class DbManager {
         const maxQta = Number(process.env.CRYPTO_MAX_BASE_QTA || 10000)
         const minQta = Number(process.env.CRYPTO_MIN_BASE_QTA || 100)
         let name = 'crypto'
-        const query = "INSERT INTO crypto (name, price, quantity) VALUES ($1, $2, $3)"
+        const query = `INSERT INTO crypto (name, price, quantity) VALUES ($1, $2, $3)`
 
         for(let i = 0; i < 5; i++){
             const values = [name+i, Math.random() * maxValue,  Math.random() * (maxQta - minQta) + minQta]
@@ -76,7 +82,7 @@ export class DbManager {
 
     async resetCrypto(){
 
-        const query = "DELETE FROM crypto "
+        const query = `DELETE FROM crypto `
         await this.client.query(query)
 
         
