@@ -1,6 +1,6 @@
-import { getTrasactionForm } from "../transactionForm/transactionForm";
-import { Crypto } from "../../entity/crypto";
-import { getUserSection } from "../user/user";
+import { getTrasactionForm } from "./transactionForm/transactionForm";
+import { Crypto } from "../entity/crypto";
+import { getUserSection } from "./user/user";
 
 export function getMainPage (cryptoList : Crypto[]) : string{
     return /*html*/`
