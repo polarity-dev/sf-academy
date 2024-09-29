@@ -21,8 +21,7 @@ export function getCryptoTable(cryptoList : Crypto[]) : string{
 
 function getRow(crypto : Crypto) : string {
     return /*html*/`
-    <tr class = 'cursor-pointer'>
-        <td class="hidden" id="${crypto.name}${crypto.id}">${crypto.id}</td>
+    <tr class = 'cursor-pointer h-10'>
         <td>${crypto.name}</td>
         <td>${crypto.quantity}</td>
         <td>${crypto.price}</td>

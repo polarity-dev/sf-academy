@@ -10,7 +10,6 @@ CREATE TABLE Wallet (
     userid INT NOT NULL,
     cryptoid INT NOT NULL,
     quantity NUMERIC(20, 2) NOT NULL,
-    FOREIGN KEY (userid) REFERENCES Users(id),
     FOREIGN KEY (cryptoid) REFERENCES Crypto(id)
 );
 
@@ -22,6 +21,5 @@ CREATE TABLE TransactionQueue (
     quantity NUMERIC(20, 2) NOT NULL,
     type VARCHAR(50) NOT NULL, 
     status VARCHAR(50) NOT NULL, 
-    FOREIGN KEY (userid) REFERENCES Users(id),
     FOREIGN KEY (cryptoid) REFERENCES Crypto(id)
 );
