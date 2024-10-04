@@ -21,5 +21,18 @@ CREATE TABLE TransactionQueue (
     quantity NUMERIC(20, 2) NOT NULL,
     type VARCHAR(50) NOT NULL, 
     status VARCHAR(50) NOT NULL, 
+    transactionDate timestamp NOT NULL,
+    FOREIGN KEY (cryptoid) REFERENCES Crypto(id)
+);
+
+CREATE TABLE TransactionHistory (
+    id SERIAL PRIMARY KEY,
+    userid INT NOT NULL,
+    cryptoid INT NOT NULL,
+    price NUMERIC(15, 2) NOT NULL,  
+    quantity NUMERIC(20, 2) NOT NULL,
+    type VARCHAR(50) NOT NULL, 
+    status VARCHAR(50) NOT NULL, 
+    transactionDate timestamp NOT NULL,
     FOREIGN KEY (cryptoid) REFERENCES Crypto(id)
 );
