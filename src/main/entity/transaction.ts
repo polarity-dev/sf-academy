@@ -7,7 +7,7 @@ export class Transaction{
     quantity : number
     type : TransactionType
     status : Status 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(row : any){
         this.id = row.id
         this.userId = row.userid

@@ -1,15 +1,15 @@
-export class Crypto{
+export class Wallet{
     id : string
-    name : string
-    price : number
+    userId : string
+    cryptoId : string
+    cryptoName : string
     quantity : number
-    
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(row : any){
         this.id = row.id
-        this.name = row.name
-        this.price = Number(row.price)
+        this.userId = row.userid
+        this.cryptoId = row.cryptoid
+        this.cryptoName = row.cryptoname
         this.quantity = Number(row.quantity)
     }
 }

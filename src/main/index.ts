@@ -6,10 +6,12 @@ import { Crypto } from './entity/crypto';
 import { HtmlManager } from './ui/htmlManager';    
 import { CryptoManager } from './manager/cryptoManager';
 import { User } from './entity/user';
-import { Transaction, TransactionType } from './entity/transaction';
+import { Status, Transaction, TransactionType } from './entity/transaction';
+import { Wallet } from './entity/wallet';
 
 
 const server = fastify({ logger: true })
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 server.register(require('@fastify/formbody'))
 
 
@@ -28,11 +30,55 @@ void (async () => {
     }
 
     //init user
-    let user = new User({
+    const user = new User({
         id : '1',
         name : "paolo",
         balance : process.env.STARTING_BALANCE || 100000
     })
+
+    setInterval(async() => {
+        const result  = await dbManager.getTransactionToProcess(user.id)
+        const transactionList = result.rows.map( r => new Transaction(r))
+        const resultWallet  = await dbManager.getUserWallet(user.id)
+        const wallet = resultWallet.rows.map( r => new Wallet(r))
+        let type = 1
+        for(const t of transactionList){
+            type = t.type === 'buy'? -1 : 1 // -1 compro | 1 vendo
+            if(type === 1){
+                if(wallet.length === 0){
+                    t.status = Status.failed
+                } else {
+                    const x = wallet.filter( (x : Wallet) => x.cryptoId === t.cryptoId)
+                    if(x.length !== 0 && x[0].quantity >= t.quantity){
+                        user.balance = Math.round((user.balance + (t.quantity * t.price)) * 100) / 100
+                        t.status = Status.completed
+                    } else {
+                        t.status = Status.failed
+                    }
+                }
+            } else {
+                if(user.balance >= t.quantity * t.price){
+                    const x = wallet.filter( (x : Wallet) => x.cryptoId === t.cryptoId)
+                    if(x.length === 0){
+                        user.balance = Math.round((user.balance - (t.quantity * t.price)) * 100) / 100
+                    } else {
+                        x[0].quantity += t.quantity
+                    }
+                    t.status = Status.completed
+                } else {
+                    t.status = Status.failed
+                }
+                
+            }
+            dbManager.updateTransactionQueue(t)
+            sendNewBalance()
+            sendUpdatedTransaction(transactionList)
+        }
+        //console.log(transactionList)
+        
+
+        
+    }, 2000)
 
 
     //SSE manager
@@ -42,7 +88,9 @@ void (async () => {
 
     const cryptoRoom = "crypto-room"
     const balanceRoom = "balance-room"
+    const transactionRoom = "transactionRoom"
 
+    //broadcast dei nuovi valori
     setInterval(async() => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
@@ -58,21 +106,18 @@ void (async () => {
         await sseManager.broadcast(balanceRoom, { data: user.balance.toString() })
     }
 
+    async function sendUpdatedTransaction(transactionList : Transaction[]){
+        await sseManager.broadcast(transactionRoom, { data: htmlManager.getTransactionTable(transactionList) })
+    }
+
 
     //HTML api
     server.get('/', async (request, reply) => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
-        const resultT  = await dbManager.getTransactionQueue(user.id);
-        const transactionList = resultT.rows.map( r => new Transaction(r))
-        console.log(transactionList)
-        reply.type('text/html').send(htmlManager.getMainpage(cryptoList, user, transactionList))
+        reply.type('text/html').send(htmlManager.getMainpage(cryptoList, user))
     })
 
-
-    server.get('/ping', async (request, reply) => {
-        return 'pong'
-    })
 
     server.get("/crypto-list", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
@@ -83,6 +128,15 @@ void (async () => {
         console.log("Successfully joined cryptoRoom")
     })
 
+    server.get("/transaction-table", async(req, res) => {
+        const sseStream = await sseManager.createSSEStream(res)
+        const resultT  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        sseStream.broadcast({ data: htmlManager.getTransactionTable(transactionList)})
+        await sseStream.addToRoom(transactionRoom)
+        console.log("Successfully joined transactionRoom")
+    })
+
     server.get("/balance", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
         sseStream.broadcast({ data: user.balance.toString() })
@@ -90,20 +144,22 @@ void (async () => {
         console.log("Successfully joined balanceRoom")
     })   
 
-    server.post("/sell", async(req, res) => {
-        let data : {crypto : string, quantity : number} = req.body as {crypto : string, quantity : number}
-        let crypto = new Crypto(dbManager.getCrypto(data.crypto))
+    server.post("/sell", async(req) => {
+        const data = req.body as {crypto : string, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
         dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
-        return 'Vendi'
+        const resultT  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        return htmlManager.getTransactionTable(transactionList)
     })
 
-    server.post("/buy",async(req, res) => {
-        let data = req.body as {crypto : string, quantity : number}
-        console.log(data.crypto)
-        let crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
-        console.log(crypto)
+    server.post("/buy",async(req) => {
+        const data = req.body as {crypto : string, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
         dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
-        return 'Compra'
+        const resultT  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        return htmlManager.getTransactionTable(transactionList)
     })
 
 
@@ -111,17 +167,17 @@ void (async () => {
     //Json api
     const baseJsonPath = '/api'
 
-    server.get(baseJsonPath+'/crypto', async (request, reply) => {
+    server.get(baseJsonPath+'/crypto', async () => {
     
         return 'pong\n'
     })
 
-    server.get(baseJsonPath+'/transactions', async (request, reply) => {
+    server.get(baseJsonPath+'/transactions', async () => {
     
         return 'pong\n'
     })
 
-    server.post(baseJsonPath+'/transactions', async (request, reply) => {
+    server.post(baseJsonPath+'/transactions', async () => {
     
         return 'pong\n'
     })

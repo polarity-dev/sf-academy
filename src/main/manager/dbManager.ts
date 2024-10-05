@@ -1,7 +1,8 @@
 import { Client } from 'pg'
 import { Crypto } from '../entity/crypto';
 import { User } from '../entity/user';
-import { Status, TransactionType } from '../entity/transaction';
+import { Status, Transaction, TransactionType } from '../entity/transaction';
+import { Wallet } from '../entity/wallet';
 
 export class DbManager {
     private client : Client
@@ -9,8 +10,8 @@ export class DbManager {
     constructor(){
         this.client = new Client({
             user: 'root',
-            host: 'db',
-            database: 'cryptoMarket',
+            host: '127.0.0.1',
+            database: 'cryptoMarket', 
             password: 'password123',
             port: 5432
         })
@@ -32,7 +33,23 @@ export class DbManager {
     getTransactionQueue(userId : string){
         const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
         inner join crypto c on c.id = t.cryptoId
-        where userId = $1 and status = 'pending'`
+        where userId = $1`
+        
+        return this.client.query(query, [userId])
+    }
+
+    getTransactionToProcess(userId : string){
+        const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status = 'pending' LIMIT 5`
+        
+        return this.client.query(query, [userId])
+    }
+
+    getTransactionToArchive(userId : string){
+        const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status != 'pending'`
         
         return this.client.query(query, [userId])
     }
@@ -43,16 +60,47 @@ export class DbManager {
         return this.client.query(query) 
     }
 
+    getUserWallet(userId : string){
+        const query =  `SELECT w.*, c.name as cryptoName FROM Wallet w
+        inner join crypto c on c.id = w.cryptoId
+        where userId = $1`
+        
+        return this.client.query(query, [userId])
+    }
+
+    updateUserWallet(wallet : Wallet){
+        const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status != 'pending'`
+        
+        return this.client.query(query, [wallet.userId])
+    }
+
+    insertUserWallet(wallet : Wallet){
+        const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
+        inner join crypto c on c.id = t.cryptoId
+        where userId = $1 and status != 'pending'`
+        
+        return this.client.query(query, [wallet.userId])
+    }
+
     getCrypto(id : string){
         const query =  `SELECT * FROM crypto WHERE id = $1`
         return this.client.query(query, [id]) 
     }
 
     async putTransactionInQueue(user : User, crypto : Crypto, quantity : number, type : TransactionType){
-        const query =  `INSERT INTO TransactionQueue (userid, cryptoid, price, quantity, type, status)
-        VALUES ($1, $2, $3, $4, $5, $6)`
-        const values = [user.id, crypto.id, crypto.price, quantity, type, Status.pending]
+        const query =  `INSERT INTO TransactionQueue (userid, cryptoid, price, quantity, type, status, transactionDate)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)`
+        const values = [user.id, crypto.id, crypto.price, quantity, type, Status.pending, new Date()]
         await this.client.query(query, values)
+    }
+
+    async updateTransactionQueue(transaction : Transaction){
+        const query = `UPDATE transactionQueue SET userid = $1, cryptoid = $2, price = $3, quantity = $4, type = $5, status = $6, transactionDate = $7 WHERE id = $8`;
+        const values = [transaction.userId, transaction.cryptoId, transaction.price, transaction.quantity, transaction.type, transaction.status, new Date(), transaction.id]
+        await this.client.query(query, values)
+        
     }
 
 
@@ -65,14 +113,14 @@ export class DbManager {
     }
 
     async initCrypto(){
-        const n = process.env.CRYPTO_NUMBER || 5
+        const n = Number(process.env.CRYPTO_NUMBER) || 5
         const maxValue = Number(process.env.CRYPTO_MAX_BASE_VALUE || 10000)
         const maxQta = Number(process.env.CRYPTO_MAX_BASE_QTA || 10000)
         const minQta = Number(process.env.CRYPTO_MIN_BASE_QTA || 100)
-        let name = 'crypto'
+        const name = 'crypto'
         const query = `INSERT INTO crypto (name, price, quantity) VALUES ($1, $2, $3)`
 
-        for(let i = 0; i < 5; i++){
+        for(let i = 0; i < n; i++){
             const values = [name+i, Math.random() * maxValue,  Math.random() * (maxQta - minQta) + minQta]
             console.log(values)
             await this.client.query(query, values)
