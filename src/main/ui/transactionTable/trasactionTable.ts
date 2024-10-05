@@ -1,7 +1,6 @@
 import { Transaction } from "../../entity/transaction"
 
 export function getTrasactionTable(transactionList : Transaction[]) : string{
-    console.log(transactionList)
     const html = /*html*/ `
     <table class="pt-3 pb-3 min-w-full bg-white text-center">
         <thead>

@@ -32,53 +32,73 @@ void (async () => {
     //init user
     const user = new User({
         id : '1',
-        name : "paolo",
+        name : "paolo", 
         balance : process.env.STARTING_BALANCE || 100000
     })
 
     setInterval(async() => {
+        const resultToArchive  = await dbManager.getTransactionToArchive(user.id)
+        const transactionToArchive = resultToArchive.rows.map( r => new Transaction(r))
+        transactionToArchive.forEach(t => dbManager.archiveTransaction(t))
+        dbManager.deleteProcessedTranscation(user.id)
+        sendTransactionTable()
+
+
         const result  = await dbManager.getTransactionToProcess(user.id)
         const transactionList = result.rows.map( r => new Transaction(r))
         const resultWallet  = await dbManager.getUserWallet(user.id)
         const wallet = resultWallet.rows.map( r => new Wallet(r))
-        let type = 1
+        const resultCrypto  = await dbManager.getCryptoList()
+        const cryptoList = resultCrypto.rows.map( r => new Crypto(r))
+
         for(const t of transactionList){
-            type = t.type === 'buy'? -1 : 1 // -1 compro | 1 vendo
-            if(type === 1){
-                if(wallet.length === 0){
-                    t.status = Status.failed
-                } else {
-                    const x = wallet.filter( (x : Wallet) => x.cryptoId === t.cryptoId)
-                    if(x.length !== 0 && x[0].quantity >= t.quantity){
-                        user.balance = Math.round((user.balance + (t.quantity * t.price)) * 100) / 100
-                        t.status = Status.completed
-                    } else {
-                        t.status = Status.failed
-                    }
-                }
-            } else {
-                if(user.balance >= t.quantity * t.price){
-                    const x = wallet.filter( (x : Wallet) => x.cryptoId === t.cryptoId)
-                    if(x.length === 0){
-                        user.balance = Math.round((user.balance - (t.quantity * t.price)) * 100) / 100
-                    } else {
-                        x[0].quantity += t.quantity
-                    }
-                    t.status = Status.completed
-                } else {
-                    t.status = Status.failed
-                }
+            const transaction = cryptoManager.checkIfTransactionIsValid(t, wallet, user, cryptoList);
+        
+            if(transaction.status === Status.completed){
+                const walletIndex = wallet.findIndex((x : Wallet) => x.cryptoId === t.cryptoId);
+                const cryptoIndex = cryptoList.findIndex((x : Crypto) => x.id === t.cryptoId);
                 
+                if(transaction.type === TransactionType.sell){
+                    if(walletIndex !== -1) {
+                        wallet[walletIndex].quantity -= transaction.quantity;
+                        dbManager.updateUserWallet(wallet[walletIndex]);
+                    }
+                    
+                    user.balance = Math.round((user.balance + (t.quantity * t.price)) * 100) / 100;
+                    
+                    if(cryptoIndex !== -1) {
+                        cryptoList[cryptoIndex].quantity += transaction.quantity;
+                        dbManager.updateCryptoQuantity(cryptoList[cryptoIndex]);
+                    }
+                } else { 
+                    if(cryptoIndex !== -1) {
+                        cryptoList[cryptoIndex].quantity -= transaction.quantity;
+                        dbManager.updateCryptoQuantity(cryptoList[cryptoIndex]);
+                    }
+        
+                    user.balance = Math.round((user.balance - (t.quantity * t.price)) * 100) / 100;
+        
+                    if(walletIndex !== -1) {
+                        wallet[walletIndex].quantity += transaction.quantity;
+                        dbManager.updateUserWallet(wallet[walletIndex]);
+                    } else {
+                        dbManager.insertUserWallet(user.id, transaction.cryptoId, transaction.quantity);
+                    }
+                }
             }
-            dbManager.updateTransactionQueue(t)
-            sendNewBalance()
-            sendUpdatedTransaction(transactionList)
+        
+            dbManager.updateTransactionQueue(transaction);
+            sendNewBalance();
+            sendUpdatedTransaction(transactionList);
+            const resultNew  = await dbManager.getCryptoList();
+            const newCryptoList = resultNew.rows.map( r => new Crypto(r))
+            sendNewCryptoList(newCryptoList)
         }
         //console.log(transactionList)
         
 
         
-    }, 2000)
+    }, 5000)
 
 
     //SSE manager
@@ -95,11 +115,11 @@ void (async () => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         const updatedCrypto = cryptoManager.changeMarketValue(cryptoList)
-        await sendNewCryptoList(htmlManager.getCryptoTable(updatedCrypto))
-    }, 1000000000)
+        await sendNewCryptoList(updatedCrypto)
+    }, 10000)
 
-    async function sendNewCryptoList(html : string){
-        await sseManager.broadcast(cryptoRoom, { data: html })
+    async function sendNewCryptoList(cryptoList : Crypto[]){
+        await sseManager.broadcast(cryptoRoom, { data: htmlManager.getCryptoTable(cryptoList)})
     }
 
     async function sendNewBalance(){
@@ -110,13 +130,22 @@ void (async () => {
         await sseManager.broadcast(transactionRoom, { data: htmlManager.getTransactionTable(transactionList) })
     }
 
+    async function sendTransactionTable(){
+        const resultT  = await dbManager.getTransactionToProcess(user.id)
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        sendUpdatedTransaction(transactionList)
+        const result  = await dbManager.getCryptoList();
+        const cryptoList = result.rows.map( r => new Crypto(r))
+        return htmlManager.getTransactionForm(cryptoList)
+    }
+
 
     //HTML api
     server.get('/', async (request, reply) => {
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
         reply.type('text/html').send(htmlManager.getMainpage(cryptoList, user))
-    })
+    }) 
 
 
     server.get("/crypto-list", async(req, res) => {
@@ -147,19 +176,19 @@ void (async () => {
     server.post("/sell", async(req) => {
         const data = req.body as {crypto : string, quantity : number}
         const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
-        dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
-        const resultT  = await dbManager.getTransactionQueue(user.id);
-        const transactionList = resultT.rows.map( r => new Transaction(r))
-        return htmlManager.getTransactionTable(transactionList)
+        if(data.quantity){
+            dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
+        }
+        return sendTransactionTable()
     })
 
     server.post("/buy",async(req) => {
         const data = req.body as {crypto : string, quantity : number}
         const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
-        dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
-        const resultT  = await dbManager.getTransactionQueue(user.id);
-        const transactionList = resultT.rows.map( r => new Transaction(r))
-        return htmlManager.getTransactionTable(transactionList)
+        if(data.quantity){
+            dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
+        }
+        return sendTransactionTable()
     })
 
 

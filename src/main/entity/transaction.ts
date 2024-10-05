@@ -7,6 +7,7 @@ export class Transaction{
     quantity : number
     type : TransactionType
     status : Status 
+    date : Date
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(row : any){
         this.id = row.id
@@ -17,6 +18,7 @@ export class Transaction{
         this.status = row.status
         this.price = Number(row.price)
         this.quantity = Number(row.quantity)
+        this.date = row.transactionDate
     }
 }
 

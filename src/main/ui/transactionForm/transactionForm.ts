@@ -17,8 +17,8 @@ export function getTrasactionForm(cryptoList : Crypto[]) : string{
                 type='number' 
                 name='quantity'/>
             <div>
-                <button hx-post="/buy" hx-swap="innetHTML" hx-target="#transactionTable">Compra</button>
-                <button hx-post="/sell"  hx-swap="innetHTML" hx-target="#transactionTable">Vendi</button>
+                <button hx-post="/buy" hx-swap="innerHTML" hx-target="#transactionForm">Compra</button>
+                <button hx-post="/sell"  hx-swap="innerHTML" hx-target="#transactionForm">Vendi</button>
             </div>
         </form>
     `
