@@ -23,9 +23,9 @@ export class DbManager {
     }
 
     getTransactionHistory(userId : string){
-        const query =  `SELECT t.*, c.name as cryptoName FROM transactionQueue t
+        const query =  `SELECT t.*, c.name as cryptoName FROM transactionHistory t
         inner join crypto c on c.id = t.cryptoId
-        where userId = $1 and status != 'pending'`
+        where userId = $1 order by transactiondate DESC`
         
         return this.client.query(query, [userId])
     }
@@ -33,7 +33,7 @@ export class DbManager {
     getTransactionQueue(userId : string){
         const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
         inner join crypto c on c.id = t.cryptoId
-        where userId = $1`
+        where userId = $1 order by transactiondate DESC`
         
         return this.client.query(query, [userId])
     }
@@ -41,7 +41,7 @@ export class DbManager {
     getTransactionToProcess(userId : string){
         const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
         inner join crypto c on c.id = t.cryptoId
-        where userId = $1 and status = 'pending' LIMIT 5`
+        where userId = $1 and status = 'pending' order by transactiondate DESC LIMIT 5`
         
         return this.client.query(query, [userId])
     }
@@ -49,7 +49,7 @@ export class DbManager {
     getTransactionToArchive(userId : string){
         const query =  `SELECT t.*, c.name as cryptoName FROM TransactionQueue t
         inner join crypto c on c.id = t.cryptoId
-        where userId = $1 and status != 'pending'`
+        where userId = $1 and status != 'pending' order by transactiondate DESC`
         
         return this.client.query(query, [userId])
     }
@@ -70,7 +70,7 @@ export class DbManager {
     getUserWallet(userId : string){
         const query =  `SELECT w.*, c.name as cryptoName FROM Wallet w
         inner join crypto c on c.id = w.cryptoId
-        where userId = $1`
+        where userId = $1 and w.quantity > 0 order by quantity`
         
         return this.client.query(query, [userId])
     }
@@ -104,13 +104,13 @@ export class DbManager {
     async archiveTransaction(t : Transaction){
         const query =  `INSERT INTO TransactionHistory (userid, cryptoid, price, quantity, type, status, transactionDate)
         VALUES ($1, $2, $3, $4, $5, $6, $7)`
-        const values = [t.userId, t.cryptoId, t.price, t.quantity, t.type, t.status, new Date()]
+        const values = [t.userId, t.cryptoId, t.price, t.quantity, t.type, t.status, t.date]
         await this.client.query(query, values)
     }
 
     async updateTransactionQueue(transaction : Transaction){
         const query = `UPDATE transactionQueue SET userid = $1, cryptoid = $2, price = $3, quantity = $4, type = $5, status = $6, transactionDate = $7 WHERE id = $8`;
-        const values = [transaction.userId, transaction.cryptoId, transaction.price, transaction.quantity, transaction.type, transaction.status, new Date(), transaction.id]
+        const values = [transaction.userId, transaction.cryptoId, transaction.price, transaction.quantity, transaction.type, transaction.status, transaction.date, transaction.id]
         await this.client.query(query, values)
     }
 
@@ -147,6 +147,14 @@ export class DbManager {
     async resetCrypto(){
 
         const query = `DELETE FROM crypto `
+        await this.client.query(query)
+
+        
+    }
+
+    async clearWallet(){
+
+        const query = `DELETE FROM wallet `
         await this.client.query(query)
 
         

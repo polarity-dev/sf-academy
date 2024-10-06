@@ -18,7 +18,7 @@ export class Transaction{
         this.status = row.status
         this.price = Number(row.price)
         this.quantity = Number(row.quantity)
-        this.date = row.transactionDate
+        this.date = row.transactiondate
     }
 }
 

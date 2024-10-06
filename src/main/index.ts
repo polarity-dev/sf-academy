@@ -32,17 +32,18 @@ void (async () => {
     //init user
     const user = new User({
         id : '1',
-        name : "paolo", 
+        name : "User", 
         balance : process.env.STARTING_BALANCE || 100000
     })
+    dbManager.clearWallet()
 
     setInterval(async() => {
         const resultToArchive  = await dbManager.getTransactionToArchive(user.id)
         const transactionToArchive = resultToArchive.rows.map( r => new Transaction(r))
         transactionToArchive.forEach(t => dbManager.archiveTransaction(t))
         dbManager.deleteProcessedTranscation(user.id)
-        sendTransactionTable()
-
+        sendTransactionForm()
+        
 
         const result  = await dbManager.getTransactionToProcess(user.id)
         const transactionList = result.rows.map( r => new Transaction(r))
@@ -89,7 +90,14 @@ void (async () => {
         
             dbManager.updateTransactionQueue(transaction);
             sendNewBalance();
-            sendUpdatedTransaction(transactionList);
+            
+            if(tableType === 'table'){
+                sendUpdatedTransaction(transactionList);
+            } else {
+                const resultHistory  = await dbManager.getTransactionHistory(user.id)
+                const transactionHistory = resultHistory.rows.map( r => new Transaction(r))
+                sendUpdatedTransaction(transactionHistory);
+            }
             const resultNew  = await dbManager.getCryptoList();
             const newCryptoList = resultNew.rows.map( r => new Crypto(r))
             sendNewCryptoList(newCryptoList)
@@ -109,6 +117,8 @@ void (async () => {
     const cryptoRoom = "crypto-room"
     const balanceRoom = "balance-room"
     const transactionRoom = "transactionRoom"
+    const walletRoom = "walletRoom"
+    let tableType = 'table'
 
     //broadcast dei nuovi valori
     setInterval(async() => {
@@ -124,15 +134,28 @@ void (async () => {
 
     async function sendNewBalance(){
         await sseManager.broadcast(balanceRoom, { data: user.balance.toString() })
+        sendUpdatedWallet()
+    }
+
+    async function sendUpdatedWallet(){
+        const result  = await dbManager.getUserWallet(user.id);
+        const wallet = result.rows.map( r => new Wallet(r))
+        await sseManager.broadcast(walletRoom, { data: htmlManager.getUserWallet(wallet) })
     }
 
     async function sendUpdatedTransaction(transactionList : Transaction[]){
-        await sseManager.broadcast(transactionRoom, { data: htmlManager.getTransactionTable(transactionList) })
+        await sseManager.broadcast(transactionRoom, { data: htmlManager.getTransactionTable(transactionList, tableType) })
     }
 
-    async function sendTransactionTable(){
-        const resultT  = await dbManager.getTransactionToProcess(user.id)
-        const transactionList = resultT.rows.map( r => new Transaction(r))
+    async function sendTransactionForm(){
+        let transactionList
+        if(tableType === 'table'){
+            const resultT  = await dbManager.getTransactionToProcess(user.id)
+            transactionList = resultT.rows.map( r => new Transaction(r))
+        } else {
+            const resultT  = await dbManager.getTransactionHistory(user.id)
+            transactionList = resultT.rows.map( r => new Transaction(r))
+        }
         sendUpdatedTransaction(transactionList)
         const result  = await dbManager.getCryptoList();
         const cryptoList = result.rows.map( r => new Crypto(r))
@@ -157,13 +180,36 @@ void (async () => {
         console.log("Successfully joined cryptoRoom")
     })
 
+    server.get("/wallet", async(req, res) => {
+        const sseStream = await sseManager.createSSEStream(res)
+        const result  = await dbManager.getUserWallet(user.id);
+        const wallet = result.rows.map( r => new Wallet(r))
+        sseStream.broadcast({ data: htmlManager.getUserWallet(wallet)})
+        await sseStream.addToRoom(walletRoom)
+        console.log("Successfully joined walletRoom")
+    })
+
     server.get("/transaction-table", async(req, res) => {
         const sseStream = await sseManager.createSSEStream(res)
         const resultT  = await dbManager.getTransactionQueue(user.id);
         const transactionList = resultT.rows.map( r => new Transaction(r))
-        sseStream.broadcast({ data: htmlManager.getTransactionTable(transactionList)})
+        sseStream.broadcast({ data: htmlManager.getTransactionTable(transactionList, tableType)})
         await sseStream.addToRoom(transactionRoom)
         console.log("Successfully joined transactionRoom")
+    })
+
+
+    server.get("/show-transaction-history", async() => {
+        tableType = 'history'
+        const resultT  = await dbManager.getTransactionHistory(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        return htmlManager.getTransactionTable(transactionList, tableType)
+    })
+    server.get("/show-transaction-table", async() => {
+        tableType = 'table'
+        const resultT  = await dbManager.getTransactionQueue(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        return htmlManager.getTransactionTable(transactionList, tableType)
     })
 
     server.get("/balance", async(req, res) => {
@@ -174,21 +220,21 @@ void (async () => {
     })   
 
     server.post("/sell", async(req) => {
-        const data = req.body as {crypto : string, quantity : number}
-        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        const data = req.body as {crypto : Crypto, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto.id)).rows[0])
         if(data.quantity){
             dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
         }
-        return sendTransactionTable()
+        return sendTransactionForm()
     })
 
     server.post("/buy",async(req) => {
-        const data = req.body as {crypto : string, quantity : number}
-        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        const data = req.body as {crypto : Crypto, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto.id)).rows[0])
         if(data.quantity){
             dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
         }
-        return sendTransactionTable()
+        return sendTransactionForm()
     })
 
 

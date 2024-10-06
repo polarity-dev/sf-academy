@@ -4,6 +4,9 @@ import { getMainPage } from './mainPage/mainPage';
 import { getCryptoTable } from './cryptoTable/cryptoTable';
 import { User } from "../entity/user";
 import { getTrasactionTable } from "./transactionTable/trasactionTable";
+import { getTrasactionForm } from "./transactionForm/transactionForm";
+import { getUserWallet } from "./wallet/wallet";
+import { Wallet } from "../entity/wallet";
 
 export class HtmlManager {
 
@@ -15,8 +18,16 @@ export class HtmlManager {
         return getCryptoTable(cryptoList)
     }
 
-    getTransactionTable(transactionList : Transaction[]) : string{
-        return getTrasactionTable(transactionList)
+    getTransactionTable(transactionList : Transaction[], tableType : string) : string{
+        return getTrasactionTable(transactionList, tableType)
+    }
+
+    getTransactionForm(cryptoList : Crypto[]){
+        return getTrasactionForm(cryptoList)
+    }
+
+    getUserWallet(wallet : Wallet[]){
+        return getUserWallet(wallet)
     }
 
 }

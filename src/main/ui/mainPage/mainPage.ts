@@ -19,18 +19,25 @@ export function getMainPage (cryptoList : Crypto[], user : User) : string{
         </head>
         <body class='h-screen bg-gray-100' style='font-family:Roboto,sans-serif'>
             <div class='h-full p-5 grid grid-cols-2 grid-rows-10 gap-5'>
-                <div class='h-full p-5  border bg-white border-white rounded-2xl row-span-10' hx-ext="sse" sse-connect="/crypto-list" sse-swap="message"> 
+                
+                <!--<div class='h-full p-5  border bg-white border-white rounded-2xl row-span-10' hx-ext="sse" sse-connect="/crypto-list" sse-swap="message"> 
                     
-                </div>
-                <div class='h-full grid grid-rows-subgrid gap-5 row-span-10'>
-                    <div class=' px-8 py-3 font-bold border bg-white border-white rounded-2xl row-span-1 align-middle'>
+                </div>-->
+                <div class='h-full grid grid-rows-subgrid gap-5 row-span-10 overflow-y-auto'>
+                <div class=' px-8 py-3 font-bold border bg-white border-white rounded-2xl row-span-1 align-middle overflow-y-auto'>
                         ${getUser(user)}
                     </div>
-                    <div id='transactionForm'  class='p-5  border bg-white border-white rounded-2xl flex flex-col row-span-3'>
+                    <div class='border bg-white border-white rounded-2xl row-span-9 p-5 overflow-y-auto' hx-ext="sse" sse-connect="/crypto-list" sse-swap="message">
+                    </div>
+                </div>
+                <div class='h-full grid grid-rows-subgrid gap-5 row-span-10 '>
+                    <div id='transactionForm'  class='p-5 border bg-white border-white rounded-2xl flex flex-col row-span-3 overflow-y-auto'>
                         ${getTrasactionForm(cryptoList)}
                     </div>
+                    <div class='border bg-white border-white rounded-2xl row-span-3 realtive overflow-y-auto' hx-ext="sse" sse-connect="/wallet" sse-swap="message">
+                    </div>
                     <div id='transactionTable' 
-                        class='overflow-y-auto p-5 border bg-white  border-white rounded-2xl flex flex-col row-span-6'
+                        class=' overflow-y-auto relative h-full border bg-white  border-white rounded-2xl flex flex-col row-span-4'
                         hx-ext="sse" sse-connect="/transaction-table" sse-swap="message"
                     >
                     </div>
