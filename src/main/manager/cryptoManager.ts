@@ -6,7 +6,11 @@ import { DbManager } from "./dbManager";
 
 export class CryptoManager {
     
-    dbManager = new DbManager()
+    private dbManager : DbManager
+
+    constructor(){
+        this.dbManager = new DbManager()
+    }
 
     changeMarketValue(cryptoList : Crypto[]){
         const priceVariation = Number(process.env.PRICE_VARIATION) || 5

@@ -67,6 +67,21 @@ export class DbManager {
         return this.client.query(query) 
     }
 
+    getCryptoByName(name : string){
+        const query =  `SELECT * FROM crypto where name = $1 ORDER BY price DESC` 
+        return this.client.query(query,[name]) 
+    }
+
+    getCryptoById(id : string){
+        const query =  `SELECT * FROM crypto where id = $1 ORDER BY price DESC`
+        return this.client.query(query,[id]) 
+    }
+
+    getUserById(id : string){
+        const query =  `SELECT * FROM UserTable where id = $1`
+        return this.client.query(query,[id]) 
+    }
+
     getUserWallet(userId : string){
         const query =  `SELECT w.*, c.name as cryptoName FROM Wallet w
         inner join crypto c on c.id = w.cryptoId
@@ -75,11 +90,18 @@ export class DbManager {
         return this.client.query(query, [userId])
     }
 
-    updateUserWallet(wallet : Wallet){
+    async updateUserWallet(wallet : Wallet){
         const query =  `UPDATE Wallet SET userid = $1, cryptoid = $2, quantity = $3
         WHERE id = $4`
         const values = [wallet.userId, wallet.cryptoId, wallet.quantity,wallet.id]
-        return this.client.query(query, values)
+        this.client.query(query, values)
+    }
+
+    async updateUserWalletWithData(userId : string, cryptoId : string, quantity : number, id: string){
+        const query =  `UPDATE Wallet SET userid = $1, cryptoid = $2, quantity = $3
+        WHERE id = $4`
+        const values = [userId, cryptoId, quantity, id]
+        await this.client.query(query, values)
     }
 
     async insertUserWallet(userId : string, cryptoId : string, quantity : number){
@@ -92,6 +114,13 @@ export class DbManager {
     getCrypto(id : string){
         const query =  `SELECT * FROM crypto WHERE id = $1`
         return this.client.query(query, [id]) 
+    }
+
+    async updateUserBalance(user : User){
+        const query =  `UPDATE UserTable SET balance = $1
+        WHERE id = $2`
+        const values = [user.balance, user.id]
+        await this.client.query(query, values)
     }
 
     async putTransactionInQueue(user : User, crypto : Crypto, quantity : number, type : TransactionType){
@@ -144,7 +173,18 @@ export class DbManager {
         
     }
 
-    async resetCrypto(){
+    async initUser(){
+        const id = 1
+        const name = 'User'
+        const balance = Number(process.env.STARTING_BALANCE || 100000)
+        const query = `INSERT INTO UserTable (id, name, balance) VALUES ($1, $2, $3)`
+        const values = [id, name, balance]
+        await this.client.query(query, values)
+        
+        
+    }
+
+    async clearCrypto(){
 
         const query = `DELETE FROM crypto `
         await this.client.query(query)
@@ -153,11 +193,29 @@ export class DbManager {
     }
 
     async clearWallet(){
-
         const query = `DELETE FROM wallet `
         await this.client.query(query)
 
-        
+    }
+
+    async clearHistory(){
+        const query = `DELETE FROM TransactionHistory `
+        await this.client.query(query)
+
+    }
+
+    async clearUser(){
+
+        const query = `DELETE FROM UserTable `
+        await this.client.query(query)
+
+    }
+
+    async clearDb(){
+        this.clearHistory()
+        this.clearWallet()
+        this.clearUser()
+        this.clearCrypto()
     }
 
 }

@@ -14,6 +14,13 @@ const server = fastify({ logger: true })
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 server.register(require('@fastify/formbody'))
 
+ //init user
+ export const user = new User({
+    id : '1',
+    name : "User", 
+    balance : process.env.STARTING_BALANCE || 100000
+})
+
 
 void (async () => {
 
@@ -24,18 +31,12 @@ void (async () => {
 
     //init Crypto Data
     const dbManager = new DbManager()
-    const cryptoList = await dbManager.getCryptoList();
-    if(!cryptoList.rowCount || cryptoList.rowCount <= 0){
-        dbManager.initCrypto()
-    }
+    //dbManager.clearDb()
+    //dbManager.initCrypto()
+    //dbManager.initUser()
+    
+    let user = new User((await dbManager.getUserById('1')).rows[0])
 
-    //init user
-    const user = new User({
-        id : '1',
-        name : "User", 
-        balance : process.env.STARTING_BALANCE || 100000
-    })
-    dbManager.clearWallet()
 
     setInterval(async() => {
         const resultToArchive  = await dbManager.getTransactionToArchive(user.id)
@@ -65,7 +66,7 @@ void (async () => {
                         dbManager.updateUserWallet(wallet[walletIndex]);
                     }
                     
-                    user.balance = Math.round((user.balance + (t.quantity * t.price)) * 100) / 100;
+                    user.balance = Number( (user.balance - (t.quantity * t.price)).toFixed(2));
                     
                     if(cryptoIndex !== -1) {
                         cryptoList[cryptoIndex].quantity += transaction.quantity;
@@ -77,7 +78,7 @@ void (async () => {
                         dbManager.updateCryptoQuantity(cryptoList[cryptoIndex]);
                     }
         
-                    user.balance = Math.round((user.balance - (t.quantity * t.price)) * 100) / 100;
+                    user.balance = Number((user.balance - (t.quantity * t.price)).toFixed(2));
         
                     if(walletIndex !== -1) {
                         wallet[walletIndex].quantity += transaction.quantity;
@@ -90,6 +91,8 @@ void (async () => {
         
             dbManager.updateTransactionQueue(transaction);
             sendNewBalance();
+            dbManager.updateUserBalance(user)
+            user = new User((await dbManager.getUserById('1')).rows[0])
             
             if(tableType === 'table'){
                 sendUpdatedTransaction(transactionList);
@@ -220,18 +223,18 @@ void (async () => {
     })   
 
     server.post("/sell", async(req) => {
-        const data = req.body as {crypto : Crypto, quantity : number}
-        const crypto = new Crypto((await dbManager.getCrypto(data.crypto.id)).rows[0])
-        if(data.quantity){
+        const data = req.body as {crypto : string, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        if(crypto && data.quantity){
             dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.sell)
         }
         return sendTransactionForm()
     })
 
     server.post("/buy",async(req) => {
-        const data = req.body as {crypto : Crypto, quantity : number}
-        const crypto = new Crypto((await dbManager.getCrypto(data.crypto.id)).rows[0])
-        if(data.quantity){
+        const data = req.body as {crypto : string, quantity : number}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        if(crypto && data.quantity){
             dbManager.putTransactionInQueue(user, crypto, data.quantity, TransactionType.buy)
         }
         return sendTransactionForm()
@@ -243,17 +246,22 @@ void (async () => {
     const baseJsonPath = '/api'
 
     server.get(baseJsonPath+'/crypto', async () => {
-    
-        return 'pong\n'
+        const result  = await dbManager.getCryptoList();
+        const cryptoList = result.rows.map( r => new Crypto(r))
+        return JSON.stringify(cryptoList)
     })
 
     server.get(baseJsonPath+'/transactions', async () => {
-    
-        return 'pong\n'
-    })
+        const resultT  = await dbManager.getTransactionHistory(user.id);
+        const transactionList = resultT.rows.map( r => new Transaction(r))
+        return JSON.stringify(transactionList)    })
 
-    server.post(baseJsonPath+'/transactions', async () => {
-    
+    server.post(baseJsonPath+'/transactions', async (req) => {
+        const data = req.body as {crypto : string, quantity : number, type: TransactionType}
+        const crypto = new Crypto((await dbManager.getCrypto(data.crypto)).rows[0])
+        if(crypto && data.quantity && data.type){
+            dbManager.putTransactionInQueue(user, crypto, data.quantity, data.type)
+        }
         return 'pong\n'
     })
 
@@ -266,6 +274,7 @@ void (async () => {
         }
         console.log(`Server listening at ${address}`)
     })
+
 
     
 })().catch(console.error)

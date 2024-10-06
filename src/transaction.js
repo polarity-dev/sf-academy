@@ -1,6 +1,5 @@
 const { program } = require('commander');
 const db = require("./main/manager/dbManager");
-const cm = require("./main/manager/cryptoManager");
 
 program
   .requiredOption('-c, --crypto <crypto>')
@@ -15,59 +14,102 @@ const typeOpt = options.type
 const quantityOpt = parseFloat(options.quantity)
 
 const dbManager = new db.DbManager()
-const cryptoManager = new cm.CryptoManager()
 
 void (async () => {
-    if(cryptoOpt && typeOpt){
-        if(typeOpt === 'sell' || typeOpt ==='buy'){
-            let result = db.getCryptoByName(cryptoOpt)
-            if(result.rows.lenght === 0)
-                result = db.getCryptoById(cryptoOpt)
+    if (cryptoOpt && typeOpt) {
+        if (typeOpt === 'sell' || typeOpt === 'buy') {
+            let result = await dbManager.getCryptoByName(cryptoOpt);
+            if (result.rows.length === 0) {
+                result = await dbManager.getCryptoById(cryptoOpt);
+            }
 
-            if(result.rows.lenght === 0){
-                console.log('errore nel recupero della crypto')
+            if (result.rows.length === 0) {
+                console.error('Errore nel recupero della crypto');
             } else {
-                const user = db.getUserById(1).rows[0]
-                const crypto = result.rows[0]
-                const resultWallet  = await dbManager.getUserWallet(user.id)
-                const wallet = resultWallet.rows
-                const isValid = cryptoManager.checkIfTransactionIsValidWithData(quantityOpt, typeOpt, wallet, user, crypto);
+                const user = (await dbManager.getUserById('1')).rows[0];
+                const crypto = result.rows[0];
+                const resultWallet = await dbManager.getUserWallet(user.id);
+                const wallet = resultWallet.rows;
+                const isValid = checkIfTransactionIsValidWithData(quantityOpt, typeOpt, wallet, user, crypto);
                 
-                if(isValid){
-                    const walletIndex = wallet.findIndex((x) => x.cryptoId === crypto.id);
-                    
-                    if(typeOpt === 'sell'){
-                        if(walletIndex !== -1) {
+                console.log(`User balance: ${user.balance}`);
+                console.log(`Crypto price: ${crypto.price}`);
+                console.log(`Transaction valid: ${isValid}`);
+                
+                if (isValid) {
+                    const walletIndex = wallet.findIndex((x) => x.cryptoid === crypto.id);
+                    if (typeOpt === 'sell') {
+                        console.log('Inizio vendita', crypto.name);
+                        if (walletIndex !== -1) {
                             wallet[walletIndex].quantity -= quantityOpt;
-                            dbManager.updateUserWallet(wallet[walletIndex]);
+                            dbManager.updateUserWalletWithData(wallet[walletIndex].userid, wallet[walletIndex].cryptoid, wallet[walletIndex].quantity, wallet[walletIndex].id);
                         }
-                        
-                        user.balance = Math.round((user.balance + (quantityOpt * crypto.price)) * 100) / 100;
+
+                        // Verifica se user.balance e crypto.price sono numeri validi
+                        if (!isNaN(user.balance) && !isNaN(crypto.price)) {
+                            user.balance = Math.round((parseFloat(user.balance) + (quantityOpt * parseFloat(crypto.price))) * 100) / 100;
+                        } else {
+                            console.error('Errore nel calcolo del bilancio: balance o prezzo non validi');
+                        }
 
                         crypto.quantity += quantityOpt;
                         dbManager.updateCryptoQuantity(crypto);
                     } else { 
-
-                        crypto.quantity -= quantityOpt;
+                        console.log('Inizio compera', crypto.name);
+                        crypto.quantity = parseFloat(crypto.quantity) - quantityOpt;
                         dbManager.updateCryptoQuantity(crypto);
-                    
             
-                        user.balance = Math.round((user.balance - (quantityOpt * crypto.price)) * 100) / 100;
+                        if (!isNaN(user.balance) && !isNaN(crypto.price)) {
+                            user.balance = Math.round((user.balance - (quantityOpt * crypto.price)) * 100) / 100;
+                        } else {
+                            console.error('Errore nel calcolo del bilancio: balance o prezzo non validi');
+                        }
             
-                        if(walletIndex !== -1) {
-                            wallet[walletIndex].quantity += quantityOpt;
-                            dbManager.updateUserWallet(wallet[walletIndex]);
+                        if (walletIndex !== -1) {
+                            wallet[walletIndex].quantity = parseFloat(wallet[walletIndex].quantity) + quantityOpt;
+
+                            dbManager.updateUserWalletWithData(wallet[walletIndex].userid, wallet[walletIndex].cryptoid, wallet[walletIndex].quantity, wallet[walletIndex].id);
                         } else {
                             dbManager.insertUserWallet(user.id, crypto.id, quantityOpt);
                         }
                     }
+                    dbManager.updateUserBalance(user);
+                    console.log('Transazione completa');
+                    console.log('Nuovo bilancio : ', user);
+
+                } else {
+                    console.error('La transazione non è valida');
                 }
             } 
-        }else{
-            console.log('il campo type puo\' essere solo sell o buy') 
+        } else {
+            console.error('Il campo type può essere solo sell o buy');
         }
-    }else {
-        console.log('i campi crypto e type sono obbligatori')
+    } else {
+        console.error('I campi crypto e type sono obbligatori');
     }
 
-})
+    function checkIfTransactionIsValidWithData(quantity, type, wallet, user, crypto){
+        if (type === 'sell') {
+            if (wallet.length === 0) {
+                return false;
+            } else {
+                const x = wallet.findIndex((x) => x.cryptoid === crypto.id);
+                if (x !== -1 && wallet[x].quantity >= quantity) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            if (crypto.quantity >= quantity) {
+                if (user.balance >= quantity * crypto.price) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+})();
