@@ -1,0 +1,18 @@
+services:
+  db: 
+    build: ./src/resources
+    environment:
+      POSTGRES_PASSWORD : password123
+      POSTGRES_USER : root
+      POSTGRES_DB : cryptoMarket
+    restart: always
+    ports: 
+      - "5432:5432"
+  backend:
+    build: ./src
+    depends_on:
+      - db
+    restart: on-failure
+    ports: 
+      - "4000:4000"
+  

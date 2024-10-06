@@ -1,0 +1,33 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "eslint": "npx eslint main/**/*.ts",
+    "build-start": "tsc -p tsconfig.json & node main/index.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node main/index.js",
+    "nodemon-start": "nodemon --exec npm run build-start -e ts,json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/formbody": "^8.0.1",
+    "@soluzioni-futura/sse-manager": "^1.5.1",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@types/node": "^22.5.5",
+    "@types/pg": "^8.11.10",
+    "eslint": "^9.11.1",
+    "globals": "^15.10.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.0"
+  }
+}
