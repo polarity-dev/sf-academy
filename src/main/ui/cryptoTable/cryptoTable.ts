@@ -24,7 +24,7 @@ function getRow(crypto : Crypto) : string {
     <tr class = 'cursor-pointer h-10'>
         <td>${crypto.name}</td>
         <td>${crypto.quantity}</td>
-        <td>${crypto.price}</td>
+        <td>${crypto.price} €</td>
     </tr>
     `
 }

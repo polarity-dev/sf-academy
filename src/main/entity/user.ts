@@ -4,6 +4,7 @@ export class User{
     balance : number
     
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(row : any){
         this.id = row.id
         this.name = row.name
