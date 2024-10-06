@@ -16,6 +16,7 @@
   "dependencies": {
     "@fastify/formbody": "^8.0.1",
     "@soluzioni-futura/sse-manager": "^1.5.1",
+    "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
     "pg": "^8.13.0"
