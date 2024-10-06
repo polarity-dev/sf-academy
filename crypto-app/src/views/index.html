@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Trading App</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Aggiorna HTMX alla versione 2.0.2 -->
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <header class="border-b pb-4 mb-6">
+      <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-2">Sistema di compravendita di criptovalute</h1>
+    </header>
+
+    <!-- Sezione Saldo Utente -->
+    <section id="user-balance" class="mb-8 p-4 bg-gray-50 rounded-lg shadow-sm">
+      <div hx-get="/balance" hx-trigger="load, transaction-completed from:body" hx-swap="innerHTML">
+        <p class="text-lg font-semibold text-center">Caricamento del saldo...</p>
+      </div>
+    </section>
+
+    <!-- Container per la lista delle criptovalute -->
+    <section id="crypto-list" class="mb-8 p-4 bg-gray-50 rounded-lg shadow-sm">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Lista delle Criptovalute Disponibili</h2>
+      <div hx-get="/crypto" hx-trigger="load, transaction-completed from:body" hx-swap="innerHTML">
+        <p>Caricamento delle criptovalute...</p>
+      </div>
+    </section>
+
+    <!-- Sezione Acquisto/Vendita -->
+    <section class="mb-8 p-6 bg-blue-50 rounded-lg shadow-sm">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Effettua una Transazione</h2>
+      <form id="transaction-form" hx-post="/transactions" hx-trigger="submit" hx-target="#transaction-message" hx-swap="innerHTML">
+        <div class="mb-4">
+          <label for="crypto-select" class="block text-sm font-medium text-gray-700">Criptovaluta:</label>
+          <select id="crypto-select" name="crypto" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            hx-get="/crypto-options" hx-trigger="load" hx-target="#crypto-select" hx-swap="innerHTML" required>
+            <option>Caricamento...</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="action" class="block text-sm font-medium text-gray-700">Azione:</label>
+          <select id="action" name="action" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+            <option value="buy">Compra</option>
+            <option value="sell">Vendi</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="quantity" class="block text-sm font-medium text-gray-700">Quantità:</label>
+          <input type="number" id="quantity" name="quantity" min="1" value="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required />
+        </div>
+
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold p-3 rounded transition duration-200">Invia Transazione</button>
+      </form>
+
+      <div id="transaction-message" class="mt-4 text-center"></div>
+    </section>
+
+    <!-- Sezione Cronologia Transazioni -->
+    <section class="mb-8 p-6 bg-gray-50 rounded-lg shadow-sm">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Cronologia delle Transazioni</h2>
+      <div id="transactions" hx-get="/transactions" hx-trigger="load, transaction-completed from:body" hx-swap="innerHTML">
+        <p>Caricamento delle transazioni...</p>
+      </div>
+    </section>
+
+    <!-- Sezione Portafoglio Utente -->
+    <section class="p-6 bg-green-50 rounded-lg shadow-sm">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Portafoglio</h2>
+      <div id="portfolio" hx-get="/portfolio" hx-trigger="load, transaction-completed from:body" hx-swap="innerHTML">
+        <p>Caricamento del portafoglio...</p>
+      </div>
+    </section>
+  </div>  
+
+  <!-- Event listener per verificare l'evento -->
+  <script>
+    document.body.addEventListener('transaction-completed', function() {
+      console.log('Evento transaction-completed ricevuto');
+    });
+  </script>
+</body>
+</html>
