@@ -12,6 +12,5 @@
     "resolveJsonModule": true,
     "types": ["node", "fastify"]                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*.ts",
-  "src/types/**/*.d.ts"  ]                   // Include tutti i file TypeScript nella cartella sr
+  "include": ["src/**/*.ts"]                   // Include tutti i file TypeScript nella cartella sr
 }
