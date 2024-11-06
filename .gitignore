@@ -1,4 +1,3 @@
 node_modules/
 build/
-bozza.txt
-dbquery.txt
+*.txt
