@@ -1,0 +1,26 @@
+
+services:
+  db:
+    image: postgres:17
+    container_name: postgres17-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: CryptoExchange
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  app:
+    build: .
+    container_name: application
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_CONNECTION_STRING: postgres://postgres:postgrespassword@db:5432/CryptoExchange
+    
+
+
